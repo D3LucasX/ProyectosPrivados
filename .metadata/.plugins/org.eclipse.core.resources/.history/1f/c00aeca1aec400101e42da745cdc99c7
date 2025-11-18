@@ -1,0 +1,11 @@
+package PFJugueteria;
+
+import java.util.Date;
+
+public class Empleado {
+	private int idEmpleado;
+	private String nombre;
+	private
+	private Date fechaIngreso;
+	
+}
