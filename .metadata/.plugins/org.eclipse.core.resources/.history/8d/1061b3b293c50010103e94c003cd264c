@@ -1,0 +1,63 @@
+package service;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import DAO.JugueteDAO;
+import model.Juguete;
+
+public class JugueteService {
+	private JugueteDAO dao;
+	
+	public JugueteService() {
+		this.dao = new JugueteDAO();
+	}
+	
+	// Crear lista de juguetes de ejemplo
+	private ArrayList<Juguete> crearJuguetesIniciales() {
+        ArrayList<Juguete> lista = new ArrayList<>();
+        lista.add(new Juguete(1, "Pelota", "Pelota de goma", 5.0, 10));
+        lista.add(new Juguete(2, "Muñeca", "Muñeca articulada", 12.0, 5));
+        lista.add(new Juguete(3, "Rompecabezas", "Puzzle 100 piezas", 8.0, 7));
+        lista.add(new Juguete(4, "Tren de madera", "Tren educativo", 15.0, 3));
+        lista.add(new Juguete(5, "Lego", "Set de construcción", 20.0, 6));
+        lista.add(new Juguete(6, "Balón de fútbol", "Balón oficial tamaño 5", 25.0, 4));
+        lista.add(new Juguete(7, "Coche de carreras", "Coche a control remoto", 30.0, 2));
+        lista.add(new Juguete(8, "Peluche", "Peluche de oso", 10.0, 8));
+        lista.add(new Juguete(9, "Ajedrez", "Juego de ajedrez madera", 18.0, 5));
+        lista.add(new Juguete(10, "Pista de autos", "Pista con loopings", 22.0, 3));
+        
+        return lista;
+    }
+	
+	// Inicializa datos si la base está vacía
+	public void inicializarSeedDataJug() throws SQLException{
+		 if (dao.listarTodos().isEmpty()) {
+	            ArrayList<Juguete> iniciales = crearJuguetesIniciales();
+	            int filas = dao.insertarLista(iniciales);
+	            System.out.println("Se insertaron " + filas + " juguetes de ejemplo.");
+	        }
+	}
+	
+	// Insertar un juguete individual
+	public boolean agregarJuguete(Juguete j) {
+        try {
+            int filas = dao.insertar(j);
+            return filas > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+	
+	// Listar todos los juguetes
+	 public ArrayList<Juguete> obtenerTodos() {
+	        try {
+	            return dao.listarTodos();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            return new ArrayList<>();
+	        }
+	    }
+}

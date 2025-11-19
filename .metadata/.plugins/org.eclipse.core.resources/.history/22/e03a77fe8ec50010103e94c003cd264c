@@ -1,0 +1,6 @@
+package DAO;
+import model.Juguete;
+public class JugueteDAO {
+
+	
+}
