@@ -24,38 +24,55 @@ public class JugueteDAO {
 	// cuantas filas fueron modificadas, para que si no se modificó ninguna,
 	// saber que no se inserto el juguete.
 	public int insertar(Juguete nuevoJuguete) throws SQLException {
-		String sql = "INSERT INTO juguete(idJuguete, Nombre, Descripcion, Precio, Cantidad_stock) VALUES (?,?,?,?,?)";
+		String sql = "INSERT INTO juguete(Nombre, Descripcion, Precio, Cantidad_stock) VALUES (?,?,?,?)";
 		try (Connection conexion = DataBaseConnection.getConnection();
-				PreparedStatement ps = conexion.prepareStatement(sql)) {
-			ps.setInt(1, nuevoJuguete.getIdJuguete());
-			ps.setString(2, nuevoJuguete.getNombre());
-			ps.setString(3, nuevoJuguete.getDescripcion());
-			ps.setDouble(4, nuevoJuguete.getPrecio());
-			ps.setInt(5, nuevoJuguete.getStock());
+				PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+			ps.setString(1, nuevoJuguete.getNombre());
+			ps.setString(2, nuevoJuguete.getDescripcion());
+			ps.setDouble(3, nuevoJuguete.getPrecio());
+			ps.setInt(4, nuevoJuguete.getStock());
 
-			return ps.executeUpdate();
+			int filas = ps.executeUpdate();
+			
+			// Obtener el ID generado
+			try (ResultSet rs = ps.getGeneratedKeys()) {
+			    if (rs.next()) {
+			        int idGenerado = rs.getInt(1);
+			        nuevoJuguete.setIdJuguete(idGenerado); // actualizar el objeto con el ID
+			    }
+			}
+
+			return filas;
 		}
 	}
 
 	// Funcion que recive una lista del service para inicializar los seedData
 	public int insertarLista(ArrayList<Juguete> seedDataJuguetes) throws SQLException {
-		String sql = "INSERT INTO juguete(idJuguete, Nombre, Descripcion, Precio, Cantidad_stock) VALUES (?,?,?,?,?)";
+		String sql = "INSERT INTO juguete(Nombre, Descripcion, Precio, Cantidad_stock) VALUES (?,?,?,?)";
 		int totalFilas = 0;
 
 		try (Connection conexion = DataBaseConnection.getConnection();
-				PreparedStatement ps = conexion.prepareStatement(sql)) {
+				PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			for (Juguete j : seedDataJuguetes) {
-				ps.setInt(1, j.getIdJuguete());
-				ps.setString(2, j.getNombre());
-				ps.setString(3, j.getDescripcion());
-				ps.setDouble(4, j.getPrecio());
-				ps.setInt(5, j.getStock());
+				ps.setString(1, j.getNombre());
+				ps.setString(2, j.getDescripcion());
+				ps.setDouble(3, j.getPrecio());
+				ps.setInt(4, j.getStock());
 				// Mas eficiente que hacer un executeUpdate
 				// por cada fila insertada.
 				ps.addBatch();
 			}
 			int[] resultados = ps.executeBatch();
 	        for (int r : resultados) totalFilas += r;
+	        
+	        // Obtener los IDs generados
+	        try (ResultSet rs = ps.getGeneratedKeys()) {
+	            int index = 0;
+	            while (rs.next() && index < seedDataJuguetes.size()) {
+	                seedDataJuguetes.get(index).setIdJuguete(rs.getInt(1));
+	                index++;
+	            }
+	        }
 
 		}
 		return totalFilas;

@@ -17,16 +17,16 @@ public class JugueteService {
 	// Crear lista de juguetes de ejemplo
 	private ArrayList<Juguete> crearJuguetesIniciales() {
         ArrayList<Juguete> lista = new ArrayList<>();
-        lista.add(new Juguete(1, "Pelota", "Pelota de goma", 5.0, 10));
-        lista.add(new Juguete(2, "Muñeca", "Muñeca articulada", 12.0, 5));
-        lista.add(new Juguete(3, "Rompecabezas", "Puzzle 100 piezas", 8.0, 7));
-        lista.add(new Juguete(4, "Tren de madera", "Tren educativo", 15.0, 3));
-        lista.add(new Juguete(5, "Lego", "Set de construcción", 20.0, 6));
-        lista.add(new Juguete(6, "Balón de fútbol", "Balón oficial tamaño 5", 25.0, 4));
-        lista.add(new Juguete(7, "Coche de carreras", "Coche a control remoto", 30.0, 2));
-        lista.add(new Juguete(8, "Peluche", "Peluche de oso", 10.0, 8));
-        lista.add(new Juguete(9, "Ajedrez", "Juego de ajedrez madera", 18.0, 5));
-        lista.add(new Juguete(10, "Pista de autos", "Pista con loopings", 22.0, 3));
+        lista.add(new Juguete("Pelota", "Pelota de goma", 5.0, 10));
+        lista.add(new Juguete("Muñeca", "Muñeca articulada", 12.0, 5));
+        lista.add(new Juguete("Rompecabezas", "Puzzle 100 piezas", 8.0, 7));
+        lista.add(new Juguete("Tren de madera", "Tren educativo", 15.0, 3));
+        lista.add(new Juguete("Lego", "Set de construcción", 20.0, 6));
+        lista.add(new Juguete("Balón de fútbol", "Balón oficial tamaño 5", 25.0, 4));
+        lista.add(new Juguete("Coche de carreras", "Coche a control remoto", 30.0, 2));
+        lista.add(new Juguete("Peluche", "Peluche de oso", 10.0, 8));
+        lista.add(new Juguete("Ajedrez", "Juego de ajedrez madera", 18.0, 5));
+        lista.add(new Juguete("Pista de autos", "Pista con loopings", 22.0, 3));
         
         return lista;
     }

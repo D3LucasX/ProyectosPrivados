@@ -7,8 +7,13 @@ public class Juguete {
 	private String descripcion;
 	private double precio;
 	private int stock;
+	public Juguete(String nombre, String descripcion, double precio, int stock) {
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+		this.precio = precio;
+		this.stock = stock;
+	}
 	public Juguete(int idJuguete, String nombre, String descripcion, double precio, int stock) {
-		super();
 		this.idJuguete = idJuguete;
 		this.nombre = nombre;
 		this.descripcion = descripcion;
