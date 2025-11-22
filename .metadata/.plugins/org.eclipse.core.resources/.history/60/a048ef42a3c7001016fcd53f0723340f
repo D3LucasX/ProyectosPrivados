@@ -1,0 +1,56 @@
+package main;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import model.Juguete;
+import service.JugueteService;
+import DAO.JugueteDAO;
+import INPUT.Input;
+
+public class launcher {
+
+	public static Juguete crearJuguete(Scanner entrada) {
+		String nombre = "", descripcion ="";
+		double precio = 0.0;
+		int stock = 0;
+		boolean valido = false;
+		
+		nombre = Input.pedirString(entrada, "Introduzca el nombre del Juguete: ", 1, 45);
+		
+		descripcion = Input.pedirString(entrada, "Introduzca una descripción para el Juguete: ", 1, 150);
+		
+		precio = Input.pedirdouble(entrada, "Introduzca el precio del producto");
+		
+		stock = Input.pedirInt(entrada, "Introduzca el Stock disponible: ");
+		
+		
+		Juguete nuevoJuguete = new Juguete(nombre, descripcion, precio, stock);
+		return nuevoJuguete;
+	}
+	
+	public static void 
+	
+	
+	public static void main(String[] args) {
+		Scanner entrada = new Scanner(System.in);
+		JugueteService service = new JugueteService();
+		
+		try {
+            service.inicializarSeedDataJug(); // inserta 10 juguetes si la BD está vacía
+            ArrayList<Juguete> todos = service.obtenerTodos();
+            todos.forEach(j -> System.out.println(j.getNombre()));
+            Juguete jugueteAdd = crearJuguete(entrada);
+			if(service.agregarJuguete(jugueteAdd)) {
+				System.out.println("Juguete " + jugueteAdd.getNombre() + " añadido correctamente.");
+			}
+		} catch (SQLException e) {
+	        System.err.println("Error al inicializar o listar juguetes: " + e.getMessage());
+	        e.printStackTrace();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+
+}

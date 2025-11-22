@@ -1,0 +1,69 @@
+package main;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import model.Juguete;
+import service.JugueteService;
+import INPUT.Input;
+
+public class launcher {
+	
+	public static void menuOpcionesPrincipales(Scanner entrada, JugueteService service, ArrayList<Juguete> listaJuguetes) {
+		int opcionPrin = 0;
+		while (opcionPrin != 5) {
+			GestionJuguetesUI.mostrarMenuPrincipal();
+			System.out.print("Introduzca una opción: ");
+			String opcion = entrada.nextLine();
+
+			if (!Input.ComprobarStringRegex(opcion, "^[1-5]$")) {
+				System.out.println("Opción no válida");
+			} else {
+				opcionPrin = Integer.parseInt(opcion);
+
+				switch (opcionPrin) {
+				case 1:
+					System.out.println();
+					GestionJuguetesUI GJ = new GestionJuguetesUI(service, entrada);
+					GJ.menuOpcionesJuguetes(entrada, service, listaJuguetes);
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+				case 4:
+					break;
+				case 5:
+					System.out.println();
+					System.out.println("Saliendo...");
+					System.out.println();
+					break;
+				default:
+					System.out.println();
+					System.out.println("Error.");
+					System.out.println();
+					System.out.println();
+					break;
+				}
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		Scanner entrada = new Scanner(System.in);
+		JugueteService service = new JugueteService();
+
+		try {
+			service.inicializarSeedDataJug();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		// inserta 10 juguetes si la BD está vacía
+		ArrayList<Juguete> todos = service.obtenerTodos();
+		
+		// Menu principal
+		menuOpcionesPrincipales(entrada, service, todos);
+	}
+
+}

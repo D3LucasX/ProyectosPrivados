@@ -1,0 +1,88 @@
+package service;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import DAO.JugueteDAO;
+import model.Juguete;
+
+public class JugueteService {
+	private JugueteDAO dao;
+	
+	// Mapeo clave valor para comprobar que los campos que se introducen en la consulta de 
+	// modificacion, no son maliciosos y concuerdan con los campos que existen en la tabla.
+	private static final Map<String, Set<String>> columnasValidas = Map.of(
+			"juguete", Set.of("Nombre", "Descripcion", "Precio", "Cantidad_stock"),
+			"empleado", Set.of("Nombre", "Cargo", "Fecha_ingreso"),
+			"zona", Set.of("Nombre", "Descripcion"),
+			"stand", Set.of("Nombre", "Descripcion", "ZONA_idzona")
+	);
+	
+	
+	public JugueteService() {
+		this.dao = new JugueteDAO();
+	}
+	
+	// Crear lista de juguetes de ejemplo
+	private ArrayList<Juguete> crearJuguetesIniciales() {
+        ArrayList<Juguete> lista = new ArrayList<>();
+        lista.add(new Juguete("Pelota", "Pelota de goma", 5.0, 10));
+        lista.add(new Juguete("Muñeca", "Muñeca articulada", 12.0, 5));
+        lista.add(new Juguete("Rompecabezas", "Puzzle 100 piezas", 8.0, 7));
+        lista.add(new Juguete("Tren de madera", "Tren educativo", 15.0, 3));
+        lista.add(new Juguete("Lego", "Set de construcción", 20.0, 6));
+        lista.add(new Juguete("Balón de fútbol", "Balón oficial tamaño 5", 25.0, 4));
+        lista.add(new Juguete("Coche de carreras", "Coche a control remoto", 30.0, 2));
+        lista.add(new Juguete("Peluche", "Peluche de oso", 10.0, 8));
+        lista.add(new Juguete("Ajedrez", "Juego de ajedrez madera", 18.0, 5));
+        lista.add(new Juguete("Pista de autos", "Pista con loopings", 22.0, 3));
+        
+        return lista;
+    }
+	
+	// Inicializa datos si la base está vacía
+	public void inicializarSeedDataJug() throws SQLException{
+		 if (dao.listarTodos().isEmpty()) {
+	            ArrayList<Juguete> iniciales = crearJuguetesIniciales();
+	            // obtenemos el numero de filas=juguetes que hemos insertado
+	            int filas = dao.insertarLista(iniciales);
+	            System.out.println("Se insertaron " + filas + " juguetes de ejemplo.");
+	        }
+	}
+	
+	// Insertar un juguete individual y devuelve true si filas es mayor a 0,indicativo de que se ha añadido una fila
+	public boolean agregarJuguete(Juguete j) {
+        try {
+            int filas = dao.insertar(j);
+            return filas > 0;
+        } catch (SQLException e) {
+        	System.err.println("Error al agregar juguete: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+	
+	// Listar todos los juguetes, devuelce una lista para tener los datos en memoria
+	 public ArrayList<Juguete> obtenerTodos() {
+	        try {
+	            return dao.listarTodos();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            return new ArrayList<>();
+	        }
+	    }
+	 
+	 // Modificar un campo de un juguete
+	 public boolean modificarCampo(String tabla , String columnaAmodificar, Object valor, String columnaId, int idJuguete) throws SQLException {
+		 if(!columnasValidas.containsKey(tabla)) {
+			 throw new IllegalArgumentException("Tabla no permitida");
+		 }
+		 if (!columnasValidas.getOrDefault(tabla, Set.of()).contains(columnaAmodificar)) {
+			 throw new IllegalArgumentException("Columna no permitida");
+		 }
+		 return dao.modificarCampo(tabla, columnaAmodificar, valor, columnaId, idJuguete);
+	 }
+}

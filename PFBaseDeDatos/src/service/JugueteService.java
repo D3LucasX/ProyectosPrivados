@@ -2,13 +2,24 @@ package service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import DAO.JugueteDAO;
 import model.Juguete;
 
 public class JugueteService {
 	private JugueteDAO dao;
+	
+	// Mapeo clave valor para comprobar que los campos que se introducen en la consulta de 
+	// modificacion, no son maliciosos y concuerdan con los campos que existen en la tabla.
+	private static final Map<String, Set<String>> columnasValidas = Map.of(
+			"juguete", Set.of("idJuguete", "Nombre", "Descripcion", "Precio", "Cantidad_stock"),
+			"empleado", Set.of("idEMPLEADO","Nombre", "Cargo", "Fecha_ingreso"),
+			"zona", Set.of("idzona","Nombre", "Descripcion"),
+			"stand", Set.of("idStand","Nombre", "Descripcion", "ZONA_idzona")
+	);
+	
 	
 	public JugueteService() {
 		this.dao = new JugueteDAO();
@@ -41,18 +52,22 @@ public class JugueteService {
 	        }
 	}
 	
-	// Insertar un juguete individual
+	// Insertar un juguete individual y devuelve true si filas es mayor a 0,indicativo de que se ha añadido una fila
 	public boolean agregarJuguete(Juguete j) {
+		int filas = 0;
         try {
-            int filas = dao.insertar(j);
-            return filas > 0;
+           filas = dao.insertar(j);
         } catch (SQLException e) {
+        	System.err.println("Error al agregar juguete: " + e.getMessage());
             e.printStackTrace();
             return false;
+        }catch(Exception e) {
+        	e.printStackTrace();
         }
+        return filas > 0;
     }
-	
-	// Listar todos los juguetes
+
+	// Listar todos los juguetes, devuelce una lista para tener los datos en memoria
 	 public ArrayList<Juguete> obtenerTodos() {
 	        try {
 	            return dao.listarTodos();
@@ -61,4 +76,25 @@ public class JugueteService {
 	            return new ArrayList<>();
 	        }
 	    }
+	 
+	 // Modificar un campo de un juguete
+	 public boolean modificarCampo(String tabla , String columnaAmodificar, Object valor, String columnaId, int idJuguete) throws SQLException {
+		 if(!columnasValidas.containsKey(tabla)) {
+			 throw new IllegalArgumentException("Tabla no permitida");
+		 }
+		 if (!columnasValidas.getOrDefault(tabla, Set.of()).contains(columnaAmodificar)) {
+			 throw new IllegalArgumentException("Columna no permitida");
+		 }
+		 return dao.modificarCampo(tabla, columnaAmodificar, valor, columnaId, idJuguete);
+	 }
+	 
+	 // Eliminar una fila de alguna tabla
+	 public boolean eliminarFila(String tabla, int idJuguete) throws SQLException {
+		 if(!columnasValidas.containsKey(tabla)) {
+			 throw new IllegalArgumentException("Tabla no permitida");
+		 }
+		 return dao.eliminarFila(tabla, idJuguete);
+	 }
+	 
+	 
 }

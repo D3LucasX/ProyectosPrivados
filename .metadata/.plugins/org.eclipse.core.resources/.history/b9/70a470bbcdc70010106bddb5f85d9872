@@ -1,0 +1,29 @@
+package main;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import model.Juguete;
+import service.JugueteService;
+import DAO.JugueteDAO;
+import INPUT.Input;
+
+public class launcher {
+
+	public static void main(String[] args) {
+		Scanner entrada = new Scanner(System.in);
+		JugueteService service = new JugueteService();
+
+		try {
+			service.inicializarSeedDataJug();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} // inserta 10 juguetes si la BD está vacía
+		ArrayList<Juguete> todos = service.obtenerTodos();
+		
+		// Menu principal
+		GestionJuguetesUI.menuOpcionesPrincipales(entrada, service, todos);
+	}
+
+}

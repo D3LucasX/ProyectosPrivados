@@ -10,12 +10,12 @@ public class Empleado {
 	private Date fechaIngreso;
 	// Definimos el enum dentro de la clase.
 	public enum Cargo{jefe, cajero};
-	
-	
-	
-	
 
-
+	public Empleado(String nombre, Cargo cargo, Date fechaIngreso) {
+		this.nombre = nombre;
+		this.cargo = cargo;
+		this.fechaIngreso = fechaIngreso;
+	}
 
 	public Empleado(int idEmpleado, String nombre, Cargo cargo, Date fechaIngreso) {
 		super();

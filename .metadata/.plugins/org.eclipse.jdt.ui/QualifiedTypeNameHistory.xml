@@ -5,6 +5,8 @@
     <fullyQualifiedTypeName name="java.sql.SQLException"/>
     <fullyQualifiedTypeName name="DataBase.DataBaseConnection"/>
     <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
-    <fullyQualifiedTypeName name="service.JugueteService"/>
+    <fullyQualifiedTypeName name="java.util.Map"/>
     <fullyQualifiedTypeName name="DAO.JugueteDAO"/>
+    <fullyQualifiedTypeName name="service.JugueteService"/>
+    <fullyQualifiedTypeName name="INPUT.Input"/>
 </qualifiedTypeNameHistroy>

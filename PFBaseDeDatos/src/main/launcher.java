@@ -6,49 +6,64 @@ import java.util.Scanner;
 
 import model.Juguete;
 import service.JugueteService;
-import DAO.JugueteDAO;
 import INPUT.Input;
 
 public class launcher {
+	
+	public static void menuOpcionesPrincipales(Scanner entrada, JugueteService service, ArrayList<Juguete> listaJuguetes) {
+		int opcionPrin = 0;
+		while (opcionPrin != 5) {
+			GestionJuguetesUI.mostrarMenuPrincipal();
+			System.out.print("Introduzca una opción: ");
+			String opcion = entrada.nextLine();
 
-	public static Juguete crearJuguete(Scanner entrada) {
-		String nombre = "", descripcion ="";
-		double precio = 0.0;
-		int stock = 0;
-		boolean valido = false;
-		
-		nombre = Input.pedirString(entrada, "Introduzca el nombre del Juguete: ", 1, 45);
-		
-		descripcion = Input.pedirString(entrada, "Introduzca una descripción para el Juguete: ", 1, 150);
-		
-		precio = Input.pedirdouble(entrada, "Introduzca el precio del producto");
-		
-		stock = Input.pedirInt(entrada, "Introduzca el Stock disponible: ");
-		
-		
-		Juguete nuevoJuguete = new Juguete(nombre, descripcion, precio, stock);
-		return nuevoJuguete;
+			if (!Input.ComprobarStringRegex(opcion, "^[1-5]$")) {
+				System.out.println("Opción no válida");
+			} else {
+				opcionPrin = Integer.parseInt(opcion);
+
+				switch (opcionPrin) {
+				case 1:
+					System.out.println();
+					GestionJuguetesUI GJ = new GestionJuguetesUI();
+					GJ.menuOpcionesJuguetes(entrada, service, listaJuguetes);
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+				case 4:
+					break;
+				case 5:
+					System.out.println();
+					System.out.println("Saliendo...");
+					System.out.println();
+					break;
+				default:
+					System.out.println();
+					System.out.println("Error.");
+					System.out.println();
+					System.out.println();
+					break;
+				}
+			}
+		}
 	}
-	
-	
+
 	public static void main(String[] args) {
 		Scanner entrada = new Scanner(System.in);
-		JugueteService service = new JugueteService();
-		
+		JugueteService serviceJ = new JugueteService();
+
 		try {
-            service.inicializarSeedDataJug(); // inserta 10 juguetes si la BD está vacía
-            ArrayList<Juguete> todos = service.obtenerTodos();
-            todos.forEach(j -> System.out.println(j.getNombre()));
-            Juguete jugueteAdd = crearJuguete(entrada);
-			if(service.agregarJuguete(jugueteAdd)) {
-				System.out.println("Juguete " + jugueteAdd.getNombre() + " añadido correctamente.");
-			}
+			serviceJ.inicializarSeedDataJug();
 		} catch (SQLException e) {
-	        System.err.println("Error al inicializar o listar juguetes: " + e.getMessage());
-	        e.printStackTrace();
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
+			e.printStackTrace();
+		} 
+		// inserta 10 juguetes si la BD está vacía
+		ArrayList<Juguete> todos = serviceJ.obtenerTodos();
+		
+		// Menu principal
+		menuOpcionesPrincipales(entrada, serviceJ, todos);
 	}
 
 }

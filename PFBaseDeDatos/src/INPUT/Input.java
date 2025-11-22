@@ -22,7 +22,7 @@ public class Input {
 	}
 	
 	public static boolean ComprobarStringRegex(String textoAcomprobar, String regerx) {
-		return esTextoVacio(textoAcomprobar) && textoAcomprobar.matches(regerx);
+		return !esTextoVacio(textoAcomprobar) && textoAcomprobar.trim().matches(regerx);
 	}
 	
 	public static String pedirString (Scanner entrada, String mensaje, int minlen, int maxlen) {

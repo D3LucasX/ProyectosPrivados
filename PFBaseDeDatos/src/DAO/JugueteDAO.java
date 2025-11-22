@@ -4,11 +4,13 @@ import model.Juguete;
 import DataBase.DataBaseConnection;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
 
 /**
  * @author d3luc
@@ -63,9 +65,11 @@ public class JugueteDAO {
 				ps.addBatch();
 			}
 			int[] resultados = ps.executeBatch();
-	        for (int r : resultados) totalFilas += r;
+	        for (int r : resultados) {
+	        	totalFilas += r;
+	        }
 	        
-	        // Obtener los IDs generados
+	        // Obtener los IDs generados y los setea en los juguetes de la lista para tener sus ids en memoria
 	        try (ResultSet rs = ps.getGeneratedKeys()) {
 	            int index = 0;
 	            while (rs.next() && index < seedDataJuguetes.size()) {
@@ -78,6 +82,7 @@ public class JugueteDAO {
 		return totalFilas;
 	}
 
+	// Funcion que lista todos los juguetes y los mete en una lista que al final devuelve
 	public ArrayList<Juguete> listarTodos() throws SQLException {
 		ArrayList<Juguete> lista = new ArrayList<>();
 		String sql = "SELECT * FROM juguete";
@@ -94,9 +99,41 @@ public class JugueteDAO {
 		return lista;
 	}
 	
-	//TODO:
-	//Funcion para updatear/modificar algun juguete donde el id sea x --> actualizar
-		// En el service se hará la lógica de como modificar el Juguete y capturar el error --> modificar
-			// hacer la clase imput para control de errores.
-				// en el main hacer la funcion para pedir los datos necesarios para modificar juguete
+	// Funcion para modificar un juguete en la base de datos
+	public boolean modificarCampo (String tabla , String columnaAmodificar, Object valor, String columnaId, int idJuguete) throws SQLException{
+		String sql =  "UPDATE " + tabla +" SET " + columnaAmodificar + " = ? WHERE " + columnaId +" = ?";
+		
+		try(Connection conexion = DataBaseConnection.getConnection()){
+			PreparedStatement ps = conexion.prepareStatement(sql);
+			ps.setObject(1, valor);
+			ps.setInt(2, idJuguete);
+			return ps.executeUpdate() > 0;
+		}
+	}
+	// Funcion para obtener el nombre de la columna de la clave primaria para evitar tener que
+	// introducir el nombre como string en la consulta para evitar posibles inyecciones SQL.
+	public String obtenerColumnaID(String tabla) throws SQLException{
+		try(Connection conexion = DataBaseConnection.getConnection()){
+			DatabaseMetaData meta = conexion.getMetaData();
+			ResultSet rs = meta.getPrimaryKeys(null, null, tabla);
+			
+			if (rs.next()) {
+				return rs.getString("COLUMN_NAME");
+			}else {
+				throw new SQLException("No se encontró columna ID en la tabla " + tabla);
+			}
+		}
+	}
+	
+	// Funcion para eliminar una fila
+	public boolean eliminarFila (String tabla, int idJuguete) throws SQLException {
+		String columnaID = obtenerColumnaID(tabla);
+		String sql = "DELETE from " + tabla + " WHERE " + columnaID + " = ?" ;
+		
+		try(Connection conexion = DataBaseConnection.getConnection();
+				PreparedStatement ps = conexion.prepareStatement(sql)){
+			ps.setInt(1, idJuguete);
+			return ps.executeUpdate() > 0;
+		}
+	}
 }

@@ -1,0 +1,250 @@
+package main;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import model.Juguete;
+import service.JugueteService;
+import DAO.JugueteDAO;
+import INPUT.Input;
+
+public class launcher {
+
+	public static Juguete crearJuguete(Scanner entrada) {
+		String nombre = "", descripcion = "";
+		double precio = 0.0;
+		int stock = 0;
+		boolean valido = false;
+
+		nombre = Input.pedirString(entrada, "Introduzca el nombre del Juguete: ", 1, 45);
+
+		descripcion = Input.pedirString(entrada, "Introduzca una descripción para el Juguete: ", 1, 150);
+
+		precio = Input.pedirdouble(entrada, "Introduzca el precio del producto");
+
+		stock = Input.pedirInt(entrada, "Introduzca el Stock disponible: ");
+
+		Juguete nuevoJuguete = new Juguete(nombre, descripcion, precio, stock);
+		return nuevoJuguete;
+	}
+
+	public static void modificarCampo(Scanner entrada) {
+		try {
+			JugueteService service = new JugueteService();
+			String tabla = "";
+			String columnaAmodificar = "";
+			Object valor;
+			String columnaID;
+			int idNumero = 0;
+			String reTry = "";
+			boolean exito = false;
+			do {
+				tabla = Input.pedirString(entrada, "Introduzca la tabla que va a modificar", 1, 45);
+				columnaAmodificar = Input.pedirString(entrada, "Introduzca la columna que va a modificar", 1, 45);
+				valor = Input.pedirString(entrada, "Introduzca el valor modificado", 1, 45);
+				columnaID = Input.pedirString(entrada, "Introduzca el nombre del campo id de la tabla " + tabla + ": ",
+						1, 45);
+				idNumero = Input.pedirInt(entrada, "Introduzca el numero del ID:");
+
+				exito = service.modificarCampo(tabla, columnaAmodificar, valor, columnaID, idNumero);
+				if (exito) {
+					System.out.printf("Columna %s de la tabla %s modificada con éxito.\n", columnaAmodificar, tabla);
+					System.out.println();
+				} else {
+					System.out.println("No se pudo modificar la columna. Verifique los datos.");
+					System.out.println("¿Desea volver a intentarlo? si/no");
+					reTry = entrada.nextLine();
+					if (reTry.equalsIgnoreCase("si")) {
+						exito = false;
+						System.out.println("Volvera a introducir los datos.");
+					} else if (reTry.equalsIgnoreCase("no")) {
+						exito = true;
+						System.out.println("Genial, volvera a l menú prioncipal.");
+					} else {
+
+						System.out.println("Introduzca si o no.");
+					}
+				}
+			} while (!exito);
+		} catch (SQLException e) {
+			System.out.println("Error al modificar el registro: " + e.getMessage());
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			System.out.println("ERROR: " + e.getMessage());
+		}
+	}
+
+	public static void eliminarFila(Scanner entrada, JugueteService service) {
+		String tabla = "";
+		String columnaID = "";
+		String reTry = "";
+		int idNumero = 0;
+		boolean exito = false;
+		try {
+			do {
+				tabla = Input.pedirString(entrada, "Introduzca la tabla que va a modificar", 1, 45);
+				idNumero = Input.pedirInt(entrada, "Introduzca el numero del ID de la fila que quieras eliminar:");
+
+				exito = service.eliminarFila(tabla, idNumero);
+				if (exito) {
+					System.out.printf("Columna de la tabla %s, ha sido eliminada con éxito.\n", tabla);
+					System.out.println();
+				} else {
+					System.out.println("No se pudo eliminar la fila. Verifique los datos.");
+					System.out.println("¿Desea volver a intentarlo? si/no");
+					reTry = entrada.nextLine();
+					if (reTry.equalsIgnoreCase("si")) {
+						exito = false;
+						System.out.println("Volvera a introducir los datos.");
+					} else if (reTry.equalsIgnoreCase("no")) {
+						exito = true;
+						System.out.println("Genial, volvera a l menú prioncipal.");
+					} else {
+
+						System.out.println("Introduzca si o no.");
+					}
+				}
+			} while (!exito);
+		} catch (SQLException e) {
+			System.out.println("Error al eliminar la fila: " + e.getMessage());
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			System.out.println("ERROR: " + e.getMessage());
+		}
+	}
+	
+	public static void listarTodosJuguetes(JugueteService service, ArrayList<Juguete> listaJuguetes) {
+		listaJuguetes = service.obtenerTodos();
+		listaJuguetes.forEach(juguete -> System.out.println(juguete.getIdJuguete() + " - " +  juguete.getNombre()));
+	}
+
+	public static void mostrarMenuPrincipal() {
+		System.out.println("********************************");
+		System.out.println("*      JUGUETERÍA DOSA         *");
+		System.out.println("********************************");
+		System.out.println();
+		System.out.println("1. Juguetes.");
+		System.out.println("2. Empleados.");
+		System.out.println("3. Ventas.");
+		System.out.println("4. Obtener datos de la tienda.");
+		System.out.println("5 Salir.");
+	}
+
+	public static void mostrarMenuJuguetes() {
+		System.out.println("********************************");
+		System.out.println("*           JUGUETES           *");
+		System.out.println("********************************");
+		System.out.println();
+		System.out.println("1. Registrar nuevo Juguete.");
+		System.out.println("2. Modificar juguete.");
+		System.out.println("3. Eliminar juguete");
+		System.out.println("4. Listar todos los juguetes.");
+		System.out.println("5. Salir.");
+	}
+
+	public static void menuOpcionesPrincipales(Scanner entrada, JugueteService service, ArrayList<Juguete> listaJuguetes) {
+		int opcionPrin = 0;
+		String opcionSecundaria = "";
+		int opcionSecun = 0;
+		while (opcionPrin != 5) {
+			mostrarMenuPrincipal();
+			System.out.print("Introduzca una opción: ");
+			String opcion = entrada.nextLine();
+
+			if (!Input.ComprobarStringRegex(opcion, "^[1-5]$")) {
+				System.out.println("Opción no válida");
+			} else {
+				opcionPrin = Integer.parseInt(opcion);
+
+				switch (opcionPrin) {
+				case 1:
+					System.out.println();
+					menuOpcionesJuguetes(entrada, service, listaJuguetes);
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+				case 4:
+					break;
+				case 5:
+					System.out.println("Saliendo...");
+					break;
+				default:
+					System.out.println("Error.");
+					break;
+				}
+			}
+		}
+	}
+
+	public static void menuOpcionesJuguetes(Scanner entrada, JugueteService service, ArrayList<Juguete> listaJuguetes) {
+		int opcionSecun = 0;
+
+		while (opcionSecun != 5) { // bucle del submenú
+			mostrarMenuJuguetes();
+			System.out.print("Introduzca una opción: ");
+			String opcion = entrada.nextLine();
+
+			if (!Input.ComprobarStringRegex(opcion, "^[1-5]$")) {
+				System.out.println("Opción no válida");
+			} else {
+				opcionSecun = Integer.parseInt(opcion);
+
+				switch (opcionSecun) {
+				case 1:
+					System.out.println();
+					Juguete jugueteAdd = crearJuguete(entrada);
+					if (service.agregarJuguete(jugueteAdd)) {
+						System.out.println("Juguete " + jugueteAdd.getNombre() + " añadido correctamente.");
+					}
+					break;
+				case 2:
+					System.out.println();
+					modificarCampo(entrada);
+					break;
+				case 3:
+					System.out.println();
+					eliminarFila(entrada, service);
+					break;
+				case 4:
+					System.out.println();
+					System.out.println("//-------------//");
+					listarTodosJuguetes(service,listaJuguetes);
+					System.out.println("//-------------//");
+					System.out.println();
+					break;
+				case 5:
+					System.out.println();
+					System.out.println("Saliendo al menú principal...");
+					System.out.println();
+					System.out.println();
+					break;
+				default:
+					System.out.println();
+					System.out.println("ERROR");
+					System.out.println();
+					System.out.println();
+				}
+			}
+		}
+
+	}
+
+	public static void main(String[] args) {
+		Scanner entrada = new Scanner(System.in);
+		JugueteService service = new JugueteService();
+
+		try {
+			service.inicializarSeedDataJug();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} // inserta 10 juguetes si la BD está vacía
+		ArrayList<Juguete> todos = service.obtenerTodos();
+		
+		// Menu principal
+		menuOpcionesPrincipales(entrada, service, todos);
+	}
+
+}
