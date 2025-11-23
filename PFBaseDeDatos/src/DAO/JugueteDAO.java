@@ -92,7 +92,7 @@ public class JugueteDAO {
 
 			while (rs.next()) {
 				lista.add(new Juguete(rs.getInt("idJuguete"), rs.getString("Nombre"), rs.getString("Descripcion"),
-						rs.getDouble("Precio"), rs.getInt("Cantidad_stock")));
+						rs.getDouble("Precio"), rs.getInt("Cantidad_stock"), rs.getInt("activo"), rs.getDate("fecha_baja")));
 			}
 		}
 		return lista;

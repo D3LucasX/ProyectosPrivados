@@ -38,7 +38,7 @@ public class GestionJuguetesUI {
 
 		stock = Input.pedirInt(entrada, "Introduzca el Stock disponible: ");
 
-		Juguete nuevoJuguete = new Juguete(nombre, descripcion, precio, stock);
+		Juguete nuevoJuguete = new Juguete(nombre, descripcion, precio, stock, 1, null);
 		return nuevoJuguete;
 	}
 	

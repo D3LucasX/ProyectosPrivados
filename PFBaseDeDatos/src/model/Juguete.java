@@ -1,5 +1,7 @@
 package model;
 
+import java.sql.Date;
+
 public class Juguete {
 
 	private int idJuguete;
@@ -7,18 +9,24 @@ public class Juguete {
 	private String descripcion;
 	private double precio;
 	private int stock;
-	public Juguete(String nombre, String descripcion, double precio, int stock) {
+	private int activo;
+	private Date fecha_baja;
+	public Juguete(String nombre, String descripcion, double precio, int stock, int activo, Date fecha_baja) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.precio = precio;
 		this.stock = stock;
+		this.activo = activo;
+		this.fecha_baja = fecha_baja;
 	}
-	public Juguete(int idJuguete, String nombre, String descripcion, double precio, int stock) {
+	public Juguete(int idJuguete, String nombre, String descripcion, double precio, int stock, int activo, Date fecha_baja) {
 		this.idJuguete = idJuguete;
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.precio = precio;
 		this.stock = stock;
+		this.activo = activo;
+		this.fecha_baja = fecha_baja;
 	}
 	public int getIdJuguete() {
 		return idJuguete;
