@@ -2,7 +2,7 @@ package service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 
 import DAO.EmpleadoDAO;
 import model.Empleado;
@@ -18,21 +18,21 @@ public class EmpleadoService {
 	private ArrayList<Empleado> crearEmpleadosIniciales() {
 	    ArrayList<Empleado> lista = new ArrayList<>();
 	    
-	    lista.add(new Empleado(1, "Ana", Cargo.jefe, new Date()));
-	    lista.add(new Empleado(2, "Luis", Cargo.cajero, new Date()));
-	    lista.add(new Empleado(3, "Marta", Cargo.cajero, new Date()));
-	    lista.add(new Empleado(4, "Carlos", Cargo.jefe, new Date()));
-	    lista.add(new Empleado(5, "Sofía", Cargo.cajero, new Date()));
-	    lista.add(new Empleado(6, "Pedro", Cargo.cajero, new Date()));
-	    lista.add(new Empleado(7, "Lucía", Cargo.jefe, new Date()));
-	    lista.add(new Empleado(8, "Jorge", Cargo.cajero, new Date()));
-	    lista.add(new Empleado(9, "María", Cargo.cajero, new Date()));
-	    lista.add(new Empleado(10, "Andrés", Cargo.jefe, new Date()));
+	    lista.add(new Empleado(1, "Ana", Cargo.jefe, new Date(System.currentTimeMillis())));
+	    lista.add(new Empleado(2, "Luis", Cargo.cajero, new Date(System.currentTimeMillis())));
+	    lista.add(new Empleado(3, "Marta", Cargo.cajero, new Date(System.currentTimeMillis())));
+	    lista.add(new Empleado(4, "Carlos", Cargo.jefe, new Date(System.currentTimeMillis())));
+	    lista.add(new Empleado(5, "Sofía", Cargo.cajero, new Date(System.currentTimeMillis())));
+	    lista.add(new Empleado(6, "Pedro", Cargo.cajero, new Date(System.currentTimeMillis())));
+	    lista.add(new Empleado(7, "Lucía", Cargo.jefe, new Date(System.currentTimeMillis())));
+	    lista.add(new Empleado(8, "Jorge", Cargo.cajero, new Date(System.currentTimeMillis())));
+	    lista.add(new Empleado(9, "María", Cargo.cajero, new Date(System.currentTimeMillis())));
+	    lista.add(new Empleado(10, "Andrés", Cargo.jefe, new Date(System.currentTimeMillis())));
 	    
 	    return lista;
 	}
-	
-	public void inicializarSeedData() throws SQLException{
+	// SEED DATA PARA SI LA BBDD ESTÁ VACÍA
+	public void inicializarSeedDataEmp() throws SQLException{
 		if (dao.listarTodos().isEmpty()) {
 			ArrayList<Empleado> iniciales = crearEmpleadosIniciales();
 			int filas = dao.insertarLista(iniciales);
@@ -54,6 +54,18 @@ public class EmpleadoService {
 			e.printStackTrace();
 		}
 		return filas > 0;
+	}
+	
+	// LISTAR TODOS LOS EMPLEADOS DEVUELVE UNA LISTA PARA PODER GUARDARLA Y PODER TENERLOS 
+	// EN MEMORIA
+	public ArrayList<Empleado> obtenerTodos(){
+		try {
+			return dao.listarTodos();
+		}catch (SQLException e) {
+			System.err.println("Error, no se ha podido acceder a los empleados: " + e.getMessage());
+	        e.printStackTrace();
+	        return new ArrayList<>();
+		}
 	}
 	
 	

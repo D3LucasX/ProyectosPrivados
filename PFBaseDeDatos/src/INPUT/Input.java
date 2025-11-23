@@ -2,6 +2,8 @@ package INPUT;
 
 import java.util.Scanner;
 
+import model.Empleado.Cargo;
+
 public class Input {
 	
 	// COMPROBACIONES DE STRING
@@ -79,5 +81,26 @@ public class Input {
 			}
 		}while(!valido);
 		return numeroAcomprobar;
+	}
+	
+	//---------------------------------------------------------------//
+	// COMOPROBACION DE CARGO DEL EMPLEADO
+	public static Cargo queCargo(Scanner entrada, String mensaje) {
+		Cargo cargo = null;
+		boolean valido = false;
+		do {
+			System.out.println(mensaje);
+			String cargoS = entrada.nextLine();
+			if (cargoS.trim().equalsIgnoreCase("jefe")) {
+				cargo = Cargo.jefe;
+				valido = true;
+			}else if (cargoS.trim().equalsIgnoreCase("cajero")) {
+				cargo = Cargo.cajero;
+				valido = true;
+			}else {
+				System.out.println("Entrada inválida, introduzca el cargo del empleado: (jefe/cajero)");
+			}
+		}while(!valido);
+		return cargo;
 	}
 }

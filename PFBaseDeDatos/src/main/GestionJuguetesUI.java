@@ -1,16 +1,28 @@
 package main;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import INPUT.Input;
 import model.Juguete;
 import service.JugueteService;
+import service.ServiceUtils;
 
 public class GestionJuguetesUI {
 
 	//  <<<<<<<<<<< FUNCIONES RELACIONADAS CON LOS JUGUETES >>>>>>>>>>>
+	
+	public static void mostrarMenuJuguetes() {
+		System.out.println("********************************");
+		System.out.println("*           JUGUETES           *");
+		System.out.println("********************************");
+		System.out.println();
+		System.out.println("1. Registrar nuevo Juguete.");
+		System.out.println("2. Modificar juguete.");
+		System.out.println("3. Eliminar juguete");
+		System.out.println("4. Listar todos los juguetes.");
+		System.out.println("5. Salir.");
+	}
 	
 	// CREAR JUGUETE
 	public Juguete crearJuguete(Scanner entrada) {
@@ -30,123 +42,14 @@ public class GestionJuguetesUI {
 		return nuevoJuguete;
 	}
 	
-	// FUNCION QUE MODIFICA UN CAMPO DE UNA TABLA EN UNA FILA
-	public void modificarCampo(Scanner entrada) {
-		try {
-			JugueteService service = new JugueteService();
-			String tabla = "";
-			String columnaAmodificar = "";
-			Object valor;
-			String columnaID;
-			int idNumero = 0;
-			String reTry = "";
-			boolean exito = false;
-			do {
-				tabla = Input.pedirString(entrada, "Introduzca la tabla que va a modificar", 1, 45);
-				columnaAmodificar = Input.pedirString(entrada, "Introduzca la columna que va a modificar", 1, 45);
-				valor = Input.pedirString(entrada, "Introduzca el valor modificado", 1, 45);
-				columnaID = Input.pedirString(entrada, "Introduzca el nombre del campo id de la tabla " + tabla + ": ",
-						1, 45);
-				idNumero = Input.pedirInt(entrada, "Introduzca el numero del ID:");
-
-				exito = service.modificarCampo(tabla, columnaAmodificar, valor, columnaID, idNumero);
-				if (exito) {
-					System.out.printf("Columna %s de la tabla %s modificada con éxito.\n", columnaAmodificar, tabla);
-					System.out.println();
-				} else {
-					System.out.println("No se pudo modificar la columna. Verifique los datos.");
-					System.out.println("¿Desea volver a intentarlo? si/no");
-					reTry = entrada.nextLine();
-					if (reTry.equalsIgnoreCase("si")) {
-						exito = false;
-						System.out.println("Volvera a introducir los datos.");
-					} else if (reTry.equalsIgnoreCase("no")) {
-						exito = true;
-						System.out.println("Genial, volvera a l menú prioncipal.");
-					} else {
-
-						System.out.println("Introduzca si o no.");
-					}
-				}
-			} while (!exito);
-		} catch (SQLException e) {
-			System.out.println("Error al modificar el registro: " + e.getMessage());
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			System.out.println("ERROR: " + e.getMessage());
-		}
-	}
-	
-	// FUNCION QUE ELIMINA UNA FILA DE UNA TABLA SEGÚN EL ID
-	public void eliminarFila(Scanner entrada, JugueteService service) {
-		String tabla = "";
-		String reTry = "";
-		int idNumero = 0;
-		boolean exito = false;
-		try {
-			do {
-				tabla = Input.pedirString(entrada, "Introduzca la tabla que va a modificar", 1, 45);
-				idNumero = Input.pedirInt(entrada, "Introduzca el numero del ID de la fila que quieras eliminar:");
-
-				exito = service.eliminarFila(tabla, idNumero);
-				if (exito) {
-					System.out.printf("Columna de la tabla %s, ha sido eliminada con éxito.\n", tabla);
-					System.out.println();
-				} else {
-					System.out.println("No se pudo eliminar la fila. Verifique los datos.");
-					System.out.println("¿Desea volver a intentarlo? si/no");
-					reTry = entrada.nextLine();
-					if (reTry.equalsIgnoreCase("si")) {
-						exito = false;
-						System.out.println("Volvera a introducir los datos.");
-					} else if (reTry.equalsIgnoreCase("no")) {
-						exito = true;
-						System.out.println("Genial, volvera a l menú prioncipal.");
-					} else {
-
-						System.out.println("Introduzca si o no.");
-					}
-				}
-			} while (!exito);
-		} catch (SQLException e) {
-			System.out.println("Error al eliminar la fila: " + e.getMessage());
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			System.out.println("ERROR: " + e.getMessage());
-		}
-	}
-	
 	// FUNCION QUE IMPRIME POR PANTALLA LA LISTA ACTUAL DE JUGUETES.
 	public void listarTodosJuguetes(JugueteService service, ArrayList<Juguete> listaJuguetes) {
 		listaJuguetes = service.obtenerTodos();
 		listaJuguetes.forEach(juguete -> System.out.println(juguete.getIdJuguete() + " - " +  juguete.getNombre()));
 	}
-
-	public static void mostrarMenuPrincipal() {
-		System.out.println("********************************");
-		System.out.println("*      JUGUETERÍA DOSA         *");
-		System.out.println("********************************");
-		System.out.println();
-		System.out.println("1. Juguetes.");
-		System.out.println("2. Empleados.");
-		System.out.println("3. Ventas.");
-		System.out.println("4. Obtener datos de la tienda.");
-		System.out.println("5 Salir.");
-	}
-
-	public static void mostrarMenuJuguetes() {
-		System.out.println("********************************");
-		System.out.println("*           JUGUETES           *");
-		System.out.println("********************************");
-		System.out.println();
-		System.out.println("1. Registrar nuevo Juguete.");
-		System.out.println("2. Modificar juguete.");
-		System.out.println("3. Eliminar juguete");
-		System.out.println("4. Listar todos los juguetes.");
-		System.out.println("5. Salir.");
-	}
-
-	public void menuOpcionesJuguetes(Scanner entrada, JugueteService service, ArrayList<Juguete> listaJuguetes) {
+	
+	// SUB-MENU JUGUETES
+	public void menuOpcionesJuguetes(Scanner entrada, ServiceUtils service, JugueteService serviceJug, ArrayList<Juguete> listaJuguetes) {
 		int opcionSecun = 0;
 
 		while (opcionSecun != 5) { // bucle del sub-menú
@@ -155,7 +58,7 @@ public class GestionJuguetesUI {
 			String opcion = entrada.nextLine();
 
 			if (!Input.ComprobarStringRegex(opcion, "^[1-5]$")) {
-				System.out.println("Opción no válida");
+				System.out.println("Opción no válida.");
 			} else {
 				opcionSecun = Integer.parseInt(opcion);
 
@@ -163,22 +66,22 @@ public class GestionJuguetesUI {
 				case 1: // AÑADIR UN JUGUETE A LA BASE DE DATOS
 					System.out.println();
 					Juguete jugueteAdd = crearJuguete(entrada);
-					if (service.agregarJuguete(jugueteAdd)) {
+					if (serviceJug.agregarJuguete(jugueteAdd)) {
 						System.out.println("Juguete " + jugueteAdd.getNombre() + " añadido correctamente.");
 					}
 					break;
 				case 2: // MODIFICAR UN CAMPO DE UNA TABLA DE LA BBDD
 					System.out.println();
-					modificarCampo(entrada);
+					GestionUtils.modificarCampo(entrada);
 					break;
 				case 3: // eLIMINAR UNA FILA DE UNA TABLA DE LA BBDD
 					System.out.println();
-					eliminarFila(entrada, service);
+					GestionUtils.eliminarFila(entrada, service);
 					break;
 				case 4: // LISTAR TODOS LOS JUGUETES DE LA BBDD
 					System.out.println();
 					System.out.println("//-------------//");
-					listarTodosJuguetes(service,listaJuguetes);
+					listarTodosJuguetes(serviceJug,listaJuguetes);
 					System.out.println("//-------------//");
 					System.out.println();
 					break;
@@ -196,6 +99,5 @@ public class GestionJuguetesUI {
 				}
 			}
 		}
-
 	}
 }

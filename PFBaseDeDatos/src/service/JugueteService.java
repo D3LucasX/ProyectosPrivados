@@ -2,24 +2,13 @@ package service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
 
 import DAO.JugueteDAO;
 import model.Juguete;
 
 public class JugueteService {
 	private JugueteDAO dao;
-	
-	// Mapeo clave valor para comprobar que los campos que se introducen en la consulta de 
-	// modificacion, no son maliciosos y concuerdan con los campos que existen en la tabla.
-	private static final Map<String, Set<String>> columnasValidas = Map.of(
-			"juguete", Set.of("idJuguete", "Nombre", "Descripcion", "Precio", "Cantidad_stock"),
-			"empleado", Set.of("idEMPLEADO","Nombre", "Cargo", "Fecha_ingreso"),
-			"zona", Set.of("idzona","Nombre", "Descripcion"),
-			"stand", Set.of("idStand","Nombre", "Descripcion", "ZONA_idzona")
-	);
-	
+
 	
 	public JugueteService() {
 		this.dao = new JugueteDAO();
@@ -72,29 +61,10 @@ public class JugueteService {
 	        try {
 	            return dao.listarTodos();
 	        } catch (SQLException e) {
-	            e.printStackTrace();
-	            return new ArrayList<>();
+	        	System.err.println("Error, no se ha podido acceder a los juguetes: " + e.getMessage());
+		        e.printStackTrace();
+		        return new ArrayList<>();
 	        }
-	    }
-	 
-	 // Modificar un campo de un juguete
-	 public boolean modificarCampo(String tabla , String columnaAmodificar, Object valor, String columnaId, int idJuguete) throws SQLException {
-		 if(!columnasValidas.containsKey(tabla)) {
-			 throw new IllegalArgumentException("Tabla no permitida");
-		 }
-		 if (!columnasValidas.getOrDefault(tabla, Set.of()).contains(columnaAmodificar)) {
-			 throw new IllegalArgumentException("Columna no permitida");
-		 }
-		 return dao.modificarCampo(tabla, columnaAmodificar, valor, columnaId, idJuguete);
 	 }
-	 
-	 // Eliminar una fila de alguna tabla
-	 public boolean eliminarFila(String tabla, int idJuguete) throws SQLException {
-		 if(!columnasValidas.containsKey(tabla)) {
-			 throw new IllegalArgumentException("Tabla no permitida");
-		 }
-		 return dao.eliminarFila(tabla, idJuguete);
-	 }
-	 
 	 
 }

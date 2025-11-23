@@ -1,0 +1,16 @@
+package main;
+
+public class GestionUtils {
+
+	public static void mostrarMenuPrincipal() {
+		System.out.println("********************************");
+		System.out.println("*      JUGUETERÍA DOSA         *");
+		System.out.println("********************************");
+		System.out.println();
+		System.out.println("1. Juguetes.");
+		System.out.println("2. Empleados.");
+		System.out.println("3. Ventas.");
+		System.out.println("4. Obtener datos de la tienda.");
+		System.out.println("5 Salir.");
+	}
+}
