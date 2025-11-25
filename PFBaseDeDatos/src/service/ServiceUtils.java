@@ -16,11 +16,11 @@ public class ServiceUtils {
 	
 	// Mapeo clave valor para comprobar que los campos que se introducen en la consulta de 
 		// modificacion, no son maliciosos y concuerdan con los campos que existen en la tabla.
-		private static final Map<String, Set<String>> columnasValidas = Map.of(
+	 public static final Map<String, Set<String>> columnasValidas = Map.of(
 				"juguete", Set.of("idJuguete", "Nombre", "Descripcion", "Precio", "Cantidad_stock"),
 				"empleado", Set.of("idEMPLEADO","Nombre", "Cargo", "Fecha_ingreso"),
 				"zona", Set.of("idzona","Nombre", "Descripcion"),
-				"stand", Set.of("idStand","Nombre", "Descripcion", "ZONA_idzona")
+				"stand", Set.of("idStand","Nombre", "Descripcion", "ZONA_idzona, habilitada")
 		);
 	
 	
@@ -35,7 +35,7 @@ public class ServiceUtils {
 		 return daoUT.modificarCampo(tabla, columnaAmodificar, valor, columnaId, idJuguete);
 	 }
 	 
-	 // Eliminar una fila de alguna tabla
+	 // dar de baja una fila de empleados o de juguetes
 	 public boolean eliminarFila(String tabla, int activo, int idJuguete) throws SQLException {
 		 if(!columnasValidas.containsKey(tabla)) {
 			 throw new IllegalArgumentException("Tabla no permitida");

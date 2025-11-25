@@ -61,7 +61,7 @@ public class DAOUtils {
 		}
 	}
 
-	// Funcion para eliminar una fila
+	// Funcion para dar de baja a una fila
 	public boolean eliminarFila(String tabla, int activo, int idJuguete) throws SQLException {
 		String columnaID = obtenerColumnaID(tabla);
 		String sql = "UPDATE " + tabla + " SET activo = ? WHERE " + columnaID + " = ?";

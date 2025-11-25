@@ -6,8 +6,12 @@ public class Zona {
 	private String nombre;
 	private String descripcion;
 	public Zona(int idZona, String nombre, String descripcion) {
-		super();
 		this.idZona = idZona;
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+	}
+	
+	public Zona(String nombre, String descripcion) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 	}

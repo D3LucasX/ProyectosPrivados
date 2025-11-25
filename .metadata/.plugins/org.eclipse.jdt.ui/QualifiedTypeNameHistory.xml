@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
     <fullyQualifiedTypeName name="model.Juguete"/>
-    <fullyQualifiedTypeName name="java.sql.SQLException"/>
     <fullyQualifiedTypeName name="java.util.Map"/>
     <fullyQualifiedTypeName name="DAO.JugueteDAO"/>
     <fullyQualifiedTypeName name="java.lang.Object"/>
     <fullyQualifiedTypeName name="main.GestionJuguetesUI"/>
     <fullyQualifiedTypeName name="java.sql.Connection"/>
-    <fullyQualifiedTypeName name="DataBase.DataBaseConnection"/>
-    <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
     <fullyQualifiedTypeName name="model.Empleado.Cargo"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="service.JugueteService"/>
     <fullyQualifiedTypeName name="main.GestionUtils"/>
     <fullyQualifiedTypeName name="model.Empleado"/>
-    <fullyQualifiedTypeName name="INPUT.Input"/>
     <fullyQualifiedTypeName name="jdk.internal.org.jline.terminal.Attributes.InputFlag"/>
     <fullyQualifiedTypeName name="java.util.Date"/>
     <fullyQualifiedTypeName name="java.time.LocalDate"/>
-    <fullyQualifiedTypeName name="java.lang.System"/>
     <fullyQualifiedTypeName name="service.EmpleadoService"/>
+    <fullyQualifiedTypeName name="DAO.DAOUtils"/>
+    <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
+    <fullyQualifiedTypeName name="DataBase.DataBaseConnection"/>
+    <fullyQualifiedTypeName name="java.beans.Statement"/>
+    <fullyQualifiedTypeName name="java.lang.System"/>
+    <fullyQualifiedTypeName name="java.sql.ResultSet"/>
+    <fullyQualifiedTypeName name="sun.swing.MenuItemLayoutHelper.ColumnAlignment"/>
+    <fullyQualifiedTypeName name="service.ServiceUtils"/>
+    <fullyQualifiedTypeName name="java.sql.SQLException"/>
+    <fullyQualifiedTypeName name="INPUT.Input"/>
 </qualifiedTypeNameHistroy>

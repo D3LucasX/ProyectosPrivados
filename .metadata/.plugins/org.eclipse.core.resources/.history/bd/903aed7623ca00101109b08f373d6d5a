@@ -1,0 +1,15 @@
+package DAO;
+
+import java.sql.Connection;
+
+import DataBase.DataBaseConnection;
+
+public class ZonaDAO {
+
+	public int registrarZona() {
+		String sql = "INSERT INTO zona (idZona, Nombre, Descripcion) VALUES(?,?,?)";
+		try(Connection conexion = DataBaseConnection.getConnection()) throws SQLException{
+			
+		}
+	}
+}

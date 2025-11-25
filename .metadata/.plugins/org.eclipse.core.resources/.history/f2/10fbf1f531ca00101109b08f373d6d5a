@@ -1,0 +1,45 @@
+package service;
+
+import java.sql.SQLException;
+import java.util.Map;
+import java.util.Set;
+
+import DAO.DAOUtils;
+
+public class ServiceUtils {
+	private DAOUtils daoUT;
+
+
+	public ServiceUtils() {
+		this.daoUT = new DAOUtils();
+	}
+	
+	// Mapeo clave valor para comprobar que los campos que se introducen en la consulta de 
+		// modificacion, no son maliciosos y concuerdan con los campos que existen en la tabla.
+	 static final Map<String, Set<String>> columnasValidas = Map.of(
+				"juguete", Set.of("idJuguete", "Nombre", "Descripcion", "Precio", "Cantidad_stock"),
+				"empleado", Set.of("idEMPLEADO","Nombre", "Cargo", "Fecha_ingreso"),
+				"zona", Set.of("idzona","Nombre", "Descripcion"),
+				"stand", Set.of("idStand","Nombre", "Descripcion", "ZONA_idzona, habilitada")
+		);
+	
+	
+	 // Modificar un campo de un juguete
+	 public boolean modificarCampo(String tabla , String columnaAmodificar, Object valor, String columnaId, int idJuguete) throws SQLException {
+		 if(!columnasValidas.containsKey(tabla)) {
+			 throw new IllegalArgumentException("Tabla no permitida");
+		 }
+		 if (!columnasValidas.getOrDefault(tabla, Set.of()).contains(columnaAmodificar)) {
+			 throw new IllegalArgumentException("Columna no permitida");
+		 }
+		 return daoUT.modificarCampo(tabla, columnaAmodificar, valor, columnaId, idJuguete);
+	 }
+	 
+	 // dar de baja una fila de empleados o de juguetes
+	 public boolean eliminarFila(String tabla, int activo, int idJuguete) throws SQLException {
+		 if(!columnasValidas.containsKey(tabla)) {
+			 throw new IllegalArgumentException("Tabla no permitida");
+		 }
+		 return daoUT.eliminarFila(tabla, activo, idJuguete);
+	 }
+}

@@ -119,10 +119,10 @@ public class GestionUtils {
 				}
 			} while (!exito);
 		} catch (SQLException e) {
-			System.out.println("Error al modificar el borrado logico de la fila: " + e.getMessage());
+			System.err.println("Error al modificar el borrado logico de la fila: " + e.getMessage());
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			System.out.println("ERROR: " + e.getMessage());
+			System.err.println("ERROR: " + e.getMessage());
 		}
 	}
 
