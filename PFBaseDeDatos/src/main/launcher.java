@@ -6,21 +6,23 @@ import java.util.Scanner;
 
 import model.Empleado;
 import model.Juguete;
+import model.Zona;
 import service.EmpleadoService;
 import service.JugueteService;
 import service.ServiceUtils;
+import service.ZonaService;
 import INPUT.Input;
 
 public class launcher {
 	
-	public static void menuOpcionesPrincipales(Scanner entrada, JugueteService serviceJ, EmpleadoService serviceE, ServiceUtils serviceUT, ArrayList<Juguete> listaJuguetes, ArrayList<Empleado> listaEmpleados) {
+	public static void menuOpcionesPrincipales(Scanner entrada, JugueteService serviceJ, EmpleadoService serviceE, ZonaService serviceZ, ServiceUtils serviceUT, ArrayList<Juguete> listaJuguetes, ArrayList<Empleado> listaEmpleados) {
 		int opcionPrin = 0;
 		while (opcionPrin != 5) {
 			GestionUtils.mostrarMenuPrincipal();
 			System.out.print("Introduzca una opción: ");
 			String opcion = entrada.nextLine();
 
-			if (!Input.ComprobarStringRegex(opcion, "^[1-5]$")) {
+			if (!Input.ComprobarStringRegex(opcion, "^[1-7]$")) {
 				System.out.println("Opción no válida");
 			} else {
 				opcionPrin = Integer.parseInt(opcion);
@@ -37,8 +39,13 @@ public class launcher {
 					gE.menuOpcionesEmpleados(entrada, serviceUT, serviceE, listaEmpleados);
 					break;
 				case 3:
+					System.out.println();
+					GestionZonaUI gZ = new GestionZonaUI();
+					gZ.menuOpcionesZonas(entrada, serviceUT, serviceZ);
 					break;
 				case 4:
+					System.out.println();
+					GestionUtils.eliminarFila(entrada, serviceUT);
 					break;
 				case 5:
 					System.out.println();
@@ -60,11 +67,13 @@ public class launcher {
 		Scanner entrada = new Scanner(System.in);
 		EmpleadoService serviceE = new EmpleadoService();
 		JugueteService serviceJ = new JugueteService();
+		ZonaService serviceZ = new ZonaService();
 		ServiceUtils serviceUT = new ServiceUtils();
 
 		try {
 			serviceJ.inicializarSeedDataJug();
 			serviceE.inicializarSeedDataEmp();
+			serviceZ.inicializarSeedData();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} 
@@ -73,7 +82,7 @@ public class launcher {
 		ArrayList<Empleado> listeEmpleados = serviceE.obtenerTodos();
 		
 		// Menu principal
-		menuOpcionesPrincipales(entrada, serviceJ, serviceE, serviceUT, listeJuguetes, listeEmpleados);
+		menuOpcionesPrincipales(entrada, serviceJ, serviceE, serviceZ, serviceUT, listeJuguetes, listeEmpleados);
 	}
 
 }

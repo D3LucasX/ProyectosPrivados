@@ -25,4 +25,6 @@
     <fullyQualifiedTypeName name="service.ServiceUtils"/>
     <fullyQualifiedTypeName name="java.sql.SQLException"/>
     <fullyQualifiedTypeName name="INPUT.Input"/>
+    <fullyQualifiedTypeName name="service.ZonaService"/>
+    <fullyQualifiedTypeName name="main.GestionZonaUI"/>
 </qualifiedTypeNameHistroy>

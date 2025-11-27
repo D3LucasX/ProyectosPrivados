@@ -18,16 +18,16 @@ public class EmpleadoService {
 	private ArrayList<Empleado> crearEmpleadosIniciales() {
 	    ArrayList<Empleado> lista = new ArrayList<>();
 	    
-	    lista.add(new Empleado(1, "Ana", Cargo.jefe, new Date(System.currentTimeMillis())));
-	    lista.add(new Empleado(2, "Luis", Cargo.cajero, new Date(System.currentTimeMillis())));
-	    lista.add(new Empleado(3, "Marta", Cargo.cajero, new Date(System.currentTimeMillis())));
-	    lista.add(new Empleado(4, "Carlos", Cargo.jefe, new Date(System.currentTimeMillis())));
-	    lista.add(new Empleado(5, "Sofía", Cargo.cajero, new Date(System.currentTimeMillis())));
-	    lista.add(new Empleado(6, "Pedro", Cargo.cajero, new Date(System.currentTimeMillis())));
-	    lista.add(new Empleado(7, "Lucía", Cargo.jefe, new Date(System.currentTimeMillis())));
-	    lista.add(new Empleado(8, "Jorge", Cargo.cajero, new Date(System.currentTimeMillis())));
-	    lista.add(new Empleado(9, "María", Cargo.cajero, new Date(System.currentTimeMillis())));
-	    lista.add(new Empleado(10, "Andrés", Cargo.jefe, new Date(System.currentTimeMillis())));
+	    lista.add(new Empleado("Ana", Cargo.jefe, new Date(System.currentTimeMillis())));
+	    lista.add(new Empleado("Luis", Cargo.cajero, new Date(System.currentTimeMillis())));
+	    lista.add(new Empleado("Marta", Cargo.cajero, new Date(System.currentTimeMillis())));
+	    lista.add(new Empleado("Carlos", Cargo.jefe, new Date(System.currentTimeMillis())));
+	    lista.add(new Empleado("Sofía", Cargo.cajero, new Date(System.currentTimeMillis())));
+	    lista.add(new Empleado("Pedro", Cargo.cajero, new Date(System.currentTimeMillis())));
+	    lista.add(new Empleado("Lucía", Cargo.jefe, new Date(System.currentTimeMillis())));
+	    lista.add(new Empleado("Jorge", Cargo.cajero, new Date(System.currentTimeMillis())));
+	    lista.add(new Empleado("María", Cargo.cajero, new Date(System.currentTimeMillis())));
+	    lista.add(new Empleado("Andrés", Cargo.jefe, new Date(System.currentTimeMillis())));
 	    
 	    return lista;
 	}

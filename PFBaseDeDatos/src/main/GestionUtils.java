@@ -14,11 +14,13 @@ public class GestionUtils {
 		System.out.println("*      JUGUETERÍA DOSA         *");
 		System.out.println("********************************");
 		System.out.println();
-		System.out.println("1. Juguetes.");
-		System.out.println("2. Empleados.");
-		System.out.println("3. Ventas.");
-		System.out.println("4. Obtener datos de la tienda.");
-		System.out.println("5 Salir.");
+		System.out.println("1. Gestion de Juguetes.");
+		System.out.println("2. Gestion de Empleados.");
+		System.out.println("3. Gestion de Zonas.");
+		System.out.println("4. Habilitar o deshabilitar producto/empleado/zona");
+		System.out.println("5. Ventas.");
+		System.out.println("6. Obtener datos de la tienda.");
+		System.out.println("7. Salir.");
 	}
 
 	// FUNCION QUE MODIFICA UN CAMPO DE UNA TABLA EN UNA FILA
@@ -86,15 +88,13 @@ public class GestionUtils {
 					if (altaBaja.equalsIgnoreCase("alta")) {
 						exito = service.eliminarFila(tabla, activo1, idNumero);
 						DAOUtils.modificarFechaBaja_alta(tabla, idNumero);
-						valido = true;
 					}else if (altaBaja.equalsIgnoreCase("baja")){
 						exito = service.eliminarFila(tabla, activo0, idNumero);
 						DAOUtils.modificarFechaBaja(tabla, idNumero);
-						valido = true;
 					}else {
 						System.out.println("Escriba 'alta' para dar de alta o 'baja' para dar de baja.");
 					}
-				}while(!valido);
+				}while(!exito);
 	
 				if (exito && altaBaja.equalsIgnoreCase("baja")) {
 					System.out.printf("Fila de la tabla %s, ha sido dada de baja con éxito.\n", tabla);

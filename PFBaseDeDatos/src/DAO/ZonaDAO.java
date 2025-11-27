@@ -12,9 +12,31 @@ import model.Zona;
 
 public class ZonaDAO {
 
+	// OBTENER UNA ZONA POR ID
+	public Zona obtenerZonaPorId(int idZona) throws SQLException {
+	    String sql = "SELECT idZona, nombre, descripcion FROM zona WHERE idZona = ?";
+	    
+	    try (Connection conexion = DataBaseConnection.getConnection();
+	         PreparedStatement ps = conexion.prepareStatement(sql)) {
+
+	        ps.setInt(1, idZona);
+
+	        try (ResultSet rs = ps.executeQuery()) {
+	            if (rs.next()) {
+	                int id = rs.getInt("idZona");
+	                String nombre = rs.getString("nombre");
+	                String descripcion = rs.getString("descripcion");
+	                return new Zona(id, nombre, descripcion);
+	            } else {
+	                return null; 
+	            }
+	        }
+	    }
+	}
+	
 	// FUNCION QUE OBTIENE EL SIGUIENTE ID PARA UNA ZONA NUEVA
 	public int obtenerSiguienteNumZona() throws SQLException {
-		String sql = "SELECT MAX(id) + 1 FROM zona";
+		String sql = "SELECT MAX(idZona) + 1 FROM zona";
 		try (Connection conexion = DataBaseConnection.getConnection();
 				Statement st = conexion.createStatement();
 				ResultSet rs = st.executeQuery(sql)) {
@@ -28,11 +50,12 @@ public class ZonaDAO {
 	// FUNCION QUE REGISTRA UNA NUEVA ZONA
 	public int registrarZona(Zona nuevaZona) throws SQLException {
 		int filas = 0;
-		int idZonaObtenida = obtenerSiguienteNumZona();
+		 // Si el objeto no tiene ID definido, obtener el siguiente
+	    int idZona = (nuevaZona.getIdZona() > 0) ? nuevaZona.getIdZona() : obtenerSiguienteNumZona();
 		String sql = "INSERT INTO zona (idZona, Nombre, Descripcion) VALUES(?,?,?)";
 		try (Connection conexion = DataBaseConnection.getConnection();
 				PreparedStatement ps = conexion.prepareStatement(sql)) {
-			ps.setInt(1, idZonaObtenida);
+			ps.setInt(1, idZona);
 			ps.setString(2, nuevaZona.getNombre());
 			ps.setString(3, nuevaZona.getDescripcion());
 
@@ -69,23 +92,23 @@ public class ZonaDAO {
 		try (Connection conexion = DataBaseConnection.getConnection();
 				PreparedStatement ps = conexion.prepareStatement(sql)) {
 			ps.setBoolean(1, habilitada);
-			try (ResultSet rs = ps.executeQuery(sql)) {
+			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
 					int idZona = rs.getInt("idZona");
 					String nombre = rs.getString("Nombre");
 					String descripcion = rs.getString("Descripcion");
-					boolean esHabilitada = rs.getBoolean("habilitada");
+					boolean esHabilitada = rs.getBoolean("activo");
 
 					System.out.println("ID: " + idZona + ", Nombre: " + nombre + ", Descripción: " + descripcion
-							+ ", Habilitada: " + habilitada);
+							+ ", Habilitada: " + esHabilitada);
 				}
 			}
 		}
 	}
 
-	public boolean deshabilitarZonas(int idZona) throws SQLException {
-		String columnaID = DAOUtils.obtenerColumnaID("zona");
-		String sql = "UPDATE zona SET activo = false WHERE" + columnaID + " = ?";
+	/*public boolean deshabilitarZonas(String tabla, int idZona) throws SQLException {
+		String columnaID = DAOUtils.obtenerColumnaID(tabla);
+		String sql = "UPDATE " + tabla + " SET activo = false WHERE" + columnaID + " = ?";
 
 		try (Connection conexion = DataBaseConnection.getConnection();
 				PreparedStatement ps = conexion.prepareStatement(sql)) {
@@ -93,5 +116,5 @@ public class ZonaDAO {
 			return ps.executeUpdate() > 0;
 		}
 
-	}
+	}*/
 }

@@ -19,7 +19,6 @@ public class GestionJuguetesUI {
 		System.out.println();
 		System.out.println("1. Registrar nuevo Juguete.");
 		System.out.println("2. Modificar juguete.");
-		System.out.println("3. Eliminar juguete");
 		System.out.println("4. Listar todos los juguetes.");
 		System.out.println("5. Salir.");
 	}
@@ -52,12 +51,12 @@ public class GestionJuguetesUI {
 	public void menuOpcionesJuguetes(Scanner entrada, ServiceUtils service, JugueteService serviceJug, ArrayList<Juguete> listaJuguetes) {
 		int opcionSecun = 0;
 
-		while (opcionSecun != 5) { // bucle del sub-menú
+		while (opcionSecun != 4) { // bucle del sub-menú
 			mostrarMenuJuguetes();
 			System.out.print("Introduzca una opción: ");
 			String opcion = entrada.nextLine();
 
-			if (!Input.ComprobarStringRegex(opcion, "^[1-5]$")) {
+			if (!Input.ComprobarStringRegex(opcion, "^[1-4]$")) {
 				System.out.println("Opción no válida.");
 			} else {
 				opcionSecun = Integer.parseInt(opcion);
@@ -74,18 +73,14 @@ public class GestionJuguetesUI {
 					System.out.println();
 					GestionUtils.modificarCampo(entrada);
 					break;
-				case 3: // eLIMINAR UNA FILA DE UNA TABLA DE LA BBDD
-					System.out.println();
-					GestionUtils.eliminarFila(entrada, service);
-					break;
-				case 4: // LISTAR TODOS LOS JUGUETES DE LA BBDD
+				case 3: // LISTAR TODOS LOS JUGUETES DE LA BBDD
 					System.out.println();
 					System.out.println("//-------------//");
 					listarTodosJuguetes(serviceJug,listaJuguetes);
 					System.out.println("//-------------//");
 					System.out.println();
 					break;
-				case 5: // SALIR DEL SUB-MENÚ
+				case 4: // SALIR DEL SUB-MENÚ
 					System.out.println();
 					System.out.println("Saliendo al menú principal...");
 					System.out.println();

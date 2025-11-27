@@ -20,9 +20,8 @@ public class GestionEmpleadosUI {
 		System.out.println();
 		System.out.println("1. Registrar nuevo Empleado.");
 		System.out.println("2. Modificar Empleado.");
-		System.out.println("3. Eliminar Empleado");
-		System.out.println("4. Listar todos los Empleados.");
-		System.out.println("5. Salir.");
+		System.out.println("3. Listar todos los Empleados.");
+		System.out.println("4. Salir.");
 	}
 	
 	// AGREGAR EMPLEADO
@@ -46,12 +45,12 @@ public class GestionEmpleadosUI {
 	public void menuOpcionesEmpleados(Scanner entrada, ServiceUtils serviceUT, EmpleadoService service, ArrayList<Empleado> listaEmpleados) {
 		int opcionSecun = 0;
 		
-		while(opcionSecun != 5) {
+		while(opcionSecun != 4) {
 			mostrarMenuEmpleados();
 			System.out.println("Introduzca una opcion: ");
 			String opcion = entrada.nextLine();
 			
-			if (!Input.ComprobarStringRegex(opcion, "^[1-5]$")) {
+			if (!Input.ComprobarStringRegex(opcion, "^[1-4]$")) {
 				System.out.println("Opcion no válida.");
 			}else {
 				opcionSecun = Integer.parseInt(opcion);
@@ -70,16 +69,12 @@ public class GestionEmpleadosUI {
 					break;
 				case 3:
 					System.out.println();
-					GestionUtils.eliminarFila(entrada, serviceUT);
-					break;
-				case 4:
-					System.out.println();
 					System.out.println("//-------------//");
 					listarTodosEmpleados(service,listaEmpleados);
 					System.out.println("//-------------//");
 					System.out.println();
 					break;
-				case 5:
+				case 4:
 					System.out.println();
 					System.out.println("Saliendo al menú principal...");
 					System.out.println();

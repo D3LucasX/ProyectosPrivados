@@ -36,10 +36,10 @@ public class ServiceUtils {
 	 }
 	 
 	 // dar de baja una fila de empleados o de juguetes
-	 public boolean eliminarFila(String tabla, int activo, int idJuguete) throws SQLException {
+	 public boolean eliminarFila(String tabla, int activo, int id) throws SQLException {
 		 if(!columnasValidas.containsKey(tabla)) {
 			 throw new IllegalArgumentException("Tabla no permitida");
 		 }
-		 return daoUT.eliminarFila(tabla, activo, idJuguete);
+		 return daoUT.eliminarFila(tabla, activo, id);
 	 }
 }

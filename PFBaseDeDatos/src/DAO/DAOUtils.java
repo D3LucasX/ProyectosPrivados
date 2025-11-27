@@ -43,10 +43,11 @@ public class DAOUtils {
 	// FUNCION QUE AL DAR DE ALTA LA FECHA LA PONGA A NULL
 	public static void modificarFechaBaja_alta(String tabla, int id) throws SQLException{
 		String columnaID = obtenerColumnaID(tabla);
-		String sql = "UPDATE juguete SET fecha_baja = NULL WHERE id = ?";
+		String sql = "UPDATE " + tabla + " SET fecha_baja = NULL WHERE " + columnaID + " = ?";
 		try (Connection conexion = DataBaseConnection.getConnection();
 				PreparedStatement ps = conexion.prepareStatement(sql)) {
 			ps.setInt(1, id);
+			ps.executeUpdate();
 		}
 	}
 
@@ -58,18 +59,19 @@ public class DAOUtils {
 		try (Connection conexion = DataBaseConnection.getConnection();
 				PreparedStatement ps = conexion.prepareStatement(sql)) {
 			ps.setInt(1, id);
+			ps.executeUpdate();
 		}
 	}
 
 	// Funcion para dar de baja a una fila
-	public boolean eliminarFila(String tabla, int activo, int idJuguete) throws SQLException {
+	public boolean eliminarFila(String tabla, int activo, int id) throws SQLException {
 		String columnaID = obtenerColumnaID(tabla);
 		String sql = "UPDATE " + tabla + " SET activo = ? WHERE " + columnaID + " = ?";
 
 		try (Connection conexion = DataBaseConnection.getConnection();
 				PreparedStatement ps = conexion.prepareStatement(sql)) {
 			ps.setInt(1, activo);
-			ps.setInt(2, idJuguete);
+			ps.setInt(2, id);
 			return ps.executeUpdate() > 0;
 		}
 	}

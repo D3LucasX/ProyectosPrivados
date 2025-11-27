@@ -8,6 +8,9 @@ public class Empleado {
 	private String nombre;
 	private Cargo cargo;
 	private Date fechaIngreso;
+	private boolean activo;
+	private Date fecha_baja;
+	
 	// Definimos el enum dentro de la clase.
 	public enum Cargo{jefe, cajero};
 
