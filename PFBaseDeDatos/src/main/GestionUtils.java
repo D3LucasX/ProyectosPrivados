@@ -1,11 +1,19 @@
 package main;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
 import DAO.DAOUtils;
+import DataBase.DataBaseConnection;
 import INPUT.Input;
+import model.Stand;
+import model.Zona;
 import service.ServiceUtils;
+import service.StandService;
+import service.ZonaService;
 
 public class GestionUtils {
 
@@ -70,7 +78,8 @@ public class GestionUtils {
 		}
 	}
 
-	// FUNCION QUE ELIMINA O DA DE ALTA LOGICAMENTE UNA FILA DE UNA TABLA SEGÚN EL ID
+	// FUNCION QUE ELIMINA O DA DE ALTA LOGICAMENTE UNA FILA DE UNA TABLA SEGÚN EL
+	// ID
 	public static void eliminarFila(Scanner entrada, ServiceUtils service) {
 		String tabla = "";
 		String reTry = "";
@@ -88,21 +97,21 @@ public class GestionUtils {
 					if (altaBaja.equalsIgnoreCase("alta")) {
 						exito = service.eliminarFila(tabla, activo1, idNumero);
 						DAOUtils.modificarFechaBaja_alta(tabla, idNumero);
-					}else if (altaBaja.equalsIgnoreCase("baja")){
+					} else if (altaBaja.equalsIgnoreCase("baja")) {
 						exito = service.eliminarFila(tabla, activo0, idNumero);
 						DAOUtils.modificarFechaBaja(tabla, idNumero);
-					}else {
+					} else {
 						System.out.println("Escriba 'alta' para dar de alta o 'baja' para dar de baja.");
 					}
-				}while(!exito);
-	
+				} while (!exito);
+
 				if (exito && altaBaja.equalsIgnoreCase("baja")) {
 					System.out.printf("Fila de la tabla %s, ha sido dada de baja con éxito.\n", tabla);
 					System.out.println();
-				}else if(exito && altaBaja.equalsIgnoreCase("alta")){ 
+				} else if (exito && altaBaja.equalsIgnoreCase("alta")) {
 					System.out.printf("Fila de la tabla %s, ha sido dada de alta con éxito.\n", tabla);
 					System.out.println();
-				}else {
+				} else {
 					System.out.println("No se pudo modificar la fila. Verifique los datos.");
 					System.out.println("¿Desea volver a intentarlo? si/no");
 					reTry = entrada.nextLine();
@@ -124,6 +133,50 @@ public class GestionUtils {
 		} catch (IllegalArgumentException e) {
 			System.err.println("ERROR: " + e.getMessage());
 		}
+	}
+
+	public static Stand validarStand(Scanner entrada, StandService service) {
+		Stand stand = null;
+		boolean valido = false;
+		int idStand = 0;
+		do {
+			idStand = Input.pedirInt(entrada, "Introduce el id del Stand al que quieres asociar el juguete");
+			try {
+				stand = service.validarStand(idStand);
+				if (stand != null) {
+					valido = true;
+				}else {
+					System.err.println("El stand que introdujo no existe, intentalo de nuevo.");
+					valido = false;
+				}
+			}catch(SQLException e){
+				e.printStackTrace();
+				System.err.println("ERROR al buscar el stand por ID");
+			}
+		}while(!valido);
+		return stand;
+	}
+	
+	public static Zona validarZona (Scanner entrada, ZonaService service) {
+		Zona zona = null;
+		boolean valido = false;
+		int idZona = 0;
+		do {
+			idZona = Input.pedirInt(entrada, "Introduce el id de la zona en la que se encuentra el stand:");
+			try {
+				zona = service.validarZona(idZona);
+				if (zona != null) {
+					valido = true;
+				}else {
+					System.err.println("El stand que introdujo no existe, intentalo de nuevo.");
+					valido = false;
+				}
+			}catch(SQLException e){
+				e.printStackTrace();
+				System.err.println("ERROR al buscar el stand por ID");
+			}
+		}while(!valido);
+		return zona;
 	}
 
 }

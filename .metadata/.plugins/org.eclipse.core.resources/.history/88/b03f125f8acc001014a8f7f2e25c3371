@@ -1,0 +1,34 @@
+package service;
+
+import java.sql.SQLException;
+
+import DAO.StandDAO;
+
+public class StandService {
+	private StandDAO dao;
+	
+	public StandService() {
+		this.dao = new StandDAO();
+	}
+
+	public void inicializarStandsSeedData() throws SQLException {
+	    // Solo si no hay stands en la BBDD
+	    if (dao.listarTodos().isEmpty()) {
+
+	        // Creamos una lista temporal para los seed data
+	        ArrayList<Stand> seedStands = new ArrayList<>();
+
+	        seedStands.add(new Stand(1, "Stand de Pelotas", "Variedad de pelotas", obtenerZonaPorId(1)));
+	        seedStands.add(new Stand(2, "Stand de Muñecas", "Muñecas y accesorios", obtenerZonaPorId(1)));
+	        seedStands.add(new Stand(3, "Stand de Construcción", "Lego y bloques", obtenerZonaPorId(2)));
+	        seedStands.add(new Stand(4, "Stand de Juegos de Mesa", "Rompecabezas y ajedrez", obtenerZonaPorId(3)));
+	        seedStands.add(new Stand(5, "Stand de Peluches", "Peluche y juguetes suaves", obtenerZonaPorId(3)));
+	        seedStands.add(new Stand(6, "Stand de Coches y Trenes", "Coches a control remoto y trenes de madera", obtenerZonaPorId(2)));
+
+	        // Insertamos todos los stands en la BBDD
+	        for (Stand stand : seedStands) {
+	            daoStand.registrarStand(stand);
+	        }
+	    }
+	}
+}

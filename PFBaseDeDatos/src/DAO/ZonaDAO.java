@@ -105,16 +105,4 @@ public class ZonaDAO {
 			}
 		}
 	}
-
-	/*public boolean deshabilitarZonas(String tabla, int idZona) throws SQLException {
-		String columnaID = DAOUtils.obtenerColumnaID(tabla);
-		String sql = "UPDATE " + tabla + " SET activo = false WHERE" + columnaID + " = ?";
-
-		try (Connection conexion = DataBaseConnection.getConnection();
-				PreparedStatement ps = conexion.prepareStatement(sql)) {
-			ps.setInt(1, idZona);
-			return ps.executeUpdate() > 0;
-		}
-
-	}*/
 }

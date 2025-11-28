@@ -5,8 +5,14 @@ import java.util.Scanner;
 
 import INPUT.Input;
 import model.Juguete;
+import model.Stand;
+import model.Stock;
+import model.Zona;
 import service.JugueteService;
 import service.ServiceUtils;
+import service.StandService;
+import service.StockService;
+import service.ZonaService;
 
 public class GestionJuguetesUI {
 
@@ -28,6 +34,8 @@ public class GestionJuguetesUI {
 		String nombre = "", descripcion = "";
 		double precio = 0.0;
 		int stock = 0;
+		Stand stand = null;
+		Zona idzona = null;
 
 		nombre = Input.pedirString(entrada, "Introduzca el nombre del Juguete: ", 1, 45);
 
@@ -36,9 +44,20 @@ public class GestionJuguetesUI {
 		precio = Input.pedirdouble(entrada, "Introduzca el precio del producto");
 
 		stock = Input.pedirInt(entrada, "Introduzca el Stock disponible: ");
+		
 
 		Juguete nuevoJuguete = new Juguete(nombre, descripcion, precio, stock, 1, null);
 		return nuevoJuguete;
+	}
+	
+	public Stock crearStock(Scanner entrada, StandService serviceS, ZonaService serviceZ, Juguete jugueteNuevo ) {
+		Stand idstand = null;
+		Zona idzona = null;
+		idstand = GestionUtils.validarStand(entrada, serviceS);
+		idzona = GestionUtils.validarZona(entrada, serviceZ);
+		Stock nuevoStock = new Stock (idstand, idzona, jugueteNuevo, jugueteNuevo.getStock());
+		
+		return nuevoStock;
 	}
 	
 	// FUNCION QUE IMPRIME POR PANTALLA LA LISTA ACTUAL DE JUGUETES.
@@ -48,7 +67,7 @@ public class GestionJuguetesUI {
 	}
 	
 	// SUB-MENU JUGUETES
-	public void menuOpcionesJuguetes(Scanner entrada, ServiceUtils service, JugueteService serviceJug, ArrayList<Juguete> listaJuguetes) {
+	public void menuOpcionesJuguetes(Scanner entrada, ServiceUtils service, JugueteService serviceJug, StockService serviceStock, ZonaService serviceZ, StandService serviceStand, ArrayList<Juguete> listaJuguetes) {
 		int opcionSecun = 0;
 
 		while (opcionSecun != 4) { // bucle del sub-menú
@@ -65,8 +84,9 @@ public class GestionJuguetesUI {
 				case 1: // AÑADIR UN JUGUETE A LA BASE DE DATOS
 					System.out.println();
 					Juguete jugueteAdd = crearJuguete(entrada);
-					if (serviceJug.agregarJuguete(jugueteAdd)) {
-						System.out.println("Juguete " + jugueteAdd.getNombre() + " añadido correctamente.");
+					Stock stockAsociado = crearStock(entrada, serviceStand, serviceZ, jugueteAdd);
+					if (serviceJug.agregarJuguete(jugueteAdd) && serviceStock.insertarStock(stockAsociado)) {
+						System.out.println("Juguete " + jugueteAdd.getNombre() + " añadido correctamente con " + stockAsociado.getJugueteEnStock().getStock() + " unidades en stock.");
 					}
 					break;
 				case 2: // MODIFICAR UN CAMPO DE UNA TABLA DE LA BBDD

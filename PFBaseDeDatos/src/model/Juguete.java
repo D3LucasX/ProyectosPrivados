@@ -28,6 +28,9 @@ public class Juguete {
 		this.activo = activo;
 		this.fecha_baja = fecha_baja;
 	}
+	public Juguete(int idJuguete) {
+		this.idJuguete = idJuguete;
+	}
 	public int getIdJuguete() {
 		return idJuguete;
 	}

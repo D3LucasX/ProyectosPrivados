@@ -11,6 +11,11 @@ public class Zona {
 		this.descripcion = descripcion;
 	}
 	
+	//CONSTRUCTOR QUE USO PARA OBTENER EL ID_ZONA PARA EL CONSTRUCTOR DE STAND
+	public Zona(int idZona) {
+		this.idZona = idZona;
+	}
+	
 	public Zona(String nombre, String descripcion) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;

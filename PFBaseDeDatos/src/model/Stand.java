@@ -14,6 +14,19 @@ public class Stand {
 		this.zona = zona;
 	}
 	
+	// CONSTRUCTOR PARA CREAR LOS STANDS QUE RECIBO DE LA BBDD CUANDO HAGO EL SELECT
+	// PARA COMPROBAR SI EXISTEN STANDS PARA GENERAR EL SEED DATA.
+	public Stand(int idStand, String nombre, String descripcion, int idZona) {
+	    this.idStand = idStand;
+	    this.nombre = nombre;
+	    this.descripcion = descripcion;
+	    this.zona = new Zona(idZona);
+	}
+	
+	public Stand (int idStand) {
+		this.idStand = idStand;
+	}
+	
 	
 	public int getIdStand() {
 		return idStand;

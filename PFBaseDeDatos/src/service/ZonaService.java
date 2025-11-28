@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import DAO.ZonaDAO;
+import model.Stand;
 import model.Zona;
 
 public class ZonaService {
@@ -27,18 +28,20 @@ public class ZonaService {
 	}
 
 	// FUNCION QUE INICIALIZA LAS ZONAS SEED DATA
-	public boolean inicializarSeedData() {
+	public void inicializarSeedData() {
 		int filas = 0;
 		try {
 			if (dao.listarTodos().isEmpty()) {
 				ArrayList<Zona> lista = crearZonasIniciales();
 				filas = dao.RegistrarVariasZonas(lista);
+				if (filas > 0) {
+					System.out.println("Zonas iniciales registradas correctamente.");
+				}
 			}
 		} catch (SQLException e) {
 			System.err.println("ERROR al registrar las zonas iniciales.");
 			e.printStackTrace();
 		}
-		return filas > 0;
 	}
 
 	// FUNCION QUE AÑADE UNA ZONA
@@ -67,10 +70,12 @@ public class ZonaService {
 		}
 	}
 	
-	/*public boolean deshabilitarZonas(String tabla, int idZona) throws SQLException {
-		 if(!ServiceUtils.columnasValidas.containsKey(tabla)) {
-			 throw new IllegalArgumentException("Tabla no permitida");
-		 }
-		 return dao.deshabilitarZonas(idZona);
-	}*/
+	public Zona validarZona(int idZona) throws SQLException {
+		Zona zona = dao.obtenerZonaPorId(idZona);
+		if (zona != null) {
+			return zona;
+		}else {
+			return null;
+		}
+	}
 }

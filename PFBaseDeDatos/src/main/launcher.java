@@ -6,16 +6,17 @@ import java.util.Scanner;
 
 import model.Empleado;
 import model.Juguete;
-import model.Zona;
 import service.EmpleadoService;
 import service.JugueteService;
 import service.ServiceUtils;
+import service.StandService;
+import service.StockService;
 import service.ZonaService;
 import INPUT.Input;
 
 public class launcher {
 	
-	public static void menuOpcionesPrincipales(Scanner entrada, JugueteService serviceJ, EmpleadoService serviceE, ZonaService serviceZ, ServiceUtils serviceUT, ArrayList<Juguete> listaJuguetes, ArrayList<Empleado> listaEmpleados) {
+	public static void menuOpcionesPrincipales(Scanner entrada, JugueteService serviceJ, EmpleadoService serviceE, ZonaService serviceZ, ServiceUtils serviceUT, StockService serviceStock, StandService serviceStand, ArrayList<Juguete> listaJuguetes, ArrayList<Empleado> listaEmpleados) {
 		int opcionPrin = 0;
 		while (opcionPrin != 5) {
 			GestionUtils.mostrarMenuPrincipal();
@@ -31,7 +32,7 @@ public class launcher {
 				case 1:
 					System.out.println();
 					GestionJuguetesUI gJ = new GestionJuguetesUI();
-					gJ.menuOpcionesJuguetes(entrada, serviceUT, serviceJ, listaJuguetes);
+					gJ.menuOpcionesJuguetes(entrada, serviceUT, serviceJ, serviceStock, serviceZ, serviceStand, listaJuguetes);
 					break;
 				case 2:
 					System.out.println();
@@ -68,12 +69,16 @@ public class launcher {
 		EmpleadoService serviceE = new EmpleadoService();
 		JugueteService serviceJ = new JugueteService();
 		ZonaService serviceZ = new ZonaService();
+		StandService serviceS = new StandService();
+		StockService serviceSk = new StockService();
 		ServiceUtils serviceUT = new ServiceUtils();
 
 		try {
 			serviceJ.inicializarSeedDataJug();
 			serviceE.inicializarSeedDataEmp();
 			serviceZ.inicializarSeedData();
+			serviceS.insertarStandsIniciales();
+			serviceSk.insertarStocksIniciales();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} 
@@ -82,7 +87,7 @@ public class launcher {
 		ArrayList<Empleado> listeEmpleados = serviceE.obtenerTodos();
 		
 		// Menu principal
-		menuOpcionesPrincipales(entrada, serviceJ, serviceE, serviceZ, serviceUT, listeJuguetes, listeEmpleados);
+		menuOpcionesPrincipales(entrada, serviceJ, serviceE, serviceZ, serviceUT, serviceSk, serviceS, listeJuguetes, listeEmpleados);
 	}
 
 }

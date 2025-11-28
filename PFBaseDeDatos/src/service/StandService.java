@@ -1,25 +1,55 @@
 package service;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import DAO.StandDAO;
+import model.Stand;
+import model.Zona;
+
 public class StandService {
+	private StandDAO dao;
 
-	public void inicializarStandsSeedData() throws SQLException {
-	    // Solo si no hay stands en la BBDD
-	    if (daoStand.listarTodos().isEmpty()) {
-
-	        // Creamos una lista temporal para los seed data
-	        ArrayList<Stand> seedStands = new ArrayList<>();
-
-	        seedStands.add(new Stand(1, "Stand de Pelotas", "Variedad de pelotas", obtenerZonaPorId(1)));
-	        seedStands.add(new Stand(2, "Stand de Muñecas", "Muñecas y accesorios", obtenerZonaPorId(1)));
-	        seedStands.add(new Stand(3, "Stand de Construcción", "Lego y bloques", obtenerZonaPorId(2)));
-	        seedStands.add(new Stand(4, "Stand de Juegos de Mesa", "Rompecabezas y ajedrez", obtenerZonaPorId(3)));
-	        seedStands.add(new Stand(5, "Stand de Peluches", "Peluche y juguetes suaves", obtenerZonaPorId(3)));
-	        seedStands.add(new Stand(6, "Stand de Coches y Trenes", "Coches a control remoto y trenes de madera", obtenerZonaPorId(2)));
-
-	        // Insertamos todos los stands en la BBDD
-	        for (Stand stand : seedStands) {
-	            daoStand.registrarStand(stand);
-	        }
-	    }
+	public StandService() {
+		this.dao = new StandDAO();
 	}
+
+	public ArrayList<Stand> crearStandsIniciales(){
+		ArrayList<Stand> seedStands = new ArrayList<>();
+
+		seedStands.add(new Stand(1, "Stand de Pelotas", "Variedad de pelotas", new Zona(1)));
+		seedStands.add(new Stand(2, "Stand de Muñecas", "Muñecas y accesorios", new Zona(1)));
+		seedStands.add(new Stand(3, "Stand de Construcción", "Lego y bloques", new Zona(2)));
+		seedStands.add(new Stand(4, "Stand de Juegos de Mesa", "Rompecabezas y ajedrez", new Zona(2)));
+		seedStands.add(new Stand(5, "Stand de Peluches", "Peluche y juguetes suaves", new Zona(3)));
+		seedStands.add(new Stand(6, "Stand de Coches y Trenes", "Coches a control remoto y trenes de madera", new Zona(3)));
+		
+		return seedStands;
+	}
+	
+	public void insertarStandsIniciales() {
+		int filas = 0;
+		try {
+			if (dao.listarTodos().isEmpty()) {
+				ArrayList<Stand> lista = crearStandsIniciales();
+				filas = dao.registrarVariosStands(lista);
+				if (filas > 0) {
+					System.out.println("Stands iniciales registrados");
+				}
+			}
+		}catch(SQLException e) {
+			System.err.println("ERROR al registrar los stands iniciales.");
+			e.printStackTrace();
+		}
+	}
+	
+	public Stand validarStand(int idStand) throws SQLException {
+		Stand stand = dao.existeStand(idStand);
+		if (stand != null) {
+			return stand;
+		}else {
+			return null;
+		}
+	}
+	
 }

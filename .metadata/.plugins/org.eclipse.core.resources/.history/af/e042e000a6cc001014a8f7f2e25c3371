@@ -1,0 +1,94 @@
+package DAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import DataBase.DataBaseConnection;
+import model.Stand;
+import model.Zona;
+public class StandDAO {
+
+	// FUNCION QUE LISTA LOS STANDS QUE HAY PARA USAR LA LISTA, PARA COMPROBAR SI HAY STANDS 
+	// PARA INICIALIZAR LOS SEEDDATA
+	public ArrayList<Stand> listarTodos() throws SQLException {
+		ArrayList<Stand> lista = new ArrayList<>();
+		String sql = "SELECT * FROM stand";
+
+		try (Connection conexion = DataBaseConnection.getConnection();
+				Statement st = conexion.createStatement();
+				ResultSet rs = st.executeQuery(sql)) {
+
+			while (rs.next()) {
+				
+				lista.add(new Stand(rs.getInt("idStand"), rs.getString("Nombre"), rs.getString("Descripcion"), rs.getInt("ZONA_idzona")));
+			}
+		}
+		return lista;
+	}
+	
+	// FUNCION PARA AÑÁDIR STANDS DE INICIO EN CASO DE NO HABER DATOS EN LA BBDD
+	public int registrarVariosStands(ArrayList<Stand> seedDataStand) throws SQLException {
+		String sql = "INSERT INTO stand(idStand,Nombre ,Descripcion, ZONA_idzona) VALUES (?,?,?,?)";
+		int totalFilas = 0;
+		
+		try(Connection conexion = DataBaseConnection.getConnection();
+				PreparedStatement ps = conexion.prepareStatement(sql)){
+			for(Stand stand : seedDataStand) {
+				ps.setInt(1, stand.getIdStand());
+				ps.setString(2, stand.getNombre());
+				ps.setString(3, stand.getDescripcion());
+				ps.setInt(4, stand.getZona().getIdZona());
+				ps.addBatch();
+			}
+			int[]resultados = ps.executeBatch();
+			for(int r : resultados) {
+				totalFilas += r;
+			}
+		}
+		return totalFilas;
+	}
+	
+	// FUNCION PARA AÑADIR UN STAND
+	public int insertarStand(Stand nuevoStand) throws SQLException {
+		int filas = 0;
+		String sql = "INSERT INTO stand(idStand,Nombre ,Descripcion, ZONA_idzona) VALUES (?,?,?,?)";
+		try(Connection conexion = DataBaseConnection.getConnection();
+				PreparedStatement ps = conexion.prepareStatement(sql)){
+			ps.setInt(1, nuevoStand.getIdStand());
+			ps.setString(2, nuevoStand.getNombre());
+			ps.setString(3, nuevoStand.getDescripcion());
+			ps.setInt(4, nuevoStand.getZona().getIdZona());
+			filas = ps.executeUpdate();
+		}
+		return filas;
+	}
+	
+	// FUNCION QUE BUSCA UN STAND POR ID
+	public Stand existeStand(int idStand) throws SQLException {
+		String sql = "SELECT idStand, Nombre, Descripcion, ZONA_idzona FROM stand WHERE idStand= ?";
+
+		try (Connection conexion = DataBaseConnection.getConnection();
+				PreparedStatement ps = conexion.prepareStatement(sql)) {
+
+			ps.setInt(1, idStand);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					 int id = rs.getInt("idStand");
+		                String nombre = rs.getString("Nombre");
+		                String descripcion = rs.getString("Descripcion");
+		                int idZona = rs.getInt("idStand");
+		                Zona zona = new Zona(idZona);
+		                return new Stand(id, nombre, descripcion, zona);
+				} else {
+					return null;
+				}
+			}
+		}
+	}
+	
+}
