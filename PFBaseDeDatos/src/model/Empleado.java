@@ -27,6 +27,10 @@ public class Empleado {
 		this.cargo = cargo;
 		this.fechaIngreso = fechaIngreso;
 	}
+	
+	public Empleado(int idEmpleado) {
+		this.idEmpleado = idEmpleado;
+	}
 
 
 	public int getIdEmpleado() {

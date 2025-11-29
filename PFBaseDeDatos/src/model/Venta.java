@@ -15,10 +15,29 @@ public class Venta {
 	
 	public enum Pago{EFECTIVO, TARJETA}
 
-	public Venta(int idVenta, Date fecaVenta, double montoTotal, Pago tipoPago, Juguete idJuguete, Empleado idEmpleado,
-			Stand idStand, Zona idZonaStand) {
+	public Venta(int idVenta, double montoTotal,
+			int idStand, int idZonaStand, int idJuguete) {
 		super();
 		this.idVenta = idVenta;
+		this.montoTotal = montoTotal;
+		this.idStand = new Stand (idStand);
+		this.idZonaStand = new Zona (idZonaStand);
+		this.idJuguete = new Juguete(idJuguete);
+	}
+	
+	public Venta(double montoTotal, Pago tipoPago, int idJuguete, int idEmpleadoI,
+			int idStand, int idZonaStand) {
+		super();
+		this.montoTotal = montoTotal;
+		this.tipoPago = tipoPago;
+		this.idJuguete = new Juguete(idJuguete);
+		this.idEmpleado = new Empleado(idEmpleadoI);
+		this.idStand = new Stand (idStand);
+		this.idZonaStand = new Zona (idZonaStand);
+	}
+	
+	public Venta(Date fecaVenta, double montoTotal, Pago tipoPago, Juguete idJuguete, Empleado idEmpleado,
+			Stand idStand, Zona idZonaStand) {
 		this.fecaVenta = fecaVenta;
 		this.montoTotal = montoTotal;
 		this.tipoPago = tipoPago;

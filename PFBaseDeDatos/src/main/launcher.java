@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import DAO.EmpleadoDAO;
+import DAO.JugueteDAO;
 import model.Empleado;
 import model.Juguete;
 import service.EmpleadoService;
@@ -11,14 +13,15 @@ import service.JugueteService;
 import service.ServiceUtils;
 import service.StandService;
 import service.StockService;
+import service.VentaService;
 import service.ZonaService;
 import INPUT.Input;
 
 public class launcher {
 	
-	public static void menuOpcionesPrincipales(Scanner entrada, JugueteService serviceJ, EmpleadoService serviceE, ZonaService serviceZ, ServiceUtils serviceUT, StockService serviceStock, StandService serviceStand, ArrayList<Juguete> listaJuguetes, ArrayList<Empleado> listaEmpleados) {
+	public static void menuOpcionesPrincipales(Scanner entrada, JugueteService serviceJ, EmpleadoService serviceE, ZonaService serviceZ, ServiceUtils serviceUT, StockService serviceStock, StandService serviceStand, VentaService serviceV, JugueteDAO dao, EmpleadoDAO daoE) {
 		int opcionPrin = 0;
-		while (opcionPrin != 5) {
+		while (opcionPrin != 7) {
 			GestionUtils.mostrarMenuPrincipal();
 			System.out.print("Introduzca una opción: ");
 			String opcion = entrada.nextLine();
@@ -32,12 +35,12 @@ public class launcher {
 				case 1:
 					System.out.println();
 					GestionJuguetesUI gJ = new GestionJuguetesUI();
-					gJ.menuOpcionesJuguetes(entrada, serviceUT, serviceJ, serviceStock, serviceZ, serviceStand, listaJuguetes);
+					gJ.menuOpcionesJuguetes(entrada, serviceUT, serviceJ, serviceStock, serviceZ, serviceStand, dao);
 					break;
 				case 2:
 					System.out.println();
 					GestionEmpleadosUI gE = new GestionEmpleadosUI();
-					gE.menuOpcionesEmpleados(entrada, serviceUT, serviceE, listaEmpleados);
+					gE.menuOpcionesEmpleados(entrada, serviceUT, serviceE, daoE);
 					break;
 				case 3:
 					System.out.println();
@@ -49,6 +52,13 @@ public class launcher {
 					GestionUtils.eliminarFila(entrada, serviceUT);
 					break;
 				case 5:
+					System.out.println();
+					GestionVenta gV = new GestionVenta();
+					gV.menuOpcionesVentas(entrada, serviceE, serviceJ, serviceStock, serviceV);
+					break;
+				case 6:
+					break;
+				case 7:
 					System.out.println();
 					System.out.println("Saliendo...");
 					System.out.println();
@@ -71,7 +81,10 @@ public class launcher {
 		ZonaService serviceZ = new ZonaService();
 		StandService serviceS = new StandService();
 		StockService serviceSk = new StockService();
+		VentaService serviceV = new VentaService();
 		ServiceUtils serviceUT = new ServiceUtils();
+		JugueteDAO daoJ = new JugueteDAO();
+		EmpleadoDAO daoE = new EmpleadoDAO();
 
 		try {
 			serviceJ.inicializarSeedDataJug();
@@ -87,7 +100,7 @@ public class launcher {
 		ArrayList<Empleado> listeEmpleados = serviceE.obtenerTodos();
 		
 		// Menu principal
-		menuOpcionesPrincipales(entrada, serviceJ, serviceE, serviceZ, serviceUT, serviceSk, serviceS, listeJuguetes, listeEmpleados);
+		menuOpcionesPrincipales(entrada, serviceJ, serviceE, serviceZ, serviceUT, serviceSk, serviceS, serviceV, daoJ, daoE);
 	}
 
 }

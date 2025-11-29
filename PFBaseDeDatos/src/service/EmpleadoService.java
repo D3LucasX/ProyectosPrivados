@@ -2,9 +2,11 @@ package service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.sql.Date;
 
 import DAO.EmpleadoDAO;
+import INPUT.Input;
 import model.Empleado;
 import model.Empleado.Cargo;
 
@@ -66,6 +68,13 @@ public class EmpleadoService {
 	        e.printStackTrace();
 	        return new ArrayList<>();
 		}
+	}
+	
+	// SELECCION DE EMPLEADO PARA LA VENTA
+	public Empleado seleccionarEmpleado(Scanner entrada) throws SQLException {
+		dao.listarEmpleadosActivos();
+		int idEmpleado = Input.pedirInt(entrada, "Introduzca el id de el empleado encargado: ");
+		return dao.seleccionarEmpleadoPorId(idEmpleado);
 	}
 	
 	

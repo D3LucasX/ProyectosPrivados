@@ -22,11 +22,11 @@ public class GestionUtils {
 		System.out.println("*      JUGUETERÍA DOSA         *");
 		System.out.println("********************************");
 		System.out.println();
-		System.out.println("1. Gestion de Juguetes.");
-		System.out.println("2. Gestion de Empleados.");
-		System.out.println("3. Gestion de Zonas.");
+		System.out.println("1. Gestión de Juguetes.");
+		System.out.println("2. Gestión de Empleados.");
+		System.out.println("3. Gestión de Zonas.");
 		System.out.println("4. Habilitar o deshabilitar producto/empleado/zona");
-		System.out.println("5. Ventas.");
+		System.out.println("5. Gestión Ventas.");
 		System.out.println("6. Obtener datos de la tienda.");
 		System.out.println("7. Salir.");
 	}
@@ -90,8 +90,8 @@ public class GestionUtils {
 		try {
 			do {
 				tabla = Input.pedirString(entrada, "Introduzca la tabla que va a modificar", 1, 45);
-				idNumero = Input.pedirInt(entrada, "Introduzca el numero del ID de la fila que quieras modificar:");
 				do {
+					idNumero = Input.pedirInt(entrada, "Introduzca el numero del ID de la fila que quieras modificar:");
 					System.out.println("¿Que desea, dar de alta, o dar de baja? (alta/baja)");
 					altaBaja = entrada.nextLine();
 					if (altaBaja.equalsIgnoreCase("alta")) {
@@ -102,6 +102,9 @@ public class GestionUtils {
 						DAOUtils.modificarFechaBaja(tabla, idNumero);
 					} else {
 						System.out.println("Escriba 'alta' para dar de alta o 'baja' para dar de baja.");
+					}
+					if (!exito) {
+						System.err.println("El id introducido no existe.");
 					}
 				} while (!exito);
 

@@ -1,0 +1,64 @@
+package DAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import DataBase.DataBaseConnection;
+import model.Empleado;
+import model.Juguete;
+import model.Stand;
+import model.Venta;
+import model.Zona;
+
+public class VentasDAO {
+
+	// LISTAR LOS JUGUETES ACTIVOS EN LA CLASE JUGUETEDAO
+	// SELECCIONAR JUGUETE ACTIVO POR ID EN JUGUETEDAO --> DEVUELVE EL JUGUETE CON EL ID Y EL PRECIO
+	// FUNCION DE SELECCIONAR EL STOCK PARA COGER EL IDZONA Y EL IDSTAND EN STOCKDAO
+	// FUNCION PARA MODIFICAR EL CAMPO CANTIDAD EN STOCK EN STOCK DAO Y STOCK SERVICE
+	
+	/** ID VENTA --> AUTOINCREMENTAL
+	 *  DATE FECHA VENTA --> NOW()
+	 *  MONTO TOTAL --> ACCEDER AL PRECIO DEL JUGUETE
+	 *  PAGO --> SE SETEA EN LA FUNCION DE GESTÓN VENTA
+	 *  JUGUETE, EL QUE SE LE PASA
+	 *  EMPLEADO EL QUE SE LE PASA
+	 *  STAND, EL QUE SE CREA CON EL ID STAND QUE SACAMOS DEL STOCK QUE SE OBTIENE DE LA FUNCION OBTENER STOCK
+	 *  ZZONA IGUAL QUE STAND
+	 * @throws SQLException 
+	 *  
+	 */
+	
+	public int insertarVenta(Venta ventaNueva) throws SQLException {
+		String sql = "INSERT INTO venta (Fecha, Monto, tipo_pago, EMPLEADO_idEMPLEADO, stock_STAND_idStand, stock_STAND_ZONA_idzona, stock_JUGUETE_idJuguete) VALUES (CURDATE(),?,?,?,?,?,?)";
+		try (Connection conexion = DataBaseConnection.getConnection();
+				PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+			ps.setDouble(1, ventaNueva.getMontoTotal());
+			ps.setString(2, ventaNueva.getTipoPago().name());
+			ps.setInt(3, ventaNueva.getIdEmpleado().getIdEmpleado());
+			ps.setInt(4, ventaNueva.getIdStand().getIdStand());
+			ps.setInt(5, ventaNueva.getIdZonaStand().getIdZona());
+			ps.setInt(6, ventaNueva.getIdJuguete().getIdJuguete());
+			
+			int filas = ps.executeUpdate();
+			return filas;
+		}
+	}
+	
+	public Venta seleccionarVentaPorID(int idVenta) throws SQLException{
+		String sql = "SELECT * FROM ventas where idVenta = ?";
+		try (Connection conexion = DataBaseConnection.getConnection();
+				PreparedStatement ps = conexion.prepareStatement(sql);) {
+			ps.setInt(1, idVenta);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				return new Venta(rs.getInt("idventa"), rs.getDouble("Monto"), rs.getInt("stock_STAND_idStand"), rs.getInt("stock_STAND_ZONA_idzona"), rs.getInt("stock_JUGUETE_idJuguete"));
+			}
+		}
+		return null;
+	}
+	
+}

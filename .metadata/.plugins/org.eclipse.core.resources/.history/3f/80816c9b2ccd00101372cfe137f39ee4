@@ -1,0 +1,99 @@
+package main;
+
+import java.sql.SQLException;
+import java.util.Scanner;
+
+import INPUT.Input;
+import model.Empleado;
+import model.Juguete;
+import model.Stock;
+import model.Venta;
+import model.Venta.Pago;
+import service.EmpleadoService;
+import service.JugueteService;
+import service.StockService;
+
+public class GestionVenta {
+
+	// <<<<<<<<<<<<<< FUNCIONES RELACIONADAS CON LAS VENTAS >>>>>>>>>>>>>>
+
+	public static void mostrarMenuVentas() {
+		System.out.println("********************************");
+		System.out.println("*            VENTAS            *");
+		System.out.println("********************************");
+		System.out.println();
+		System.out.println("1. Nueva venta.");
+		System.out.println("2. Realizar cambio.");
+		System.out.println("4. Los 5 top sellers.");
+		System.out.println("5. Top 3 empleados con mas ventas.");
+		System.out.println("6. Salir");
+	}
+
+	public Venta crearVenta(Scanner entrada, EmpleadoService serviceE, JugueteService serviceJ, StockService serviceST)
+			throws SQLException {
+		boolean valido = false;
+		Empleado vendedor = null;
+		Juguete jugueteVenta = null;
+		Stock stockJuguete = null;
+		double monto = 0;
+		int idEmpleado = 0, idZona = 0, idStand = 0, idJuguete = 0;
+		String tipoPagoS = "";
+		Pago tipoPago = null;
+		do {
+			vendedor = serviceE.seleccionarEmpleado(entrada);
+			if (vendedor != null) {
+				valido = true;
+			} else {
+				System.err.println("No se ha encontrado dicho vendedor, o algo salio mal.");
+			}
+		} while (!valido);
+		valido = false;
+		idEmpleado = vendedor.getIdEmpleado();
+		do {
+			jugueteVenta = serviceJ.jugueteVenta(entrada);
+			if (jugueteVenta != null) {
+				valido = true;
+			} else {
+				System.err.println("No se ha encontrado dicho juguete, o algo salio mal.");
+			}
+		} while (!valido);
+		monto = jugueteVenta.getPrecio();
+		idJuguete = jugueteVenta.getIdJuguete();
+		valido = false;
+		do {
+			stockJuguete = serviceST.seleccionarStockVenta(jugueteVenta);
+			if (stockJuguete != null) {
+				valido = true;
+			} else {
+				System.err.println("Error con el stock del juguete con id " + idJuguete);
+			}
+		} while (!valido);
+		valido = false;
+
+		idStand = stockJuguete.getIdStand().getIdStand();
+		idZona = stockJuguete.getIdZona_enStand().getIdZona();
+
+		do {
+			System.out.println("Metodo de pago: (efectivo / tarjeta)");
+			tipoPagoS = entrada.nextLine();
+			valido = Input.ComprobarStringRegex(tipoPagoS, "^(?i)(efectivo|tarjeta)$");
+		} while (!valido);
+		valido = false;
+		do {
+			if (tipoPagoS.trim().equalsIgnoreCase("efectivo")) {
+				tipoPago = Pago.EFECTIVO;
+				valido = true;
+			} else if (tipoPagoS.trim().equalsIgnoreCase("tarjeta")) {
+				tipoPago = Pago.TARJETA;
+				valido = true;
+			} else {
+				System.err.println("Algo aslio mal con la eleccion del método de pago.");
+			}
+		}while(!valido);
+		Venta ventaInsert = new Venta(monto, tipoPago, idJuguete, idEmpleado, idStand, idZona);
+		if (stockJuguete.getCantidad() > 0) {
+			return ventaInsert;
+		}
+		return null;
+	}
+}

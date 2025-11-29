@@ -1,0 +1,24 @@
+package service;
+
+import java.sql.SQLException;
+
+import DAO.VentasDAO;
+import model.Venta;
+
+public class VentaService {
+	private VentasDAO dao;
+	
+	public VentaService() {
+		this.dao = new VentasDAO();
+	}
+	
+	public boolean realizarVenta(Venta venta) throws SQLException {
+		int filas = dao.insertarVenta(venta);
+		if (filas > 0) {
+			System.out.println("Venta realizada con éxito.");
+		}else {
+			System.err.println("Algo salió mal con la venta.");
+		}
+		return false;
+	}
+}

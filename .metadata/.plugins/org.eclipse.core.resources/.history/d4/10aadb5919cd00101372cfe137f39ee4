@@ -1,0 +1,83 @@
+package DAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import DataBase.DataBaseConnection;
+import model.Empleado;
+import model.Juguete;
+import model.Stand;
+import model.Stock;
+import model.Zona;
+
+public class StockDAO {
+
+	public ArrayList<Stock> listarTodos() throws SQLException {
+		ArrayList<Stock> lista = new ArrayList<Stock>();
+		String sql = "SELECT * FROM stock";
+		try (Connection conexion = DataBaseConnection.getConnection();
+				Statement st = conexion.createStatement();
+				ResultSet rs = st.executeQuery(sql)) {
+
+			while (rs.next()) {
+				Stand stand = new Stand(rs.getInt("STAND_idStand"));
+				Zona zona = new Zona(rs.getInt("STAND_ZONA_idzona"));
+				Juguete juguete = new Juguete(rs.getInt("JUGUETE_idJuguete"));
+				int cantidad = rs.getInt("CANTIDAD");
+				lista.add(new Stock(stand, zona, juguete, cantidad));
+			}
+		}
+		return lista;
+	}
+
+	public int insertarVariosStocks(ArrayList<Stock> seedDataStock) throws SQLException {
+		int stocksInsertados = 0;
+		for (Stock stock : seedDataStock) {
+			stocksInsertados += registrarStock(stock);
+		}
+		return stocksInsertados;
+	}
+
+	public int registrarStock(Stock nuevoStock) throws SQLException {
+		int filas = 0;
+		String sql = "INSERT INTO stock (STAND_idStand, STAND_ZONA_idzona, JUGUETE_idJuguete, CANTIDAD) VALUES(?,?,?,?)";
+		try (Connection conexion = DataBaseConnection.getConnection();
+				PreparedStatement ps = conexion.prepareStatement(sql)) {
+			ps.setInt(1, nuevoStock.getIdStand().getIdStand());
+			ps.setInt(2, nuevoStock.getIdZona_enStand().getIdZona());
+			ps.setInt(3, nuevoStock.getJugueteEnStock().getIdJuguete());
+			ps.setInt(4, nuevoStock.getCantidad());
+			filas = ps.executeUpdate();
+		}
+		return filas;
+	}
+
+	// SELECCIONAR EL STOCK DE UN JUGUETE
+	public Stock seleccionarStockDeJuguete(Juguete juguete) throws SQLException {
+		String sql = "SELECT * from stock where JUGUETE_idjuguete = " + juguete.getIdJuguete();
+		try (Connection conexion = DataBaseConnection.getConnection();
+				Statement st = conexion.createStatement();
+				ResultSet rs = st.executeQuery(sql)) {
+			while (rs.next()) {
+			return new Stock(rs.getInt("STAND_idStand"), rs.getInt("STAND_ZONA_idzona"),
+					new Juguete(rs.getInt("JUGUETE_idJuguete")), rs.getInt("CANTIDAD"));
+			}
+		}
+		return null;
+	}
+	
+	
+	public int modificarStock(Juguete juguete, int sumar_restar, String sentencia) throws SQLException {
+		int filas = 0;
+		String sql = sentencia;
+		try (Connection conexion = DataBaseConnection.getConnection();
+				Statement st = conexion.createStatement()) {
+			filas = st.executeUpdate(sql);
+		}
+		return filas;
+	}
+}

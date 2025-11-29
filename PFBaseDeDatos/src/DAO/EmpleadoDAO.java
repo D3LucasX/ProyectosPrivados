@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import DataBase.DataBaseConnection;
 import model.Empleado;
+import model.Juguete;
 
 /**
  * @author d3luc
@@ -93,5 +94,36 @@ public class EmpleadoDAO {
 			return filas;
 		}
 	}
+	
+	// LISTAR TODOS LOS EMPLEADOS ACTIVOS QUE SEAN CAJEROS
+		public void listarEmpleadosActivos() throws SQLException {
+			String sql = "SELECT * FROM empleado WHERE activo = true AND Cargo = 'cajero'";
+			try (Connection conexion = DataBaseConnection.getConnection();
+					Statement st = conexion.createStatement();
+					ResultSet rs = st.executeQuery(sql)) {
+				while (rs.next()) {
+					System.out.printf(
+							"ID: %d\n" + "Nombre: %s\n" + "Cargo: %s\n" + "------------------\n",
+							rs.getInt("idEMPLEADO"), rs.getString("Nombre"), rs.getString("Cargo"));
+				}
+			}
+		}
+	
+	
+	// SELECCIONAR EMPLEADO POR ID
+		public Empleado seleccionarEmpleadoPorId(int idEMPLEADO) throws SQLException {
+			String sql = "SELECT * FROM empleado WHERE activo = 1 AND idEMPLEADO = ?";
+
+			try (Connection conexion = DataBaseConnection.getConnection();
+					PreparedStatement ps = conexion.prepareStatement(sql)) {
+				ps.setInt(1, idEMPLEADO);
+
+				ResultSet rs = ps.executeQuery();
+				while (rs.next()) {
+					return new Empleado(rs.getInt("idEMPLEADO"));
+				}
+			}
+			return null;
+		}
 
 }

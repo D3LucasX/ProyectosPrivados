@@ -1,0 +1,71 @@
+package service;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import DAO.JugueteDAO;
+import INPUT.Input;
+import model.Juguete;
+
+public class JugueteService {
+	private JugueteDAO dao;
+
+	public JugueteService() {
+		this.dao = new JugueteDAO();
+	}
+
+	// Crear lista de juguetes de ejemplo
+	private ArrayList<Juguete> crearJuguetesIniciales() {
+		ArrayList<Juguete> lista = new ArrayList<>();
+		lista.add(new Juguete("Pelota", "Pelota de goma", 5.0, 10, 1, null));
+		lista.add(new Juguete("Muñeca", "Muñeca articulada", 12.0, 5, 1, null));
+		lista.add(new Juguete("Rompecabezas", "Puzzle 100 piezas", 8.0, 7, 1, null));
+		lista.add(new Juguete("Tren de madera", "Tren educativo", 15.0, 3, 1, null));
+		lista.add(new Juguete("Lego", "Set de construcción", 20.0, 6, 1, null));
+		lista.add(new Juguete("Balón de fútbol", "Balón oficial tamaño 5", 25.0, 4, 1, null));
+		lista.add(new Juguete("Coche de carreras", "Coche a control remoto", 30.0, 2, 1, null));
+		lista.add(new Juguete("Peluche", "Peluche de oso", 10.0, 8, 1, null));
+		lista.add(new Juguete("Ajedrez", "Juego de ajedrez madera", 18.0, 5, 1, null));
+		lista.add(new Juguete("Pista de autos", "Pista con loopings", 22.0, 3, 1, null));
+
+		return lista;
+	}
+
+	// Inicializa datos si la base está vacía
+	public void inicializarSeedDataJug() throws SQLException {
+		if (dao.listarTodos().isEmpty()) {
+			ArrayList<Juguete> iniciales = crearJuguetesIniciales();
+			// obtenemos el numero de filas=juguetes que hemos insertado
+			int filas = dao.insertarLista(iniciales);
+			System.out.println("Se insertaron " + filas + " juguetes de ejemplo.");
+		}
+	}
+
+	// Insertar un juguete individual y devuelve true si filas es mayor a
+	// 0,indicativo de que se ha añadido una fila
+	public boolean agregarJuguete(Juguete j, Connection conrollB) throws SQLException {
+		int filas = 0;
+		filas = dao.insertarRollBack(conrollB, j);
+		return filas > 0;
+	}
+
+	// Listar todos los juguetes, devuelce una lista para tener los datos en memoria
+	public ArrayList<Juguete> obtenerTodos() {
+		try {
+			return dao.listarTodos();
+		} catch (SQLException e) {
+			System.err.println("Error, no se ha podido acceder a los juguetes: " + e.getMessage());
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
+	}
+
+	public Juguete jugueteVenta(Scanner entrada) throws SQLException {
+		dao.listarJuguetesActivos();
+		int idJuguete = Input.pedirInt(entrada, "Introduzca el id del juguete que desea comprar: ");
+		return dao.seleccionarJuguetePorId(idJuguete);
+	}
+
+}

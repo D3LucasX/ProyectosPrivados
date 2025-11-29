@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-
 /**
  * @author d3luc
  */
@@ -34,17 +33,37 @@ public class JugueteDAO {
 			ps.setInt(4, nuevoJuguete.getStock());
 
 			int filas = ps.executeUpdate();
-			
+
 			// Obtener el ID generado
 			try (ResultSet rs = ps.getGeneratedKeys()) {
-			    if (rs.next()) {
-			        int idGenerado = rs.getInt(1);
-			        nuevoJuguete.setIdJuguete(idGenerado); // actualizar el objeto con el ID
-			    }
+				if (rs.next()) {
+					int idGenerado = rs.getInt(1);
+					nuevoJuguete.setIdJuguete(idGenerado); // actualizar el objeto con el ID
+				}
 			}
 
 			return filas;
 		}
+	}
+	
+	//InsertarJuguete para rollBack
+	public int insertarRollBack(Connection conexion, Juguete nuevoJuguete) throws SQLException {
+	    String sql = "INSERT INTO juguete(Nombre, Descripcion, Precio, Cantidad_stock) VALUES (?,?,?,?)";
+	    
+	    try (PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+	        ps.setString(1, nuevoJuguete.getNombre());
+	        ps.setString(2, nuevoJuguete.getDescripcion());
+	        ps.setDouble(3, nuevoJuguete.getPrecio());
+	        ps.setInt(4, nuevoJuguete.getStock());
+
+	        int filas = ps.executeUpdate();
+
+	        try (ResultSet rs = ps.getGeneratedKeys()) {
+	            if (rs.next()) nuevoJuguete.setIdJuguete(rs.getInt(1));
+	        }
+
+	        return filas;
+	    }
 	}
 
 	// Funcion que recive una lista del service para inicializar los seedData
@@ -64,24 +83,26 @@ public class JugueteDAO {
 				ps.addBatch(); // Cuando quieres hacer varias consultas o peticiones a la vez
 			}
 			int[] resultados = ps.executeBatch(); // devuelve un array de enteros
-	        for (int r : resultados) {			  // cada numero de el array representa una sentencia ejecutada
-	        	totalFilas += r;  // así aqui sabemos que se ha insertado
-	        }
-	        
-	        // Obtener los IDs generados y los setea en los juguetes de la lista para tener sus ids en memoria
-	        try (ResultSet rs = ps.getGeneratedKeys()) {
-	            int index = 0;
-	            while (rs.next() && index < seedDataJuguetes.size()) {
-	                seedDataJuguetes.get(index).setIdJuguete(rs.getInt(1));
-	                index++;
-	            }
-	        }
+			for (int r : resultados) { // cada numero de el array representa una sentencia ejecutada
+				totalFilas += r; // así aqui sabemos que se ha insertado
+			}
+
+			// Obtener los IDs generados y los setea en los juguetes de la lista para tener
+			// sus ids en memoria
+			try (ResultSet rs = ps.getGeneratedKeys()) {
+				int index = 0;
+				while (rs.next() && index < seedDataJuguetes.size()) {
+					seedDataJuguetes.get(index).setIdJuguete(rs.getInt(1));
+					index++;
+				}
+			}
 
 		}
 		return totalFilas;
 	}
 
-	// Funcion que lista todos los juguetes y los mete en una lista que al final devuelve
+	// Funcion que lista todos los juguetes y los mete en una lista que al final
+	// devuelve
 	public ArrayList<Juguete> listarTodos() throws SQLException {
 		ArrayList<Juguete> lista = new ArrayList<>();
 		String sql = "SELECT * FROM juguete";
@@ -92,10 +113,41 @@ public class JugueteDAO {
 
 			while (rs.next()) {
 				lista.add(new Juguete(rs.getInt("idJuguete"), rs.getString("Nombre"), rs.getString("Descripcion"),
-						rs.getDouble("Precio"), rs.getInt("Cantidad_stock"), rs.getInt("activo"), rs.getDate("fecha_baja")));
+						rs.getDouble("Precio"), rs.getInt("Cantidad_stock"), rs.getInt("activo"),
+						rs.getDate("fecha_baja")));
 			}
 		}
 		return lista;
 	}
-	
+
+	// LISTAR TODOS LOS JUGUETES ACTIVOS
+	public void listarJuguetesActivos() throws SQLException {
+		String sql = "SELECT * FROM juguete WHERE activo = true";
+		try (Connection conexion = DataBaseConnection.getConnection();
+				Statement st = conexion.createStatement();
+				ResultSet rs = st.executeQuery(sql)) {
+			while (rs.next()) {
+				System.out.printf(
+						"ID: %d\n" + "Nombre: %s\n" + "Descripcion: %s\n" + "Precio: %f\n" + "------------------\n",
+						rs.getInt("idJuguete"), rs.getString("Nombre"), rs.getString("Descripcion"),
+						rs.getDouble("Precio"));
+			}
+		}
+	}
+
+	// SELECCIONAR JUGUETE POR ID
+	public Juguete seleccionarJuguetePorId(int idJuguete) throws SQLException {
+		String sql = "SELECT * FROM juguete WHERE activo = 1 AND idJuguete = ?";
+
+		try (Connection conexion = DataBaseConnection.getConnection();
+				PreparedStatement ps = conexion.prepareStatement(sql)) {
+			ps.setInt(1, idJuguete);
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				return new Juguete(rs.getInt("idJuguete"), rs.getDouble("Precio"), rs.getInt("Cantidad_stock"));
+			}
+		}
+		return null;
+	}
 }

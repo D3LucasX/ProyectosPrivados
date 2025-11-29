@@ -29,6 +29,18 @@ public class Cambio {
 		this.jugueteNuevo = jugueteNuevo;
 		this.empleado = empleado;
 	}
+	public Cambio(String motivo, int standOriginal, int zonaOriginal,
+			int jugueteOriginal, int standNuevo, int zonaNueva, int jugueteNuevo, int idEmpleado) {
+		
+		this.motivo = motivo;
+		this.standOriginal = new Stand(standOriginal);
+		this.zonaOriginal = new Zona(zonaOriginal);
+		JugueteOriginal = new Juguete(jugueteOriginal);
+		this.standNuevo = new Stand(standNuevo);
+		this.zonaNueva = new Zona(zonaNueva);
+		this.jugueteNuevo = new Juguete(jugueteNuevo);
+		this.empleado = new Empleado(idEmpleado);
+	}
 
 	public int getIdCambio() {
 		return idCambio;

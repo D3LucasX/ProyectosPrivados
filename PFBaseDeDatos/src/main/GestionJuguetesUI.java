@@ -1,8 +1,12 @@
 package main;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import DAO.JugueteDAO;
+import DataBase.DataBaseConnection;
 import INPUT.Input;
 import model.Juguete;
 import model.Stand;
@@ -25,8 +29,8 @@ public class GestionJuguetesUI {
 		System.out.println();
 		System.out.println("1. Registrar nuevo Juguete.");
 		System.out.println("2. Modificar juguete.");
-		System.out.println("4. Listar todos los juguetes.");
-		System.out.println("5. Salir.");
+		System.out.println("3. Listar todos los juguetes.");
+		System.out.println("4. Salir.");
 	}
 	
 	// CREAR JUGUETE
@@ -61,13 +65,12 @@ public class GestionJuguetesUI {
 	}
 	
 	// FUNCION QUE IMPRIME POR PANTALLA LA LISTA ACTUAL DE JUGUETES.
-	public void listarTodosJuguetes(JugueteService service, ArrayList<Juguete> listaJuguetes) {
-		listaJuguetes = service.obtenerTodos();
-		listaJuguetes.forEach(juguete -> System.out.println(juguete.getIdJuguete() + " - " +  juguete.getNombre()));
+	public void listarTodosJuguetes(JugueteDAO dao) throws SQLException {
+		dao.listarJuguetesActivos();
 	}
 	
 	// SUB-MENU JUGUETES
-	public void menuOpcionesJuguetes(Scanner entrada, ServiceUtils service, JugueteService serviceJug, StockService serviceStock, ZonaService serviceZ, StandService serviceStand, ArrayList<Juguete> listaJuguetes) {
+	public void menuOpcionesJuguetes(Scanner entrada, ServiceUtils service, JugueteService serviceJug, StockService serviceStock, ZonaService serviceZ, StandService serviceStand, JugueteDAO dao) {
 		int opcionSecun = 0;
 
 		while (opcionSecun != 4) { // bucle del sub-menú
@@ -76,7 +79,7 @@ public class GestionJuguetesUI {
 			String opcion = entrada.nextLine();
 
 			if (!Input.ComprobarStringRegex(opcion, "^[1-4]$")) {
-				System.out.println("Opción no válida.");
+				System.err.println("Opción no válida.");
 			} else {
 				opcionSecun = Integer.parseInt(opcion);
 
@@ -85,8 +88,22 @@ public class GestionJuguetesUI {
 					System.out.println();
 					Juguete jugueteAdd = crearJuguete(entrada);
 					Stock stockAsociado = crearStock(entrada, serviceStand, serviceZ, jugueteAdd);
-					if (serviceJug.agregarJuguete(jugueteAdd) && serviceStock.insertarStock(stockAsociado)) {
-						System.out.println("Juguete " + jugueteAdd.getNombre() + " añadido correctamente con " + stockAsociado.getJugueteEnStock().getStock() + " unidades en stock.");
+					try (Connection conexion = DataBaseConnection.getConnection()) {
+					    conexion.setAutoCommit(false); // inicio de la transacción
+
+					    boolean jugueteInsertado = serviceJug.agregarJuguete(jugueteAdd, conexion);
+					    boolean stockInsertado = serviceStock.insertarStock(stockAsociado, conexion);
+
+					    if (jugueteInsertado && stockInsertado) {
+					        conexion.commit(); // confirma cambios
+					        System.out.println("Juguete y stock añadidos correctamente.");
+					    } else {
+					        conexion.rollback(); // deshace todo si algo falla
+					        System.err.println("Error: no se pudo añadir el juguete y/o el stock.");
+					    }
+
+					} catch (SQLException e) {
+					    e.printStackTrace();
 					}
 					break;
 				case 2: // MODIFICAR UN CAMPO DE UNA TABLA DE LA BBDD
@@ -96,7 +113,12 @@ public class GestionJuguetesUI {
 				case 3: // LISTAR TODOS LOS JUGUETES DE LA BBDD
 					System.out.println();
 					System.out.println("//-------------//");
-					listarTodosJuguetes(serviceJug,listaJuguetes);
+					try {
+						listarTodosJuguetes(dao);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					System.out.println("//-------------//");
 					System.out.println();
 					break;

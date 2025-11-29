@@ -31,6 +31,11 @@ public class Juguete {
 	public Juguete(int idJuguete) {
 		this.idJuguete = idJuguete;
 	}
+	public Juguete(int idJuguete, double precio, int Cantidad_stock) {
+		this.idJuguete = idJuguete;
+		this.precio = precio;
+		this.stock = Cantidad_stock;
+	}
 	public int getIdJuguete() {
 		return idJuguete;
 	}

@@ -1,0 +1,59 @@
+package service;
+
+import java.sql.SQLException;
+
+import DAO.JugueteDAO;
+import DAO.StockDAO;
+import DAO.VentasDAO;
+import model.Juguete;
+import model.Stock;
+import model.Venta;
+
+public class VentaService {
+	private VentasDAO dao;
+	private StockDAO daoS;
+	private JugueteDAO daoJ;
+	private StockService serviceST;
+	
+	public VentaService() {
+		this.dao = new VentasDAO();
+		this.daoS = new StockDAO();
+		this.daoJ = new JugueteDAO();
+		this.serviceST = new StockService();
+	}
+	
+	public boolean realizarVenta(Venta venta) throws SQLException {
+		int filas = dao.insertarVenta(venta);
+		if (filas > 0) {
+			System.out.println("Venta realizada con éxito.");
+			return true;
+		}else {
+			System.err.println("Algo salió mal con la venta.");
+		}
+		return false;
+	}
+	
+	public boolean realizarCambio(int idVenta, Juguete jugueteCambio) throws SQLException{
+		Venta ventaCambio = dao.seleccionarVentaPorID(idVenta);
+		Juguete jugueteDevuelto = new Juguete(ventaCambio.getIdJuguete().getIdJuguete());
+		Stock stockJugueteCambio = daoS.seleccionarStockDeJuguete(jugueteDevuelto);
+		boolean devuelto = serviceST.modificarStock(jugueteDevuelto, "sumar");
+		if(devuelto) {
+			System.out.println("Se modifica el stock del producto que se devuelve.");
+			boolean cambio = serviceST.modificarStock(jugueteCambio, "restar");
+			if (cambio) {
+				System.out.println("Stock del producto que se lleva de cambio modificado");
+				return true;
+			}else {
+				devuelto = serviceST.modificarStock(jugueteDevuelto, "restar");
+				System.err.println("Se cancela la modificacion de stock del juguete que se devolvía.");
+				return false;
+			}
+		}else {
+			System.err.println("No se ha podido devolver el stock del juguete devuelto");
+			return false;
+		}
+		
+		
+	}
+}

@@ -2,8 +2,10 @@ package main;
 
 import java.util.ArrayList;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.Scanner;
 
+import DAO.EmpleadoDAO;
 import INPUT.Input;
 import model.Empleado;
 import model.Empleado.Cargo;
@@ -36,13 +38,12 @@ public class GestionEmpleadosUI {
 	}
 	
 	// FUNCION QUE IMPRIME POR PANTALLA LA LISTA ACTUAL DE EMPLEADOS
-	public void listarTodosEmpleados(EmpleadoService service, ArrayList<Empleado> listaEmpleados) {
-		listaEmpleados = service.obtenerTodos();
-		listaEmpleados.forEach(empleado -> System.out.println(empleado.getIdEmpleado() + " - " + empleado.getNombre() + " - " + empleado.getCargo()));
+	public void listarTodosEmpleados(EmpleadoDAO daoE) throws SQLException {
+		daoE.listarEmpleadosActivos();
 	}
 	
 	//SUB-MENÚ EMPLEADOS
-	public void menuOpcionesEmpleados(Scanner entrada, ServiceUtils serviceUT, EmpleadoService service, ArrayList<Empleado> listaEmpleados) {
+	public void menuOpcionesEmpleados(Scanner entrada, ServiceUtils serviceUT, EmpleadoService service, EmpleadoDAO daoE) {
 		int opcionSecun = 0;
 		
 		while(opcionSecun != 4) {
@@ -70,7 +71,12 @@ public class GestionEmpleadosUI {
 				case 3:
 					System.out.println();
 					System.out.println("//-------------//");
-					listarTodosEmpleados(service,listaEmpleados);
+					try {
+						listarTodosEmpleados(daoE);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					System.out.println("//-------------//");
 					System.out.println();
 					break;

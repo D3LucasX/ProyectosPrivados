@@ -1,0 +1,41 @@
+package main;
+
+import java.sql.SQLException;
+import java.util.Scanner;
+
+import INPUT.Input;
+import model.Empleado;
+import model.Venta;
+import service.EmpleadoService;
+
+public class GestionVenta {
+	
+	//<<<<<<<<<<<<<< FUNCIONES RELACIONADAS CON LAS VENTAS >>>>>>>>>>>>>>
+	
+	public static void mostrarMenuVentas() {
+		System.out.println("********************************");
+		System.out.println("*            VENTAS            *");
+		System.out.println("********************************");
+		System.out.println();
+		System.out.println("1. Nueva venta.");
+		System.out.println("2. Realizar cambio.");
+		System.out.println("4. Los 5 top sellers.");
+		System.out.println("5. Top 3 empleados con mas ventas.");
+		System.out.println("6. Salir");
+	}
+	
+	public Venta crearVenta(Scanner entrada, EmpleadoService serviceE) throws SQLException {
+		boolean valido = false;
+		Empleado vendedor = null;
+		do {
+			vendedor = serviceE.seleccionarEmpleado(entrada);
+			if (vendedor != null) {
+				valido = true;
+			}else {
+				System.err.println("No se ha encontrado dicho vendedor, o algo salio mal.");
+			}
+		}while(!valido);
+		
+		
+	}
+}
