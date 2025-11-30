@@ -106,8 +106,7 @@ public class launcher {
 		StandDAO daoS = new StandDAO();
 		EmpleadoDAO daoE = new EmpleadoDAO();
 		StatsDAO daoEST = new StatsDAO();
-		
-		// INICIALIZAR SEED DATA 
+
 		inicializarSeedData(serviceE, serviceJ, serviceZ, serviceS, serviceSk);
 		
 		// Menu principal

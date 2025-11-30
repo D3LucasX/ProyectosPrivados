@@ -21,7 +21,6 @@ import INPUT.Input;
 
 public class launcher {
 	
-	// MENÚ PRINCIPAL
 	public static void menuOpcionesPrincipales(Scanner entrada, JugueteService serviceJ, EmpleadoService serviceE, ZonaService serviceZ, ServiceUtils serviceUT, StockService serviceStock, StandService serviceStand, VentaService serviceV, JugueteDAO dao, StandDAO daoS, StatsDAO daoEST, EmpleadoDAO daoE) {
 		int opcionPrin = 0;
 		while (opcionPrin != 7) {
@@ -79,19 +78,6 @@ public class launcher {
 			}
 		}
 	}
-	
-	//INICIALIZAR SEED DATA
-	public static void inicializarSeedData(EmpleadoService serviceE, JugueteService serviceJ,  ZonaService serviceZ, StandService serviceS, StockService serviceSk) {
-		try {
-			serviceJ.inicializarSeedDataJug();
-			serviceE.inicializarSeedDataEmp();
-			serviceZ.inicializarSeedData();
-			serviceS.insertarStandsIniciales();
-			serviceSk.insertarStocksIniciales();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} 
-	}
 
 	public static void main(String[] args) {
 		Scanner entrada = new Scanner(System.in);
@@ -106,9 +92,19 @@ public class launcher {
 		StandDAO daoS = new StandDAO();
 		EmpleadoDAO daoE = new EmpleadoDAO();
 		StatsDAO daoEST = new StatsDAO();
-		
-		// INICIALIZAR SEED DATA 
-		inicializarSeedData(serviceE, serviceJ, serviceZ, serviceS, serviceSk);
+
+		try {
+			serviceJ.inicializarSeedDataJug();
+			serviceE.inicializarSeedDataEmp();
+			serviceZ.inicializarSeedData();
+			serviceS.insertarStandsIniciales();
+			serviceSk.insertarStocksIniciales();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		// inserta 10 juguetes si la BD está vacía
+		ArrayList<Juguete> listeJuguetes = serviceJ.obtenerTodos();
+		ArrayList<Empleado> listeEmpleados = serviceE.obtenerTodos();
 		
 		// Menu principal
 		menuOpcionesPrincipales(entrada, serviceJ, serviceE, serviceZ, serviceUT, serviceSk, serviceS, serviceV, daoJ, daoS, daoEST, daoE);
