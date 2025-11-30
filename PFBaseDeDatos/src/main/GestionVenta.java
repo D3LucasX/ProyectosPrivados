@@ -26,9 +26,7 @@ public class GestionVenta {
 		System.out.println();
 		System.out.println("1. Nueva venta.");
 		System.out.println("2. Realizar cambio.");
-		System.out.println("3. Los 5 top sellers.");
-		System.out.println("4. Top 3 empleados con mas ventas.");
-		System.out.println("5. Salir");
+		System.out.println("3. Salir");
 	}
 
 	// FUNCION QUE CREA UN OBJETO VENTA.
@@ -127,6 +125,8 @@ public class GestionVenta {
 					}else {
 						System.err.println("Algo salió mal al introducir el cambio");
 					}
+				}else {
+					System.err.println("No hay stock del producto que ha elegido.");
 				}
 			}else {
 				System.err.println("ERROR al realizar el cambio.");
@@ -141,12 +141,12 @@ public class GestionVenta {
 		int opcionSecun = 0;
 		boolean valido = false, ventaRealizada = false;
 		try {
-			while(opcionSecun != 5) {
+			while(opcionSecun != 3) {
 				mostrarMenuVentas();
 				System.out.println("Introduce una opción: ");
 				String opcion = entrada.nextLine();
 				
-				if(!Input.ComprobarStringRegex(opcion, "^[1-5]$")) {
+				if(!Input.ComprobarStringRegex(opcion, "^[1-3]$")) {
 					System.err.println("Opción no válida.");
 				}else {
 					opcionSecun = Integer.parseInt(opcion);
@@ -168,7 +168,7 @@ public class GestionVenta {
 						        System.err.println("Error, no se pudo completar la venta.");
 						    }
 						}else {
-							System.out.println("La venta es null.");
+							System.err.println("No se pudo completar la venta por falta de stock.");
 						}
 						break;
 					case 2:
@@ -176,11 +176,6 @@ public class GestionVenta {
 						crearCambio(entrada, serviceV, serviceJ, serviceST, serviceE);
 						break;
 					case 3:
-						
-						break;
-					case 4:
-						break;
-					case 5:
 						System.out.println();
 						System.out.println("Saliendo al menú principal...");
 						System.out.println();

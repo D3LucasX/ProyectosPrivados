@@ -1,0 +1,40 @@
+package DAO;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import DataBase.DataBaseConnection;
+
+public class StatsDAO {
+
+	public boolean masVendidosCinco () throws SQLException {
+		String sql = "select stock_JUGUETE_idJuguete, Nombre, count(*) as veces_vendido from venta \r\n"
+				+ "inner join\r\n"
+				+ "(SELECT idJuguete, Nombre from juguete)t1\r\n"
+				+ "on venta.stock_JUGUETE_idJuguete = t1.idJuguete\r\n"
+				+ "group by stock_JUGUETE_idJuguete, Nombre\r\n"
+				+ "order by veces_vendido desc\r\n"
+				+ "limit 5;";
+		try(Connection conexion = DataBaseConnection.getConnection();
+				Statement st = conexion.createStatement();
+				ResultSet rs = st.executeQuery(sql)){
+			if(!rs.next()) {
+				System.err.println("No hay compras registradas.");
+				return false;
+			}
+			int i = 1;
+			do{
+				System.out.printf("Producto en %dº posición"
+						+ "-------------------------"
+						+ "ID producto: %d\\n"
+						+ "Nombre producto: %s\n"
+						+ "Veces vendido: %d", i ,rs.getInt("stock_JUGUETE_idJuguete"), rs.getString("Nombre"), rs.getInt("veces_vendido"));
+				System.out.println();
+				i++;
+			}while (rs.next());
+		}
+		return true;
+	}
+}

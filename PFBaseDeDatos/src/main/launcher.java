@@ -6,6 +6,8 @@ import java.util.Scanner;
 
 import DAO.EmpleadoDAO;
 import DAO.JugueteDAO;
+import DAO.StandDAO;
+import DAO.StatsDAO;
 import model.Empleado;
 import model.Juguete;
 import service.EmpleadoService;
@@ -19,7 +21,7 @@ import INPUT.Input;
 
 public class launcher {
 	
-	public static void menuOpcionesPrincipales(Scanner entrada, JugueteService serviceJ, EmpleadoService serviceE, ZonaService serviceZ, ServiceUtils serviceUT, StockService serviceStock, StandService serviceStand, VentaService serviceV, JugueteDAO dao, EmpleadoDAO daoE) {
+	public static void menuOpcionesPrincipales(Scanner entrada, JugueteService serviceJ, EmpleadoService serviceE, ZonaService serviceZ, ServiceUtils serviceUT, StockService serviceStock, StandService serviceStand, VentaService serviceV, JugueteDAO dao, StandDAO daoS, StatsDAO daoEST, EmpleadoDAO daoE) {
 		int opcionPrin = 0;
 		while (opcionPrin != 7) {
 			GestionUtils.mostrarMenuPrincipal();
@@ -35,7 +37,7 @@ public class launcher {
 				case 1:
 					System.out.println();
 					GestionJuguetesUI gJ = new GestionJuguetesUI();
-					gJ.menuOpcionesJuguetes(entrada, serviceUT, serviceJ, serviceStock, serviceZ, serviceStand, dao);
+					gJ.menuOpcionesJuguetes(entrada, serviceUT, serviceJ, serviceStock, serviceZ, serviceStand, dao, daoS);
 					break;
 				case 2:
 					System.out.println();
@@ -57,6 +59,9 @@ public class launcher {
 					gV.menuOpcionesVentas(entrada, serviceE, serviceJ, serviceStock, serviceV);
 					break;
 				case 6:
+					System.out.println();
+					GestionStatsUI gST = new GestionStatsUI();
+					gST.menuOpcionesEstadisticas(entrada, daoEST);
 					break;
 				case 7:
 					System.out.println();
@@ -84,7 +89,9 @@ public class launcher {
 		VentaService serviceV = new VentaService();
 		ServiceUtils serviceUT = new ServiceUtils();
 		JugueteDAO daoJ = new JugueteDAO();
+		StandDAO daoS = new StandDAO();
 		EmpleadoDAO daoE = new EmpleadoDAO();
+		StatsDAO daoEST = new StatsDAO();
 
 		try {
 			serviceJ.inicializarSeedDataJug();
@@ -100,7 +107,7 @@ public class launcher {
 		ArrayList<Empleado> listeEmpleados = serviceE.obtenerTodos();
 		
 		// Menu principal
-		menuOpcionesPrincipales(entrada, serviceJ, serviceE, serviceZ, serviceUT, serviceSk, serviceS, serviceV, daoJ, daoE);
+		menuOpcionesPrincipales(entrada, serviceJ, serviceE, serviceZ, serviceUT, serviceSk, serviceS, serviceV, daoJ, daoS, daoEST, daoE);
 	}
 
 }

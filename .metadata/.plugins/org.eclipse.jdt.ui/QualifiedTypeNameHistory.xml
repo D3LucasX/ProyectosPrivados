@@ -5,7 +5,6 @@
     <fullyQualifiedTypeName name="DAO.JugueteDAO"/>
     <fullyQualifiedTypeName name="java.lang.Object"/>
     <fullyQualifiedTypeName name="main.GestionJuguetesUI"/>
-    <fullyQualifiedTypeName name="java.sql.Connection"/>
     <fullyQualifiedTypeName name="model.Empleado.Cargo"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="service.JugueteService"/>
@@ -17,16 +16,20 @@
     <fullyQualifiedTypeName name="DAO.DAOUtils"/>
     <fullyQualifiedTypeName name="java.beans.Statement"/>
     <fullyQualifiedTypeName name="java.lang.System"/>
-    <fullyQualifiedTypeName name="java.sql.ResultSet"/>
     <fullyQualifiedTypeName name="sun.swing.MenuItemLayoutHelper.ColumnAlignment"/>
     <fullyQualifiedTypeName name="service.ServiceUtils"/>
     <fullyQualifiedTypeName name="java.sql.SQLException"/>
-    <fullyQualifiedTypeName name="INPUT.Input"/>
     <fullyQualifiedTypeName name="service.ZonaService"/>
     <fullyQualifiedTypeName name="main.GestionZonaUI"/>
-    <fullyQualifiedTypeName name="DataBase.DataBaseConnection"/>
-    <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
     <fullyQualifiedTypeName name="service.StockService"/>
     <fullyQualifiedTypeName name="main.GestionUtils"/>
     <fullyQualifiedTypeName name="service.StandService"/>
+    <fullyQualifiedTypeName name="DataBase.DataBaseConnection"/>
+    <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
+    <fullyQualifiedTypeName name="java.sql.ResultSet"/>
+    <fullyQualifiedTypeName name="model.Venta"/>
+    <fullyQualifiedTypeName name="model.Venta.Pago"/>
+    <fullyQualifiedTypeName name="main.GestionVenta"/>
+    <fullyQualifiedTypeName name="java.sql.Connection"/>
+    <fullyQualifiedTypeName name="INPUT.Input"/>
 </qualifiedTypeNameHistroy>

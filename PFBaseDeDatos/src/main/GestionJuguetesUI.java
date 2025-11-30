@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import DAO.JugueteDAO;
+import DAO.StandDAO;
 import DataBase.DataBaseConnection;
 import INPUT.Input;
 import model.Juguete;
@@ -29,8 +30,9 @@ public class GestionJuguetesUI {
 		System.out.println();
 		System.out.println("1. Registrar nuevo Juguete.");
 		System.out.println("2. Modificar juguete.");
-		System.out.println("3. Listar todos los juguetes.");
-		System.out.println("4. Salir.");
+		System.out.println("3. Listar juguetes de un stand.");
+		System.out.println("4. Listar juguetes por precio de mayor a menor.");
+		System.out.println("5. Salir.");
 	}
 	
 	// CREAR JUGUETE
@@ -65,20 +67,26 @@ public class GestionJuguetesUI {
 	}
 	
 	// FUNCION QUE IMPRIME POR PANTALLA LA LISTA ACTUAL DE JUGUETES.
-	public void listarTodosJuguetes(JugueteDAO dao) throws SQLException {
-		dao.listarJuguetesActivos();
+	public void listarTodosJuguetes(JugueteDAO dao, StandDAO daoS, Scanner entrada) throws SQLException {
+		int idStand = Input.pedirInt(entrada, "Introduce el numero de ID del stand que desea revisar:");
+		Stand standArevisar = daoS.existeStand(idStand);
+		if (standArevisar != null) {
+			dao.listarJuguetesEnStand(idStand);
+		}else {
+			System.err.println("El stand introducido no existe.");
+		}
 	}
 	
 	// SUB-MENU JUGUETES
-	public void menuOpcionesJuguetes(Scanner entrada, ServiceUtils service, JugueteService serviceJug, StockService serviceStock, ZonaService serviceZ, StandService serviceStand, JugueteDAO dao) {
+	public void menuOpcionesJuguetes(Scanner entrada, ServiceUtils service, JugueteService serviceJug, StockService serviceStock, ZonaService serviceZ, StandService serviceStand, JugueteDAO dao, StandDAO daoS) {
 		int opcionSecun = 0;
 
-		while (opcionSecun != 4) { // bucle del sub-menú
+		while (opcionSecun != 5) { // bucle del sub-menú
 			mostrarMenuJuguetes();
 			System.out.print("Introduzca una opción: ");
 			String opcion = entrada.nextLine();
 
-			if (!Input.ComprobarStringRegex(opcion, "^[1-4]$")) {
+			if (!Input.ComprobarStringRegex(opcion, "^[1-5]$")) {
 				System.err.println("Opción no válida.");
 			} else {
 				opcionSecun = Integer.parseInt(opcion);
@@ -114,7 +122,8 @@ public class GestionJuguetesUI {
 					System.out.println();
 					System.out.println("//-------------//");
 					try {
-						listarTodosJuguetes(dao);
+						System.out.println();
+						listarTodosJuguetes(dao, daoS, entrada);
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -122,7 +131,18 @@ public class GestionJuguetesUI {
 					System.out.println("//-------------//");
 					System.out.println();
 					break;
-				case 4: // SALIR DEL SUB-MENÚ
+				case 4:
+					System.out.println();
+					try {
+						dao.listarJuguetesActivosPorPrecio();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					System.out.println();
+					System.out.println();
+					break;
+				case 5: // SALIR DEL SUB-MENÚ
 					System.out.println();
 					System.out.println("Saliendo al menú principal...");
 					System.out.println();

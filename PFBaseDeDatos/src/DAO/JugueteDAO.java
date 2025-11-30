@@ -121,8 +121,8 @@ public class JugueteDAO {
 	}
 
 	// LISTAR TODOS LOS JUGUETES ACTIVOS
-	public void listarJuguetesActivos() throws SQLException {
-		String sql = "SELECT * FROM juguete WHERE activo = true";
+	public void listarJuguetesActivosPorPrecio() throws SQLException {
+		String sql = "SELECT * FROM juguete WHERE activo = true order by precio desc";
 		try (Connection conexion = DataBaseConnection.getConnection();
 				Statement st = conexion.createStatement();
 				ResultSet rs = st.executeQuery(sql)) {
@@ -133,6 +133,29 @@ public class JugueteDAO {
 						rs.getDouble("Precio"));
 			}
 		}
+	}
+	
+	public boolean listarJuguetesEnStand(int idStand) throws SQLException {
+		String sql = "select idJuguete, Nombre from stock \r\n"
+				+ "inner join\r\n"
+				+ "(SELECT * FROM jugueteria.juguete)t1\r\n"
+				+ "on stock.JUGUETE_idJuguete = t1.idJuguete\r\n"
+				+ "group by STAND_idStand, JUGUETE_idJuguete\r\n"
+				+ " having STAND_idStand = ?";
+		try (Connection conexion = DataBaseConnection.getConnection();
+				PreparedStatement ps = conexion.prepareStatement(sql)) {
+			ps.setInt(1, idStand);
+			ResultSet rs = ps.executeQuery();
+			if (!rs.next()) {
+				System.out.println("No hay juguetes en el stand indicado.");
+				return false;
+			}
+			do {
+				System.out.printf("ID juguete: %d\n"
+						+ "Nombre: %s\n", rs.getInt("idJuguete"), rs.getString("Nombre"));
+			}while (rs.next());
+		}
+		return true;
 	}
 
 	// SELECCIONAR JUGUETE POR ID

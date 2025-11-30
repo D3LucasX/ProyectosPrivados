@@ -25,7 +25,7 @@ public class GestionUtils {
 		System.out.println("1. Gestión de Juguetes.");
 		System.out.println("2. Gestión de Empleados.");
 		System.out.println("3. Gestión de Zonas.");
-		System.out.println("4. Habilitar o deshabilitar producto/empleado/zona");
+		System.out.println("4. Habilitar o deshabilitar producto/empleado");
 		System.out.println("5. Gestión Ventas.");
 		System.out.println("6. Obtener datos de la tienda.");
 		System.out.println("7. Salir.");

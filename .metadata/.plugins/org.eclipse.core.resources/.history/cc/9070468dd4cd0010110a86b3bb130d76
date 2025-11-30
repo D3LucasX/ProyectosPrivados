@@ -1,0 +1,176 @@
+package DAO;
+
+import model.Juguete;
+import DataBase.DataBaseConnection;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+/**
+ * @author d3luc
+ */
+
+/**
+ * Clase para implementar las operaciones CRUD
+ */
+
+public class JugueteDAO {
+
+	// Metodo int para guardarlo en una variable int al llamarla para saber
+	// cuantas filas fueron modificadas, para que si no se modificó ninguna,
+	// saber que no se inserto el juguete.
+	public int insertar(Juguete nuevoJuguete) throws SQLException {
+		String sql = "INSERT INTO juguete(Nombre, Descripcion, Precio, Cantidad_stock) VALUES (?,?,?,?)";
+		try (Connection conexion = DataBaseConnection.getConnection();
+				PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+			ps.setString(1, nuevoJuguete.getNombre());
+			ps.setString(2, nuevoJuguete.getDescripcion());
+			ps.setDouble(3, nuevoJuguete.getPrecio());
+			ps.setInt(4, nuevoJuguete.getStock());
+
+			int filas = ps.executeUpdate();
+
+			// Obtener el ID generado
+			try (ResultSet rs = ps.getGeneratedKeys()) {
+				if (rs.next()) {
+					int idGenerado = rs.getInt(1);
+					nuevoJuguete.setIdJuguete(idGenerado); // actualizar el objeto con el ID
+				}
+			}
+
+			return filas;
+		}
+	}
+	
+	//InsertarJuguete para rollBack
+	public int insertarRollBack(Connection conexion, Juguete nuevoJuguete) throws SQLException {
+	    String sql = "INSERT INTO juguete(Nombre, Descripcion, Precio, Cantidad_stock) VALUES (?,?,?,?)";
+	    
+	    try (PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+	        ps.setString(1, nuevoJuguete.getNombre());
+	        ps.setString(2, nuevoJuguete.getDescripcion());
+	        ps.setDouble(3, nuevoJuguete.getPrecio());
+	        ps.setInt(4, nuevoJuguete.getStock());
+
+	        int filas = ps.executeUpdate();
+
+	        try (ResultSet rs = ps.getGeneratedKeys()) {
+	            if (rs.next()) nuevoJuguete.setIdJuguete(rs.getInt(1));
+	        }
+
+	        return filas;
+	    }
+	}
+
+	// Funcion que recive una lista del service para inicializar los seedData
+	public int insertarLista(ArrayList<Juguete> seedDataJuguetes) throws SQLException {
+		String sql = "INSERT INTO juguete(Nombre, Descripcion, Precio, Cantidad_stock) VALUES (?,?,?,?)";
+		int totalFilas = 0;
+
+		try (Connection conexion = DataBaseConnection.getConnection();
+				PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+			for (Juguete j : seedDataJuguetes) {
+				ps.setString(1, j.getNombre());
+				ps.setString(2, j.getDescripcion());
+				ps.setDouble(3, j.getPrecio());
+				ps.setInt(4, j.getStock());
+				// Mas eficiente que hacer un executeUpdate
+				// por cada fila insertada.
+				ps.addBatch(); // Cuando quieres hacer varias consultas o peticiones a la vez
+			}
+			int[] resultados = ps.executeBatch(); // devuelve un array de enteros
+			for (int r : resultados) { // cada numero de el array representa una sentencia ejecutada
+				totalFilas += r; // así aqui sabemos que se ha insertado
+			}
+
+			// Obtener los IDs generados y los setea en los juguetes de la lista para tener
+			// sus ids en memoria
+			try (ResultSet rs = ps.getGeneratedKeys()) {
+				int index = 0;
+				while (rs.next() && index < seedDataJuguetes.size()) {
+					seedDataJuguetes.get(index).setIdJuguete(rs.getInt(1));
+					index++;
+				}
+			}
+
+		}
+		return totalFilas;
+	}
+
+	// Funcion que lista todos los juguetes y los mete en una lista que al final
+	// devuelve
+	public ArrayList<Juguete> listarTodos() throws SQLException {
+		ArrayList<Juguete> lista = new ArrayList<>();
+		String sql = "SELECT * FROM juguete";
+
+		try (Connection conexion = DataBaseConnection.getConnection();
+				Statement st = conexion.createStatement();
+				ResultSet rs = st.executeQuery(sql)) {
+
+			while (rs.next()) {
+				lista.add(new Juguete(rs.getInt("idJuguete"), rs.getString("Nombre"), rs.getString("Descripcion"),
+						rs.getDouble("Precio"), rs.getInt("Cantidad_stock"), rs.getInt("activo"),
+						rs.getDate("fecha_baja")));
+			}
+		}
+		return lista;
+	}
+
+	// LISTAR TODOS LOS JUGUETES ACTIVOS
+	public void listarJuguetesActivos() throws SQLException {
+		String sql = "SELECT * FROM juguete WHERE activo = true";
+		try (Connection conexion = DataBaseConnection.getConnection();
+				Statement st = conexion.createStatement();
+				ResultSet rs = st.executeQuery(sql)) {
+			while (rs.next()) {
+				System.out.printf(
+						"ID: %d\n" + "Nombre: %s\n" + "Descripcion: %s\n" + "Precio: %f\n" + "------------------\n",
+						rs.getInt("idJuguete"), rs.getString("Nombre"), rs.getString("Descripcion"),
+						rs.getDouble("Precio"));
+			}
+		}
+	}
+	
+	public boolean listarJuguetesEnStand(int idStand) throws SQLException {
+		String sql = "select idJuguete, Nombre from stock \r\n"
+				+ "inner join\r\n"
+				+ "(SELECT * FROM jugueteria.juguete)t1\r\n"
+				+ "on stock.JUGUETE_idJuguete = t1.idJuguete\r\n"
+				+ "group by STAND_idStand, JUGUETE_idJuguete\r\n"
+				+ " having STAND_idStand = ?";
+		try (Connection conexion = DataBaseConnection.getConnection();
+				PreparedStatement ps = conexion.prepareStatement(sql)) {
+			ps.setInt(1, idStand);
+			ResultSet rs = ps.executeQuery();
+			if (!rs.next()) {
+				System.out.println("No hay juguetes en el stand indicado.");
+				return false;
+			}
+			do {
+				System.out.println("ID juguete: %d\n"
+						+ "Nombre: %s\n");
+			}while (rs.next());
+		}
+		return true;
+	}
+
+	// SELECCIONAR JUGUETE POR ID
+	public Juguete seleccionarJuguetePorId(int idJuguete) throws SQLException {
+		String sql = "SELECT * FROM juguete WHERE activo = 1 AND idJuguete = ?";
+
+		try (Connection conexion = DataBaseConnection.getConnection();
+				PreparedStatement ps = conexion.prepareStatement(sql)) {
+			ps.setInt(1, idJuguete);
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				return new Juguete(rs.getInt("idJuguete"), rs.getDouble("Precio"), rs.getInt("Cantidad_stock"));
+			}
+		}
+		return null;
+	}
+}

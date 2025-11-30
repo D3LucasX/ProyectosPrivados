@@ -18,10 +18,7 @@ public class ServiceUtils {
 		// modificacion, no son maliciosos y concuerdan con los campos que existen en la tabla.
 	 public static final Map<String, Set<String>> columnasValidas = Map.of(
 				"juguete", Set.of("idJuguete", "Nombre", "Descripcion", "Precio", "Cantidad_stock"),
-				"empleado", Set.of("idEMPLEADO","Nombre", "Cargo", "Fecha_ingreso"),
-				"zona", Set.of("idzona","Nombre", "Descripcion"),
-				"stand", Set.of("idStand","Nombre", "Descripcion", "ZONA_idzona, habilitada")
-		);
+				"empleado", Set.of("idEMPLEADO","Nombre", "Cargo", "Fecha_ingreso"));
 	
 	
 	 // Modificar un campo de un juguete

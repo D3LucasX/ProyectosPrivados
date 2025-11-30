@@ -63,7 +63,7 @@ public class JugueteService {
 	}
 
 	public Juguete jugueteVenta(Scanner entrada) throws SQLException {
-		dao.listarJuguetesActivos();
+		dao.listarJuguetesActivosPorPrecio();
 		int idJuguete = Input.pedirInt(entrada, "Introduzca el id del juguete que desee: ");
 		return dao.seleccionarJuguetePorId(idJuguete);
 	}
