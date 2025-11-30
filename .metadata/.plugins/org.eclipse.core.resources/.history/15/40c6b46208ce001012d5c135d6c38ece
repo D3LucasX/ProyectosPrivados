@@ -51,7 +51,12 @@ public class launcher {
 					break;
 				case 4:
 					System.out.println();
-					GestionUtils.eliminarFila(entrada, serviceUT, dao, daoE);
+					try {
+						dao.listarJuguetesActivosPorPrecioInactivos();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					GestionUtils.eliminarFila(entrada, serviceUT);
 					break;
 				case 5:
 					System.out.println();

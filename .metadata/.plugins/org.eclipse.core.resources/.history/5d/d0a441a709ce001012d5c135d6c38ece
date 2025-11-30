@@ -111,7 +111,7 @@ public class EmpleadoDAO {
 		
 		// LISTAR TODOS LOS EMPLEADOS INACTIVOS QUE SEAN CAJEROS
 				public void listarEmpleadosInactivos() throws SQLException {
-					String sql = "SELECT * FROM empleado WHERE activo = false";
+					String sql = "SELECT * FROM empleado WHERE activo = faslse";
 					try (Connection conexion = DataBaseConnection.getConnection();
 							Statement st = conexion.createStatement();
 							ResultSet rs = st.executeQuery(sql)) {

@@ -135,21 +135,6 @@ public class JugueteDAO {
 		}
 	}
 	
-	// LISTAR TODOS LOS JUGUETES DESHABILITADOS
-	public void listarJuguetesActivosPorPrecioInactivos() throws SQLException {
-		String sql = "SELECT * FROM juguete WHERE activo = FALSE order by precio desc";
-		try (Connection conexion = DataBaseConnection.getConnection();
-				Statement st = conexion.createStatement();
-				ResultSet rs = st.executeQuery(sql)) {
-			while (rs.next()) {
-				System.out.printf(
-						"ID: %d\n" + "Nombre: %s\n" + "Descripcion: %s\n" + "Precio: %f\n" + "------------------\n",
-						rs.getInt("idJuguete"), rs.getString("Nombre"), rs.getString("Descripcion"),
-						rs.getDouble("Precio"));
-			}
-		}
-	}
-	
 	public boolean listarJuguetesEnStand(int idStand) throws SQLException {
 		String sql = "select idJuguete, Nombre from stock \r\n"
 				+ "inner join\r\n"

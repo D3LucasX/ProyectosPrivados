@@ -94,26 +94,23 @@ public class GestionUtils {
 				tabla = Input.pedirString(entrada, "Introduzca la tabla que va a modificar", 1, 45);
 				
 				do {
+					
+					idNumero = Input.pedirInt(entrada, "Introduzca el numero del ID de la fila que quieras modificar:");
 					System.out.println("¿Que desea, dar de alta, o dar de baja? (alta/baja)");
 					altaBaja = entrada.nextLine();
-					
 					if (altaBaja.equalsIgnoreCase("alta")) {
 						if (tabla.equalsIgnoreCase("juguete")) {
 							daoJ.listarJuguetesActivosPorPrecioInactivos();
-							idNumero = Input.pedirInt(entrada, "Introduzca el numero del ID de la fila que quieras modificar:");
 						}else {
 							daoE.listarEmpleadosInactivos();
-							idNumero = Input.pedirInt(entrada, "Introduzca el numero del ID de la fila que quieras modificar:");
 						}
 						exito = service.eliminarFila(tabla, activo1, idNumero);
 						DAOUtils.modificarFechaBaja_alta(tabla, idNumero);
 					} else if (altaBaja.equalsIgnoreCase("baja")) {
 						if (tabla.equalsIgnoreCase("juguete")) {
 							daoJ.listarJuguetesActivosPorPrecio();
-							idNumero = Input.pedirInt(entrada, "Introduzca el numero del ID de la fila que quieras modificar:");
 						}else {
 							daoE.listarEmpleadosActivos();
-							idNumero = Input.pedirInt(entrada, "Introduzca el numero del ID de la fila que quieras modificar:");
 						}
 						exito = service.eliminarFila(tabla, activo0, idNumero);
 						DAOUtils.modificarFechaBaja(tabla, idNumero);

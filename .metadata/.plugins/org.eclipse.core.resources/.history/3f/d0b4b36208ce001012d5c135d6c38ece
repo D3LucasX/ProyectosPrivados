@@ -97,31 +97,17 @@ public class EmpleadoDAO {
 	
 	// LISTAR TODOS LOS EMPLEADOS ACTIVOS QUE SEAN CAJEROS
 		public void listarEmpleadosActivos() throws SQLException {
-			String sql = "SELECT * FROM empleado WHERE activo = true";
+			String sql = "SELECT * FROM empleado WHERE activo = true AND Cargo = 'cajero'";
 			try (Connection conexion = DataBaseConnection.getConnection();
 					Statement st = conexion.createStatement();
 					ResultSet rs = st.executeQuery(sql)) {
 				while (rs.next()) {
 					System.out.printf(
-							"ID: %d\n" + "Nombre: %s\n" + "------------------\n",
-							rs.getInt("idEMPLEADO"), rs.getString("Nombre"));
+							"ID: %d\n" + "Nombre: %s\n" + "Cargo: %s\n" + "------------------\n",
+							rs.getInt("idEMPLEADO"), rs.getString("Nombre"), rs.getString("Cargo"));
 				}
 			}
 		}
-		
-		// LISTAR TODOS LOS EMPLEADOS INACTIVOS QUE SEAN CAJEROS
-				public void listarEmpleadosInactivos() throws SQLException {
-					String sql = "SELECT * FROM empleado WHERE activo = false";
-					try (Connection conexion = DataBaseConnection.getConnection();
-							Statement st = conexion.createStatement();
-							ResultSet rs = st.executeQuery(sql)) {
-						while (rs.next()) {
-							System.out.printf(
-									"ID: %d\n" + "Nombre: %s\n" + "------------------\n",
-									rs.getInt("idEMPLEADO"), rs.getString("Nombre"));
-						}
-					}
-				}
 	
 	
 	// SELECCIONAR EMPLEADO POR ID

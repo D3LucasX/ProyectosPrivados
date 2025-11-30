@@ -62,7 +62,7 @@ public class StatsDAO {
 			do{
 				System.out.printf("Empleado en %dº posición\n"
 						+ "-------------------------\n"
-						+ "ID Empleado: %d\n"
+						+ "ID Empleado: %d\\n"
 						+ "Nombre Empleado: %s\n"
 						+ "Numero de ventas: %d\n"
 						+ "----------------------------\n", i ,rs.getInt("EMPLEADO_idEMPLEADO"), rs.getString("Nombre"), rs.getInt("mas_ventas"));
