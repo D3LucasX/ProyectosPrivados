@@ -32,4 +32,5 @@
     <fullyQualifiedTypeName name="DataBase.DataBaseConnection"/>
     <fullyQualifiedTypeName name="INPUT.Input"/>
     <fullyQualifiedTypeName name="DAO.JugueteDAO"/>
+    <fullyQualifiedTypeName name="java.lang.Integer"/>
 </qualifiedTypeNameHistroy>
