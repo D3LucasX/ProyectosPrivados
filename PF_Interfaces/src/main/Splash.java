@@ -25,6 +25,10 @@ import model.Paginas;
 import model.User;
 import java.awt.CardLayout;
 import java.awt.Rectangle;
+import javax.swing.JTextField;
+import javax.swing.JPasswordField;
+import javax.swing.SwingConstants;
+import javax.swing.JButton;
 
 public class Splash {
 
@@ -33,6 +37,11 @@ public class Splash {
 	private JProgressBar progressBar;
 	private JLabel infoCarga ;
 	private JPanel panelLoggin;
+	private JTextField textField;
+	private JPasswordField passwordField;
+	private JLabel labelInicioSesion;
+	private JLabel nombreLBL;
+	private JLabel contraseñaLBL;
 
 	/**
 	 * Launch the application.
@@ -74,6 +83,39 @@ public class Splash {
 		panelLoggin.setBounds(new Rectangle(100, 100, 900, 900));
 		frame.getContentPane().add(panelLoggin, "name_5951028023100");
 		panelLoggin.setLayout(null);
+		
+		labelInicioSesion = new JLabel("INICIO DE SESIÓN");
+		labelInicioSesion.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 39));
+		labelInicioSesion.setHorizontalAlignment(SwingConstants.CENTER);
+		labelInicioSesion.setBounds(10, 42, 385, 39);
+		panelLoggin.add(labelInicioSesion);
+		
+		textField = new JTextField();
+		textField.setBounds(300, 249, 314, 32);
+		panelLoggin.add(textField);
+		textField.setColumns(10);
+		
+		nombreLBL = new JLabel("NOMBRE");
+		nombreLBL.setHorizontalAlignment(SwingConstants.RIGHT);
+		nombreLBL.setBounds(203, 249, 87, 32);
+		panelLoggin.add(nombreLBL);
+		
+		contraseñaLBL = new JLabel("CONTRASEÑA");
+		contraseñaLBL.setHorizontalAlignment(SwingConstants.RIGHT);
+		contraseñaLBL.setBounds(203, 292, 87, 32);
+		panelLoggin.add(contraseñaLBL);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(300, 292, 314, 32);
+		panelLoggin.add(passwordField);
+		
+		JButton btnNewButton = new JButton("ENVIAR");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton.setBounds(392, 346, 99, 32);
+		panelLoggin.add(btnNewButton);
 	}
 	
 	private Component buscarImagen() {

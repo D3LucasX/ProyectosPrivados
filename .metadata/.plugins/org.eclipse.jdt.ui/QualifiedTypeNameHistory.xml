@@ -13,7 +13,6 @@
     <fullyQualifiedTypeName name="service.EmpleadoService"/>
     <fullyQualifiedTypeName name="DAO.DAOUtils"/>
     <fullyQualifiedTypeName name="java.beans.Statement"/>
-    <fullyQualifiedTypeName name="java.lang.System"/>
     <fullyQualifiedTypeName name="sun.swing.MenuItemLayoutHelper.ColumnAlignment"/>
     <fullyQualifiedTypeName name="service.ServiceUtils"/>
     <fullyQualifiedTypeName name="java.sql.SQLException"/>
@@ -33,5 +32,7 @@
     <fullyQualifiedTypeName name="DAO.JugueteDAO"/>
     <fullyQualifiedTypeName name="java.lang.Integer"/>
     <fullyQualifiedTypeName name="FileLoader.FileLoader"/>
+    <fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
+    <fullyQualifiedTypeName name="java.lang.System"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
 </qualifiedTypeNameHistroy>
