@@ -10,9 +10,9 @@ import model.User;
 public class FileLoader {
 
 	public ArrayList<User> cargarUsuarios(){
-		ArrayList<User> listaUsuarios = null;
+		ArrayList<User> listaUsuarios = new ArrayList<User>();
 		
-		try(BufferedReader br = new BufferedReader(new FileReader("ArchivoUsuario"))){
+		try(BufferedReader br = new BufferedReader(new FileReader("ArchivoUsuario.txt"))){
 			while(br.readLine() != null) {
 				String usuario = br.readLine();
 				String[] camposUsu = usuario.split(";;");
@@ -22,10 +22,14 @@ public class FileLoader {
 				listaUsuarios.add(user);
 			}
 			
+			
 		}catch(IOException e) {
 			System.err.println("No se ha podido cargar a los usuarios.");
+			e.printStackTrace();
 			return null;
 		}
 		return listaUsuarios;
 	}
+	
+	public ArrayList
 }

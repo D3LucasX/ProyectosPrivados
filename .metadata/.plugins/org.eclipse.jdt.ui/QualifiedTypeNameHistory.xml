@@ -5,7 +5,6 @@
     <fullyQualifiedTypeName name="java.lang.Object"/>
     <fullyQualifiedTypeName name="main.GestionJuguetesUI"/>
     <fullyQualifiedTypeName name="model.Empleado.Cargo"/>
-    <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="service.JugueteService"/>
     <fullyQualifiedTypeName name="model.Empleado"/>
     <fullyQualifiedTypeName name="jdk.internal.org.jline.terminal.Attributes.InputFlag"/>
@@ -33,4 +32,6 @@
     <fullyQualifiedTypeName name="INPUT.Input"/>
     <fullyQualifiedTypeName name="DAO.JugueteDAO"/>
     <fullyQualifiedTypeName name="java.lang.Integer"/>
+    <fullyQualifiedTypeName name="FileLoader.FileLoader"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
 </qualifiedTypeNameHistroy>
