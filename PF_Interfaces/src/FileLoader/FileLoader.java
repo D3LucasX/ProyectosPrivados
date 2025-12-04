@@ -12,12 +12,13 @@ public class FileLoader {
 
 	public ArrayList<User> cargarUsuarios() {
 		ArrayList<User> listaUsuarios = new ArrayList<User>();
-
+		String usuario;
 		try (BufferedReader br = new BufferedReader(new FileReader("ArchivoUsuario.txt"))) {
-			while (br.readLine() != null) {
-				String usuario = br.readLine();
+			while ((usuario = br.readLine()) != null) {
 				String[] camposUsu = usuario.split(";;");
+				
 				int idUser = Integer.parseInt(camposUsu[0]);
+				
 				int vecesLoaded = Integer.parseInt(camposUsu[3]);
 				User user = new User(idUser, camposUsu[1], camposUsu[2], vecesLoaded, camposUsu[4]);
 				listaUsuarios.add(user);
@@ -33,15 +34,14 @@ public class FileLoader {
 
 	public ArrayList<Paginas> cargarConfigPagina() {
 		ArrayList<Paginas> listaPaginas = new ArrayList<Paginas>();
-
+		String linea;
 		try (BufferedReader br = new BufferedReader(new FileReader("ConfiguracionDeNoticias.txt"))) {
-			while (br.readLine() != null) {
-				String usuario = br.readLine();
-				String[] camposPag = usuario.split(";;");
+			while ((linea = br.readLine()) != null) {
+				String[] camposPag = linea.split(";;");
 				String url = camposPag[0];
 				String filtro = camposPag[1];
-				Paginas user = new Paginas(url, filtro);
-				listaPaginas.add(user);
+				Paginas pagina = new Paginas(url, filtro);
+				listaPaginas.add(pagina);
 			}
 
 		} catch (IOException e) {
