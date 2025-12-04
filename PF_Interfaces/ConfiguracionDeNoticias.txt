@@ -1,0 +1,18 @@
+https://elpais.com/economia/;;h2.c_t a
+https://www.eldiario.es/economia/;;h2 a 
+https://www.eleconomista.es/;;h2 a
+https://www.hobbyconsolas.com/;;h2 a
+https://www.3djuegos.com/;;h2 a
+https://www.3djuegospc.com/#utm_source=xataka&utm_medium=network&utm_campaign=favicons;;h2 a
+https://www.elmundo.es/internacional.html;;h2 a
+https://elpais.com/internacional/;;h2 a
+https://www.bbc.com/mundo/topics/c2lej05epw5t;; h2 a
+https://www.elmundo.es/espana.html;;h2
+https://elpais.com/espana/;;h2.c_t a
+https://www.elnacional.cat/es;;div.c-opening__main h2.c-news-block__title a
+https://www.marca.com/;;div.ue-l-cover-grid h2.ue-c-cover-content__headline
+https://as.com/;;h3
+https://www.sport.es/es/;;h2 a
+https://www.ocimagazine.es/categoria/moda/streetwear/;;h2 a
+https://www.revistagq.com/tags/streetwear;;h3
+https://www.vogue.es/;;h3

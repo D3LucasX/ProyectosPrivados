@@ -15,11 +15,13 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.Timer;
 
 import FileLoader.FileLoader;
+import model.Paginas;
 import model.User;
 import java.awt.CardLayout;
 import java.awt.Rectangle;
@@ -110,9 +112,12 @@ public class Splash {
         Timer timer = new Timer(50, new ActionListener() {
             private int contador = 0;
 
+            ArrayList<User> listaUsu = new ArrayList<User>();
+            ArrayList<Paginas> listaPaginas = new ArrayList<Paginas>();
+            FileLoader carga = new FileLoader();
+            
             @Override
             public void actionPerformed(ActionEvent e) {
-            	ArrayList<User> listaUsuarios = null;
                 contador++;
                 progressBar.setValue(contador);
                 
@@ -120,14 +125,23 @@ public class Splash {
                 if (contador <= 35) {
                 	infoCarga.setText("Cargando usuarios...");
                 	if (contador == 5) {
-	                 	FileLoader cargarUsuarios = new FileLoader();
-	                 	listaUsuarios = cargarUsuarios.cargarUsuarios();
+	                 	listaUsu = carga.cargarUsuarios();
                 	}
-                } else if (contador <= 70) {
-                	infoCarga.setText("Cargando configuración...");
-                } else if (contador <= 100){
-                	infoCarga.setText("Finalizando...");
-                }
+                 }else if (contador <= 70) {
+                 	infoCarga.setText("Cargando configuración...");
+                 	listaPaginas = carga.cargarConfigPagina();
+                 }else if(contador == 80) {
+                 	if ( listaUsu == null || listaUsu.isEmpty()) {
+                 		JOptionPane.showMessageDialog(null, "Error al cargar a los usuarios, se cerrara el programa...", "Error", 0);;
+                 		System.exit(0);
+                 	}
+                 	if (listaPaginas == null || listaPaginas.isEmpty()) {
+                 		JOptionPane.showMessageDialog(null, "Error al cargar la configuracion de las páginas, se cerrara el programa...", "Error", 0);;
+                 		System.exit(0);
+                 	}
+                 } else if (contador <= 100){
+                 	infoCarga.setText("Finalizando...");
+                 }
                 
                 // Mover el JLabel horizontalmente con la barra
                 int xBar = progressBar.getX();
@@ -153,10 +167,7 @@ public class Splash {
                 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 		frame.setVisible(true);
                 		panelConFondo.setVisible(false);
-                		panelLoggin.setVisible(true);
-                		
-                		FileLoader carga = new FileLoader();
-                		ArrayList<User> listaUsu = carga.cargarUsuarios();
+                		panelLoggin.setVisible(true);    
                 		
                 	}
                 }
