@@ -1,6 +1,6 @@
-https://elpais.com/economia/;;h2.c_t a
-https://www.eldiario.es/economia/;;h2 a 
-https://www.eleconomista.es/;;h2 a
+El pais Economia;;https://elpais.com/economia/;;h2.c_t a
+El Diario Economia;;https://www.eldiario.es/economia/;;h2 a 
+El Economista Economia;;https://www.eleconomista.es/;;h2 a
 https://www.hobbyconsolas.com/;;h2 a
 https://www.3djuegos.com/;;h2 a
 https://www.3djuegospc.com/#utm_source=xataka&utm_medium=network&utm_campaign=favicons;;h2 a

@@ -24,4 +24,8 @@ public class FileWritter {
 			e.printStackTrace();
 		}
 	}
+	
+	public void setConfiguracion() {
+		
+	}
 }
