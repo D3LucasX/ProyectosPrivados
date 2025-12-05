@@ -180,6 +180,7 @@ public class Splash {
 		// PANEL CONFIGURACIÓN AÑADIDO AL FRAME
         frame.getContentPane().add(configPanel.listaFuentesInternacionales, "config");
         
+        
         //GUARDAMOS LO QUE SELECCIONE DE LAS LISTAS DE LA CLASE PANEL
         List<String> seleccionInternacional = configPanel.listaFuentesInternacionales.getSelectedValuesList();
         List<String> seleccionNacional = configPanel.listaFuentesNacionales.getSelectedValuesList();

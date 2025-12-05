@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 
-public class PanelConfiguracion {
+public class PanelConfiguracion  {
 
 	public JPanel panelConfiguracion;
     public JList<String> listaFuentesInternacionales;
@@ -49,4 +49,6 @@ public class PanelConfiguracion {
         listaFuentesNacionales.setListData(fuentesNacionales);
         listaFuentesNacionales.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     }
+    
+    
 }
