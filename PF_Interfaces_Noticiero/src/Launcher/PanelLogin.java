@@ -1,6 +1,9 @@
 package Launcher;
 
 import javax.swing.*;
+
+import FileLoader.FileLoader;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ public class PanelLogin extends JPanel {
 
     private ArrayList<User> listaUsu;
     private ArrayList<Paginas> listaPaginas;
+    private FileLoader carga;
     private FileWritter escritor;
     private PanelConfiguracion configPanel;
 
@@ -27,6 +31,7 @@ public class PanelLogin extends JPanel {
         this.listaUsu = listaUsu;
         this.listaPaginas = listaPaginas;
         this.ventana = ventana;
+        this.carga = new FileLoader();
         this.escritor = new FileWritter();
         this.configPanel = new PanelConfiguracion(ventana, listaUsu, listaPaginas);
 
@@ -88,6 +93,8 @@ public class PanelLogin extends JPanel {
         for (User u : listaUsu) {
             if (u.getNickName().trim().equals(user) && u.getPass().equals(pass)) {
                 usuarioLogueado = u;
+                //Seteo el usuario logueado en la clase sesion para usar ese usuario en otras clases
+                Sesion.setUsuario(usuarioLogueado);
                 encontrado = true;
                 break;
             }
@@ -101,13 +108,23 @@ public class PanelLogin extends JPanel {
 
         if (usuarioLogueado != null) {
             if (usuarioLogueado.getVecesLoaded() < 1) {
-                usuarioLogueado.setVecesLoaded(usuarioLogueado.getVecesLoaded() + 1);
-                escritor.reescribirUsu(listaUsu);
+            	boolean actualizado = false;
+            	for (User u : listaUsu) {
+            	    if (!actualizado && u.getIdUser() == usuarioLogueado.getIdUser()) {
+            	        u.setVecesLoaded(u.getVecesLoaded() + 1);
+            	        actualizado = true;
+            	    }
+            	}
+            	if(actualizado) {
+	            	escritor.reescribirUsu(listaUsu);
+	            	listaUsu = carga.cargarUsuarios();
+            	}
 
                 // Mostrar panel de configuración en la misma ventana
                 ventana.mostrarPanel(configPanel, "config");
             } else {
                 // Aquí puedes mostrar el panel de noticias
+            	
             }
         }
     }

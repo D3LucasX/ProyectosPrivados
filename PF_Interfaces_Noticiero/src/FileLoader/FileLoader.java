@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import model.Noticia;
 import model.Paginas;
 import model.User;
 
@@ -38,17 +39,40 @@ public class FileLoader {
 		try (BufferedReader br = new BufferedReader(new FileReader("ConfiguracionDeNoticias.txt"))) {
 			while ((linea = br.readLine()) != null) {
 				String[] camposPag = linea.split(";;");
-				String url = camposPag[0];
-				String filtro = camposPag[1];
-				Paginas pagina = new Paginas(url, filtro);
+				String idNoticia = camposPag[0];
+				String url = camposPag[1];
+				String filtro = camposPag[2];
+				Paginas pagina = new Paginas(idNoticia, url, filtro);
 				listaPaginas.add(pagina);
 			}
 
 		} catch (IOException e) {
-			System.err.println("No se ha podido cargar a los usuarios.");
+			System.err.println("No se ha podido cargar las paginas con los filtros.");
 			e.printStackTrace();
 			return null;
 		}
 		return listaPaginas;
+	}
+	
+	public ArrayList<Noticia> creaarListaDeNoticias(ArrayList<Paginas>listaPaginasSeleccionadasPorElUsuario){
+		String titulo = "";
+		ArrayList<Noticia> listaNoticias = new ArrayList<Noticia>();
+		for(Paginas pagina : listaPaginasSeleccionadasPorElUsuario) {
+			int idNoticia = Integer.parseInt(pagina.getIdNoticia());
+			if (idNoticia > 0 && idNoticia <= 3) {
+				//creas una noticia con el titulo Economia
+			}else if (idNoticia > 3 && idNoticia <= 6) {
+				//Creas una noticia sobre videojuegos
+			}else if (idNoticia > 6 && idNoticia <= 9) {
+				// creas una noticia sobre internacional
+			}else if(idNoticia > 9 && idNoticia <= 12) {
+				// creas una noticia sobre nacional
+			}else if(idNoticia > 12 && idNoticia <= 15) {
+				// creas una noticia sobre deportes
+			}else if(idNoticia > 15 && idNoticia <= 18) {
+				// creas una noticia sobre moda
+			}
+		}
+		return listaNoticias;
 	}
 }

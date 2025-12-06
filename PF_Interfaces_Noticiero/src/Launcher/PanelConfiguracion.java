@@ -4,10 +4,14 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 
 import FileLoader.FileLoader;
@@ -16,6 +20,9 @@ import model.Paginas;
 import model.User;
 
 public class PanelConfiguracion extends JPanel {
+	
+
+    private JButton botonGuardarConfig;
 
     private ArrayList<User> listaUsu;
     private ArrayList<Paginas> listaPaginas;
@@ -50,9 +57,9 @@ public class PanelConfiguracion extends JPanel {
 
         // --- Categoría Nacional ---
         JLabel lblNacional = new JLabel("Nacional");
-        JCheckBox Nacional1 = new JCheckBox("El pais Economia");
-        JCheckBox Nacional2 = new JCheckBox("El Diario Economia");
-        JCheckBox Nacional3 = new JCheckBox("El Economista Economia");
+        JCheckBox Nacional1 = new JCheckBox("1 - El Mundo");
+        JCheckBox Nacional2 = new JCheckBox("2 - El Pais");
+        JCheckBox Nacional3 = new JCheckBox("3 - El Nacional");
         nacionalBoxes.add(Nacional1);
         nacionalBoxes.add(Nacional2);
         nacionalBoxes.add(Nacional3);
@@ -64,9 +71,9 @@ public class PanelConfiguracion extends JPanel {
 
         // --- Categoría Internacional ---
         JLabel lblInternacional = new JLabel("Internacional");
-        JCheckBox Internacional1 = new JCheckBox("New check box");
-        JCheckBox Internacional2 = new JCheckBox("New check box");
-        JCheckBox Internacional3 = new JCheckBox("New check box");
+        JCheckBox Internacional1 = new JCheckBox("4 - El Mundo");
+        JCheckBox Internacional2 = new JCheckBox("5 - El Pais");
+        JCheckBox Internacional3 = new JCheckBox("6 - BBC");
         internacionalBoxes.add(Internacional1);
         internacionalBoxes.add(Internacional2);
         internacionalBoxes.add(Internacional3);
@@ -78,9 +85,9 @@ public class PanelConfiguracion extends JPanel {
 
         // --- Categoría Economía ---
         JLabel lblEconomia = new JLabel("Economía");
-        JCheckBox Economia1 = new JCheckBox("New check box");
-        JCheckBox Economia2 = new JCheckBox("New check box");
-        JCheckBox Economia3 = new JCheckBox("New check box");
+        JCheckBox Economia1 = new JCheckBox("7 - El Pais");
+        JCheckBox Economia2 = new JCheckBox("8 - El Diario");
+        JCheckBox Economia3 = new JCheckBox("9 - El Economista");
         economiaBoxes.add(Economia1);
         economiaBoxes.add(Economia2);
         economiaBoxes.add(Economia3);
@@ -108,9 +115,9 @@ public class PanelConfiguracion extends JPanel {
 
         // --- Categoría Deportes ---
         JLabel lblDeportes = new JLabel("Deportes");
-        JCheckBox Deportes1 = new JCheckBox("New check box");
-        JCheckBox Deportes2 = new JCheckBox("New check box");
-        JCheckBox Deportes3 = new JCheckBox("New check box");
+        JCheckBox Deportes1 = new JCheckBox("10 - Marca");
+        JCheckBox Deportes2 = new JCheckBox("11 - As");
+        JCheckBox Deportes3 = new JCheckBox("12 - El Sport");
         deportesBoxes.add(Deportes1);
         deportesBoxes.add(Deportes2);
         deportesBoxes.add(Deportes3);
@@ -122,9 +129,9 @@ public class PanelConfiguracion extends JPanel {
 
         // --- Categoría Videojuegos ---
         JLabel lblVideojuegos = new JLabel("Videojuegos");
-        JCheckBox Videojuegos1 = new JCheckBox("New check box");
-        JCheckBox Videojuegos2 = new JCheckBox("New check box");
-        JCheckBox Videojuegos3 = new JCheckBox("New check box");
+        JCheckBox Videojuegos1 = new JCheckBox("13 - Hobbie Consolas");
+        JCheckBox Videojuegos2 = new JCheckBox("14 - 3DJuegos");
+        JCheckBox Videojuegos3 = new JCheckBox("15 - 3DJuegos Pc");
         videojuegosBoxes.add(Videojuegos1);
         videojuegosBoxes.add(Videojuegos2);
         videojuegosBoxes.add(Videojuegos3);
@@ -136,12 +143,12 @@ public class PanelConfiguracion extends JPanel {
 
         // --- Categoría Moda ---
         JLabel lblModa = new JLabel("Moda");
-        JCheckBox Moda1 = new JCheckBox("New check box");
-        JCheckBox Moda2 = new JCheckBox("New check box");
-        JCheckBox Moda3 = new JCheckBox("New check box");
-        modaBoxes.add(Videojuegos1);
-        modaBoxes.add(Videojuegos2);
-        modaBoxes.add(Videojuegos3);
+        JCheckBox Moda1 = new JCheckBox("16 - Ocimagazine");
+        JCheckBox Moda2 = new JCheckBox("17 - Revista GQ");
+        JCheckBox Moda3 = new JCheckBox("18 - Vogue");
+        modaBoxes.add(Moda1);
+        modaBoxes.add(Moda2);
+        modaBoxes.add(Moda3);
         
         JPanel panelModa = new JPanel(new GridLayout(3, 1));
         panelModa.add(Moda1);
@@ -164,24 +171,56 @@ public class PanelConfiguracion extends JPanel {
         gbc.gridy = 3;
         add(panelModa, gbc);
         
-        //Obtener Seleccionados
-        seleccionados = getSeleccionados(nacionalBoxes);
-        seleccionados = getSeleccionados(internacionalBoxes);
-        seleccionados = getSeleccionados(economiaBoxes);
-        seleccionados = getSeleccionados(deportesBoxes);
-        seleccionados = getSeleccionados(videojuegosBoxes);
-        seleccionados = getSeleccionados(modaBoxes);
+        // BOTÓN ENVIAR
+        botonGuardarConfig = new JButton("GUARDAR Y MOSTRAR");
+        GridBagConstraints gbcBoton = new GridBagConstraints();
+        gbcBoton.gridx = 2; // columna 2 --> a la derecha
+        gbcBoton.gridy = 5; // fila debajo de tus paneles
+        gbcBoton.anchor = GridBagConstraints.SOUTHEAST; // abajo a la derecha
+        gbcBoton.insets = new Insets(20, 0, 20, 20); // margen superior, izquierdo, inferior, derecho
+        add(botonGuardarConfig, gbcBoton);
+
+        // Acción del botón
+        botonGuardarConfig.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                guardarConfiguracion();
+                ventana.mostrarPNoticias(listaUsu, listaPaginas);
+            }
+        });
         
-        
+    }
+    
+    private void guardarConfiguracion() {
+    	  ArrayList<String> seleccionados = new ArrayList<>();
+    	    seleccionados.addAll(getSeleccionados(nacionalBoxes));
+    	    seleccionados.addAll(getSeleccionados(internacionalBoxes));
+    	    seleccionados.addAll(getSeleccionados(economiaBoxes));
+    	    seleccionados.addAll(getSeleccionados(deportesBoxes));
+    	    seleccionados.addAll(getSeleccionados(videojuegosBoxes));
+    	    seleccionados.addAll(getSeleccionados(modaBoxes));
+
+    	    User userLogged = Sesion.getUsuario();
+
+    	    if (userLogged == null) {
+    	        JOptionPane.showMessageDialog(this, "No hay usuario logueado");
+    	        return;
+    	    }
+
+    	    escritor.setConfiguracion(userLogged, listaUsu, seleccionados);
+    	    listaUsu = carga.cargarUsuarios();
     }
     
     public ArrayList<String> getSeleccionados(ArrayList<JCheckBox> lista){
     	ArrayList<String> seleccionados = new ArrayList<String>();
     	for(JCheckBox caja : lista) {
     		if (caja.isSelected()) {
-    			seleccionados.add(caja.getText());
+    			String seleccion = caja.getText().trim();
+    			String[] partesSelecc = seleccion.split("-");
+    			seleccionados.add(partesSelecc[0].trim());
     		}
     	}
 		return seleccionados;
     }
+    
+    
 }

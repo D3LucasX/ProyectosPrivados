@@ -37,6 +37,11 @@ public class Ventana extends JFrame {
     	PanelConfiguracion config = new PanelConfiguracion(this, listaUsuarios, listaPaginas);
     	mostrarPanel(config, "config");
     }
+    
+    public void mostrarPNoticias(ArrayList<User> listaUsuarios, ArrayList<Paginas> listaPaginas) {
+    	PanelNoticias noticias = new PanelNoticias(this, listaUsuarios, listaPaginas);
+    	mostrarPanel(noticias, "Noticias");
+    }
 
     // Método para restaurar el marco de la ventana sin SwingWorker
     public void restaurarMarco() {
