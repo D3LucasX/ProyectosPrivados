@@ -108,18 +108,6 @@ public class PanelLogin extends JPanel {
 
         if (usuarioLogueado != null) {
             if (usuarioLogueado.getVecesLoaded() < 1) {
-            	boolean actualizado = false;
-            	for (User u : listaUsu) {
-            	    if (!actualizado && u.getIdUser() == usuarioLogueado.getIdUser()) {
-            	        u.setVecesLoaded(u.getVecesLoaded() + 1);
-            	        actualizado = true;
-            	    }
-            	}
-            	if(actualizado) {
-	            	escritor.reescribirUsu(listaUsu);
-	            	listaUsu = carga.cargarUsuarios();
-            	}
-
                 // Mostrar panel de configuración en la misma ventana
                 ventana.mostrarPanel(configPanel, "config");
             } else {

@@ -1,16 +1,29 @@
 package model;
 
 public class Noticia {
+	private String idNoticia;
 	private String titulo;
 	private String url;
 	private String filtro;
 	
-	public Noticia(String titulo, String url, String filtro) {
+	public Noticia(String idNoticia, String titulo, String url, String filtro) {
+		this.idNoticia = idNoticia;
 		this.titulo = titulo;
 		this.url = url;
 		this.filtro = filtro;
 	}
 	
+	
+	public String getIdNoticia() {
+		return idNoticia;
+	}
+
+
+	public void setIdNoticia(String idNoticia) {
+		this.idNoticia = idNoticia;
+	}
+
+
 	public String getTitulo() {
 		return titulo;
 	}

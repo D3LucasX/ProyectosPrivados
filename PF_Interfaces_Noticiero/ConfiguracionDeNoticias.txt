@@ -4,7 +4,7 @@
 4;;https://www.hobbyconsolas.com/;;h2 a
 5;;https://www.3djuegos.com/;;h2 a
 6;;https://www.3djuegospc.com/#utm_source=xataka&utm_medium=network&utm_campaign=favicons;;h2 a
-7;;https://www.elmundo.es/internacional.html;;h2 a
+7;;https://www.elmundo.es/internacional.html;;h2
 8;;https://elpais.com/internacional/;;h2 a
 9;;https://www.bbc.com/mundo/topics/c2lej05epw5t;; h2 a
 10;;https://www.elmundo.es/espana.html;;h2
