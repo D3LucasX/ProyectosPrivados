@@ -111,7 +111,7 @@ public class PanelLogin extends JPanel {
                 // Mostrar panel de configuración en la misma ventana
                 ventana.mostrarPanel(configPanel, "config");
             } else {
-                // Aquí puedes mostrar el panel de noticias
+                ventana.mostrarPNoticias(listaUsu, listaPaginas);
             	
             }
         }

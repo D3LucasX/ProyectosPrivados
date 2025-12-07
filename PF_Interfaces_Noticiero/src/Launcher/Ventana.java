@@ -14,7 +14,7 @@ public class Ventana extends JFrame {
 
     public Ventana() {
         // FRAME inicial sin decoraciones
-        setBounds(100, 100, 900, 800);
+        setBounds(100, 100, 900, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setUndecorated(true); //sin marco

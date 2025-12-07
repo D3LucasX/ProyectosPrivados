@@ -194,22 +194,22 @@ public class PanelConfiguracion extends JPanel {
 						boolean actualizado = false;
 						for (User u : listaUsu) {
 							if (!actualizado && u.getIdUser() == usuarioLogueado.getIdUser()) {
-								u.setVecesLoaded(u.getVecesLoaded() + 1);
+								u.setVecesLoaded(1); // PASA DE 0 A 1
+								Sesion.setUsuario(u);
 								actualizado = true;
 							}
 						}
 						if (actualizado) {
-							for(User u : listaUsu) {
+							for (User u : listaUsu) {
 								System.out.println(u.toStringSelecciones());
 							}
-							listaUsu = carga.cargarUsuariosConConfiguracion();
 							escritor.setConfiguracion(usuarioLogueado, listaUsu, seleccionados);
 							listaUsu = carga.cargarUsuariosConConfiguracion();
 						}
 					}
 				}
 				int haSeleccionado = guardarConfiguracion();
-			
+
 				if (haSeleccionado == 0) {
 					ventana.mostrarPNoticias(listaUsu, listaPaginas);
 				}
@@ -228,14 +228,14 @@ public class PanelConfiguracion extends JPanel {
 		seleccionados.addAll(getSeleccionados(modaBoxes));
 
 		User userLogged = Sesion.getUsuario();
-		
+
 		if (seleccionados.isEmpty() || seleccionados == null) {
-			JOptionPane.showMessageDialog(null, "Debe no puede continuar sin seleccionar nada.","ERROR", 0);
+			JOptionPane.showMessageDialog(null, "Debe no puede continuar sin seleccionar nada.", "ERROR", 0);
 			return 1;
-		}else {
+		} else {
 			escritor.setConfiguracion(userLogged, listaUsu, seleccionados);
 			listaUsu = carga.cargarUsuariosConConfiguracion();
-	
+
 			for (User u : listaUsu) {
 				if (u.getIdUser() == userLogged.getIdUser()) {
 					Sesion.setUsuario(u);

@@ -32,6 +32,7 @@ public class PanelNoticias extends JPanel {
 	private ArrayList<Noticia> listaNoticias;
 	private FileLoader carga;
 	private FileWritter escritor;
+	private StringBuilder noticiasTexto;
 
 	private Ventana ventana;
 
@@ -131,7 +132,7 @@ public class PanelNoticias extends JPanel {
 			panelCategoria.add(lblCategoria);
 
 			// Recoger noticias de la categoría
-			StringBuilder noticiasTexto = new StringBuilder();
+			noticiasTexto = new StringBuilder();
 			for (Noticia noticia : listaNoticias) {
 				if (noticia.getTitulo().equalsIgnoreCase(categoria)) {
 					String noticiaTexto = buscadorNoticia(noticia.getUrl(), noticia.getFiltro());
@@ -152,28 +153,35 @@ public class PanelNoticias extends JPanel {
 			
 			// Al final de mostrarNoticiasPorCategoria()
 			add(Box.createVerticalGlue()); // empuja todo el contenido arriba
-
-			JPanel panelBotones = new JPanel();
-			panelBotones.setLayout(new BoxLayout(panelBotones, BoxLayout.X_AXIS));
-
-			JButton btnCerrarSesion = new JButton("Cerrar sesión");
-			JButton btnGuardar = new JButton("Guardar");
-
-			panelBotones.add(btnCerrarSesion);
-			panelBotones.add(Box.createHorizontalGlue()); // separador flexible
-			panelBotones.add(btnGuardar);
-
-			add(panelBotones);
-			
-			btnCerrarSesion.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					Sesion.setUsuario(null);
-					ventana.mostrarLogin(listaUsu, listaPaginas);
-					JOptionPane.showMessageDialog(null, "Sesión Cerrada con exito.", "INFO", 3);
-				}
-			});
-			
+		
 		}
+		JPanel panelBotones = new JPanel();
+		panelBotones.setLayout(new BoxLayout(panelBotones, BoxLayout.X_AXIS));
+
+		JButton btnCerrarSesion = new JButton("Cerrar sesión");
+		JButton btnGuardar = new JButton("Guardar");
+
+		panelBotones.add(btnCerrarSesion);
+		panelBotones.add(Box.createHorizontalGlue()); // separador flexible
+		panelBotones.add(btnGuardar);
+
+		add(panelBotones);
+		
+		btnCerrarSesion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Sesion.setUsuario(null);
+				ventana.mostrarLogin(listaUsu, listaPaginas);
+				JOptionPane.showMessageDialog(null, "Sesión Cerrada con exito.", "INFO", 3);
+			}
+		});
+		
+		btnGuardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				User usuarioLogueado = Sesion.getUsuario();
+				escritor.guardarNoticias(noticiasTexto, usuarioLogueado);
+				JOptionPane.showMessageDialog(null, "Noticias guardadas con exito.", "ENHORABUENA!", 3);
+			}
+		});
 	}
 
 }
