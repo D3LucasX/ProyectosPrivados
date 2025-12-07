@@ -37,17 +37,20 @@ public class FileWritter {
 			for (User u : listaUsu) {
 
 				String linea;
+				String seleccionesFinal;
 
 				if (u.getIdUser() == userLogged.getIdUser()) {
-					linea = u.getIdUser() + ";;" + u.getNickName() + ";;" + u.getPass() + ";;" + u.getVecesLoaded()
-							+ ";;" + u.getMail() + ";;" + seleccionesS;
-				} else {
-					linea = u.getIdUser() + ";;" + u.getNickName() + ";;" + u.getPass() + ";;" + u.getVecesLoaded()
-							+ ";;" + u.getMail();
-				}
+			        // Actualiza solo el usuario logueado
+			        seleccionesFinal = (seleccionesS == null || seleccionesS.isEmpty()) ? "0" : seleccionesS;
+			    } else {
+			        // Mantiene la configuración existente de los demás usuarios
+			        seleccionesFinal = (u.getSelecciones() == null || u.getSelecciones().isEmpty()) ? "0" : u.getSelecciones();
+			    }
+				 linea = u.getIdUser() + ";;" + u.getNickName() + ";;" + u.getPass() + ";;" +
+		                    u.getVecesLoaded() + ";;" + u.getMail() + ";;" + seleccionesFinal;
 
-				bw.write(linea);
-				bw.newLine();
+		            bw.write(linea);
+		            bw.newLine();
 			}
 
 		} catch (IOException e) {

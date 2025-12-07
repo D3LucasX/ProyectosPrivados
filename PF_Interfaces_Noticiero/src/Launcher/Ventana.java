@@ -14,10 +14,11 @@ public class Ventana extends JFrame {
 
     public Ventana() {
         // FRAME inicial sin decoraciones
-        setBounds(100, 100, 900, 600);
+        setBounds(100, 100, 900, 800);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setUndecorated(true); // arrancamos sin marco
+        setUndecorated(true); //sin marco
+        setResizable(false);
         getContentPane().setLayout(new CardLayout());
     }
     

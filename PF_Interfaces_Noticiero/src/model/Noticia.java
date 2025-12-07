@@ -42,4 +42,12 @@ public class Noticia {
 	public void setFiltro(String filtro) {
 		this.filtro = filtro;
 	}
+
+
+	@Override
+	public String toString() {
+		return "Noticia [idNoticia=" + idNoticia + ", titulo=" + titulo + ", url=" + url + ", filtro=" + filtro + "]";
+	}
+	
+	
 }

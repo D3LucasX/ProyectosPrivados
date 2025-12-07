@@ -74,7 +74,7 @@ public class PanelCarga extends JPanel {
                 if (contador <= 35) {
                     infoCarga.setText("Cargando usuarios...");
                     if (contador == 5) {
-                        listaUsu = carga.cargarUsuarios();
+                        listaUsu = carga.cargarUsuariosConConfiguracion();
                         for (User u : listaUsu) {
                             System.out.println(u);
                         }

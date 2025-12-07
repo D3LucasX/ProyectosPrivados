@@ -1,4 +1,4 @@
-1;;Admin;;SoyAdmin11;;1;;jose.delucas.dosa@gmail.com;;1*2*3*18
-2;;Daniel Gonzalez;;SoyDaniel22;;0;;jose.delucas.dosa@gmail.com
-3;;Mary;;SoyMary33;;0;;jose.delucas.dosa@gmail.com
-4;;Roberto Angustiado;;SoyRoberto44;;0;;jose.delucas.dosa@gmail.com
+1;;Admin;;SoyAdmin11;;0;;jose.delucas.dosa@gmail.com;;0
+2;;Daniel Gonzalez;;SoyDaniel22;;0;;jose.delucas.dosa@gmail.com;;0
+3;;Mary;;SoyMary33;;0;;jose.delucas.dosa@gmail.com;;0
+4;;Roberto Angustiado;;SoyRoberto44;;0;;jose.delucas.dosa@gmail.com;;0 

@@ -7,6 +7,7 @@ public class User {
 	private String pass;
 	private int vecesLoaded;
 	private String mail;
+	private String selecciones;
 	
 	public User(int idUser, String nickName, String pass, int vecesLoaded, String mail) {
 		this.idUser = idUser;
@@ -16,6 +17,24 @@ public class User {
 		this.mail = mail;
 	}
 	
+	public User(int idUser, String nickName, String pass, int vecesLoaded, String mail, String selecciones) {
+		this.idUser = idUser;
+		this.nickName = nickName;
+		this.pass = pass;
+		this.vecesLoaded = vecesLoaded;
+		this.mail = mail;
+		this.selecciones = selecciones;
+	}
+	
+	
+	public String getSelecciones() {
+		return selecciones;
+	}
+
+	public void setSelecciones(String selecciones) {
+		this.selecciones = selecciones;
+	}
+
 	public int getIdUser() {
 		return idUser;
 	}
@@ -46,10 +65,15 @@ public class User {
 	public void setMail(String mail) {
 		this.mail = mail;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "User [idUser=" + idUser + ", nickName=" + nickName + ", pass=" + pass + ", vecesLoaded=" + vecesLoaded
 				+ ", mail=" + mail + "]";
+	}
+
+	public String toStringSelecciones() {
+		return "User [idUser=" + idUser + ", nickName=" + nickName + ", pass=" + pass + ", vecesLoaded=" + vecesLoaded
+				+ ", mail=" + mail + "Selecciones: " + selecciones + "]";
 	}
 }

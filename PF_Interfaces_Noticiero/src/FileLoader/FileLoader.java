@@ -12,6 +12,7 @@ import model.User;
 
 public class FileLoader {
 
+	// Para cargar a los usuarios al inicio
 	public ArrayList<User> cargarUsuarios() {
 		ArrayList<User> listaUsuarios = new ArrayList<User>();
 		String usuario;
@@ -33,7 +34,31 @@ public class FileLoader {
 		}
 		return listaUsuarios;
 	}
+	
+	// Para cargar a los usuarios con sus configuraciones
+	public ArrayList<User> cargarUsuariosConConfiguracion() {
+		ArrayList<User> listaUsuarios = new ArrayList<User>();
+		String usuario;
+		try (BufferedReader br = new BufferedReader(new FileReader("ArchivoUsuario.txt"))) {
+			while ((usuario = br.readLine()) != null) {
+				String[] camposUsu = usuario.split(";;");
+				
+				int idUser = Integer.parseInt(camposUsu[0]);
+				
+				int vecesLoaded = Integer.parseInt(camposUsu[3]);
+				User user = new User(idUser, camposUsu[1], camposUsu[2], vecesLoaded, camposUsu[4], camposUsu[5]);
+				listaUsuarios.add(user);
+			}
 
+		} catch (IOException e) {
+			System.err.println("No se ha podido cargar a los usuarios.");
+			e.printStackTrace();
+			return null;
+		}
+		return listaUsuarios;
+	}
+	
+	//Cargar las paginas al inicio
 	public ArrayList<Paginas> cargarConfigPagina() {
 		ArrayList<Paginas> listaPaginas = new ArrayList<Paginas>();
 		String linea;
@@ -55,11 +80,11 @@ public class FileLoader {
 		return listaPaginas;
 	}
 	
-	public ArrayList<Noticia> creaarListaDeNoticias(ArrayList<Paginas>listaPaginasSeleccionadasPorElUsuario ){
-		User usuarioLogueado = Sesion.getUsuario();
+	
+	public ArrayList<Noticia> creaarListaDeNoticias(ArrayList<Paginas>listaPaginas ){
 		
 		ArrayList<Noticia> listaNoticias = new ArrayList<Noticia>();
-		for(Paginas pagina : listaPaginasSeleccionadasPorElUsuario) {
+		for(Paginas pagina : listaPaginas) {
 			int idNoticia = Integer.parseInt(pagina.getIdNoticia());
 			if (idNoticia > 0 && idNoticia <= 3) {
 				//creas una noticia con el titulo Economia
