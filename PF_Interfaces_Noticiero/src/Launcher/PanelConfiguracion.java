@@ -1,6 +1,10 @@
 package Launcher;
 
 import java.awt.GridBagLayout;
+import java.awt.Color;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.Insets;
@@ -47,6 +51,28 @@ public class PanelConfiguracion extends JPanel {
 		this.escritor = new FileWritter();
 
 		inicializarComponentes();
+	}
+	
+	@Override
+	protected void paintComponent(Graphics g) {
+	    super.paintComponent(g);
+
+	    Graphics2D g2d = (Graphics2D) g;
+	    int width = getWidth();
+	    int height = getHeight();
+
+	    // Colores del degradado
+	    Color rosa = new Color(255, 102, 178);     // rosa
+	    Color amarillo = new Color(255, 255, 102); // amarillo
+
+	    // Degradado vertical
+	    GradientPaint gp = new GradientPaint(
+	        0, 0, rosa,
+	        0, height, amarillo
+	    );
+
+	    g2d.setPaint(gp);
+	    g2d.fillRect(0, 0, width, height);
 	}
 
 	private void inicializarComponentes() {

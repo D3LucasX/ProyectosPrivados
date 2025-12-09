@@ -37,10 +37,31 @@ public class PanelLogin extends JPanel {
 
         inicializarComponentes();
     }
+    
+    @Override
+	protected void paintComponent(Graphics g) {
+	    super.paintComponent(g);
+
+	    Graphics2D g2d = (Graphics2D) g;
+	    int width = getWidth();
+	    int height = getHeight();
+
+	    // Colores del degradado
+	    Color rosa = new Color(255, 102, 178);     // rosa
+	    Color amarillo = new Color(255, 255, 102); // amarillo
+
+	    // Degradado vertical
+	    GradientPaint gp = new GradientPaint(
+	        0, 0, rosa,
+	        0, height, amarillo
+	    );
+
+	    g2d.setPaint(gp);
+	    g2d.fillRect(0, 0, width, height);
+	}
 
     private void inicializarComponentes() {
         setLayout(null);
-        setBackground(new Color(51, 255, 153));
 
         // TÍTULO
         JLabel labelInicioSesion = new JLabel("INICIO DE SESIÓN");
@@ -107,12 +128,14 @@ public class PanelLogin extends JPanel {
         }
 
         if (usuarioLogueado != null) {
-            if (usuarioLogueado.getVecesLoaded() < 1) {
+        	if (usuarioLogueado.getIdUser() == 1) {
+        		ventana.mostrarPAdmin(ventana, listaUsu, listaPaginas);
+        	}else if (usuarioLogueado.getIdUser() != 1 && usuarioLogueado.getVecesLoaded() < 1) {
                 // Mostrar panel de configuración en la misma ventana
                 ventana.mostrarPanel(configPanel, "config");
             } else {
+            	// Mostrar el panel noticias
                 ventana.mostrarPNoticias(listaUsu, listaPaginas);
-            	
             }
         }
     }

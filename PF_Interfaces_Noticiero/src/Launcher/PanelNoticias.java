@@ -1,6 +1,10 @@
 package Launcher;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -45,6 +49,28 @@ public class PanelNoticias extends JPanel {
 		this.escritor = new FileWritter();
 
 		inicializarComponentes();
+	}
+	
+	@Override
+	protected void paintComponent(Graphics g) {
+	    super.paintComponent(g);
+
+	    Graphics2D g2d = (Graphics2D) g;
+	    int width = getWidth();
+	    int height = getHeight();
+
+	    // Colores del degradado
+	    Color rosa = new Color(255, 102, 178);     // rosa
+	    Color amarillo = new Color(255, 255, 102); // amarillo
+
+	    // Degradado vertical
+	    GradientPaint gp = new GradientPaint(
+	        0, 0, rosa,
+	        0, height, amarillo
+	    );
+
+	    g2d.setPaint(gp);
+	    g2d.fillRect(0, 0, width, height);
 	}
 
 	private void inicializarComponentes() {
@@ -160,13 +186,17 @@ public class PanelNoticias extends JPanel {
 
 		JButton btnCerrarSesion = new JButton("Cerrar sesión");
 		JButton btnGuardar = new JButton("Guardar");
-
+		JButton btnEmail = new JButton("Enviar e-mail"); // este es el nuevo que quiero incorporar en el centro
+		
+		// Con glue empujamos componentes hacia los extremos.
 		panelBotones.add(btnCerrarSesion);
-		panelBotones.add(Box.createHorizontalGlue()); // separador flexible
+		panelBotones.add(Box.createHorizontalGlue());  // empuja a la izquierda
+		panelBotones.add(btnEmail);
+		panelBotones.add(Box.createHorizontalGlue());  // empuja a la derecha
 		panelBotones.add(btnGuardar);
 
 		add(panelBotones);
-		
+		// Boton cerrar sesión
 		btnCerrarSesion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Sesion.setUsuario(null);
@@ -174,12 +204,18 @@ public class PanelNoticias extends JPanel {
 				JOptionPane.showMessageDialog(null, "Sesión Cerrada con exito.", "INFO", 3);
 			}
 		});
-		
+		// Boton de Guardar noticias
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				User usuarioLogueado = Sesion.getUsuario();
 				escritor.guardarNoticias(noticiasTexto, usuarioLogueado);
 				JOptionPane.showMessageDialog(null, "Noticias guardadas con exito.", "ENHORABUENA!", 3);
+			}
+		});
+		// Boton de enviar noticias por email
+		btnGuardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
 			}
 		});
 	}

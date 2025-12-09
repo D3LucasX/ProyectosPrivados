@@ -15,9 +15,8 @@ public class FileWritter {
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter("ArchivoUsuario.txt"))) {
 
 			for (User u : listaUsu) {
-
 				String linea = u.getIdUser() + ";;" + u.getNickName() + ";;" + u.getPass() + ";;" + u.getVecesLoaded()
-						+ ";;" + u.getMail();
+						+ ";;" + u.getMail() + ";;" + u.getSelecciones();
 
 				bw.write(linea);
 				bw.newLine();
