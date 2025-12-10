@@ -59,6 +59,7 @@ public class PanelCarga extends JPanel {
         add(progressBar);
 
         infoCarga = new JLabel("Cargando...");
+        infoCarga.setForeground(new Color(89, 89, 89));
         infoCarga.setFont(new Font("Arial", Font.PLAIN, 12));
         add(infoCarga);
 
@@ -73,24 +74,26 @@ public class PanelCarga extends JPanel {
                 // Mensajes según progreso
                 if (contador <= 35) {
                     infoCarga.setText("Cargando usuarios...");
+                    
                     if (contador == 5) {
                         listaUsu = carga.cargarUsuariosConConfiguracion();
-                        for (User u : listaUsu) {
-                            System.out.println(u);
-                        }
                     }
+                    
                 } else if (contador <= 70) {
                     infoCarga.setText("Cargando configuración...");
                     listaPaginas = carga.cargarConfigPagina();
+                    
                 } else if (contador == 80) {
                     if (listaUsu == null || listaUsu.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Error al cargar a los usuarios, se cerrará el programa...", "Error", JOptionPane.ERROR_MESSAGE);
                         System.exit(0);
                     }
+                    
                     if (listaPaginas == null || listaPaginas.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Error al cargar la configuración de las páginas, se cerrará el programa...", "Error", JOptionPane.ERROR_MESSAGE);
                         System.exit(0);
                     }
+                    
                 } else if (contador <= 100) {
                     infoCarga.setText("Finalizando...");
                 }
@@ -115,6 +118,7 @@ public class PanelCarga extends JPanel {
                 }
             }
         });
+        
         timer.start();
     }
 

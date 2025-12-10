@@ -12,7 +12,7 @@
 12;;https://www.elnacional.cat/es;;div.c-opening__main h2.c-news-block__title a;;07:00
 13;;https://www.marca.com/;;div.ue-l-cover-grid h2.ue-c-cover-content__headline;;07:00
 14;;https://as.com/;;h3;;07:00
-15;;https://www.sport.es/es/;;h2 a;;07:00
+15;;https://www.sport.es/es/;;article.ft-layout-grid-flex__row h2 a;;07:00
 16;;https://www.ocimagazine.es/categoria/moda/streetwear/;;h2 a;;07:00
 17;;https://www.revistagq.com/tags/streetwear;;h3;;07:00
 18;;https://www.vogue.es/;;h3;;07:00

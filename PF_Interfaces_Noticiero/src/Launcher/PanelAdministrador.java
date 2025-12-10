@@ -1,12 +1,8 @@
 package Launcher;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -79,7 +75,7 @@ public class PanelAdministrador extends JPanel {
 		lblTitulo.setForeground(new Color(89, 89, 89));
 		lblTitulo.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTitulo.setBounds(323, 171, 258, 37);
+		lblTitulo.setBounds(328, 169, 258, 37);
 		add(lblTitulo);
 
 		btnCrearUsuario = new JButton("Crear nuevo usuario");
@@ -97,7 +93,7 @@ public class PanelAdministrador extends JPanel {
 				}
 			}
 		});
-		btnCrearUsuario.setBounds(384, 310, 131, 23);
+		btnCrearUsuario.setBounds(380, 310, 156, 23);
 		add(btnCrearUsuario);
 
 		btnEliminarUsuario = new JButton("Eliminar Usuario");
@@ -110,13 +106,18 @@ public class PanelAdministrador extends JPanel {
 			}
 		});
 		btnEliminarUsuario.setForeground(new Color(89, 89, 89));
-		btnEliminarUsuario.setBounds(204, 310, 131, 23);
+		btnEliminarUsuario.setBounds(214, 310, 156, 23);
 		add(btnEliminarUsuario);
 
 		btnModoTest = new JButton("Test de noticias");
+		btnModoTest.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ventana.mostrarPNoticias(listaUsuarios, listaPaginas);
+			}
+		});
 		
 		btnModoTest.setForeground(new Color(89, 89, 89));
-		btnModoTest.setBounds(556, 310, 131, 23);
+		btnModoTest.setBounds(546, 310, 151, 23);
 		add(btnModoTest);
 
 		btnLogOut = new JButton("Cerrar Sesión");
@@ -127,11 +128,11 @@ public class PanelAdministrador extends JPanel {
 				ventana.mostrarLogin(listaUsuarios, listaPaginas);
 			}
 		});
-		btnLogOut.setBounds(26, 481, 97, 23);
+		btnLogOut.setBounds(26, 481, 117, 23);
 		add(btnLogOut);
 
 		separator = new JSeparator();
-		separator.setBounds(204, 344, 483, 77);
+		separator.setBounds(214, 344, 483, 77);
 		add(separator);
 	}
 	
@@ -146,6 +147,9 @@ public class PanelAdministrador extends JPanel {
 		 if (nickName == null) {
 		        return null;
 		    }
+		 if(nickName != null && nickName.trim().isEmpty()) {
+			 return null;
+		 }
 		do {
 			pass = JOptionPane.showInputDialog(
 			        null,
@@ -156,6 +160,9 @@ public class PanelAdministrador extends JPanel {
 			if (pass == null) {
 				return null;
 			}
+			 if(pass != null && pass.trim().isEmpty()) {
+				 return null;
+			 }
 			String passVerif = JOptionPane.showInputDialog(
 			        null,
 			        "Repita la contraseña:",
@@ -165,6 +172,9 @@ public class PanelAdministrador extends JPanel {
 			if(passVerif == null) {
 				return null;
 			}
+			if(passVerif != null && passVerif.trim().isEmpty()) {
+				 return null;
+			 }
 			if(pass.equals(passVerif)) {
 				coincide = true;
 			}else {
@@ -181,7 +191,9 @@ public class PanelAdministrador extends JPanel {
 		if (email == null) {
 			return null;
 		}
-		
+		if(email != null && email.trim().isEmpty()) {
+			 return null;
+		 }
 		
 		User usuarioAlta = new User(idNuevo, nickName, pass, vecesLoaded, email,"0");
 		return usuarioAlta;
@@ -194,6 +206,9 @@ public class PanelAdministrador extends JPanel {
 		if(idS == null) {
 			return null;
 		}
+		if(idS != null && idS.trim().isEmpty()) {
+			 return null;
+		 }
 		int id = Integer.parseInt(idS);
 		ArrayList<User> nuevaListaDeUsuarios = new ArrayList<User>();
 		for (User u : listaUsuarios) {

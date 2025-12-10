@@ -61,7 +61,7 @@ public class FileWritter {
 		}
 	}
 	
-	public void guardarNoticias(StringBuilder noticiasAguardar, User usuarioLogueado) {
+	public boolean guardarNoticias(StringBuilder noticiasAguardar, User usuarioLogueado) {
 		LocalDate date = LocalDate.now();
 		String fecha = "Fecha de registro: " + date + " ";
 		int idUsuario = usuarioLogueado.getIdUser();
@@ -71,8 +71,10 @@ public class FileWritter {
 			bw.write(fecha);
 			bw.write(idUsuario + "\n");
 			bw.write(noticiasAguardar.toString());
+			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 

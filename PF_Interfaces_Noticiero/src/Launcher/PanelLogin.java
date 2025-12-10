@@ -17,6 +17,8 @@ public class PanelLogin extends JPanel {
     private JTextField textField;
     private JPasswordField passwordField;
     private JButton botonEnviarLoggin;
+    private JTextField textFieldPasswordVisible; 
+    private JCheckBox mostrarContraseñaCheck; 
 
     private ArrayList<User> listaUsu;
     private ArrayList<Paginas> listaPaginas;
@@ -65,13 +67,16 @@ public class PanelLogin extends JPanel {
 
         // TÍTULO
         JLabel labelInicioSesion = new JLabel("INICIO DE SESIÓN");
-        labelInicioSesion.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 39));
+        labelInicioSesion.setForeground(new Color(89, 89, 89));
+        labelInicioSesion.setFont(new Font("Arial", Font.PLAIN, 39));
         labelInicioSesion.setHorizontalAlignment(SwingConstants.CENTER);
         labelInicioSesion.setBounds(10, 42, 385, 39);
         add(labelInicioSesion);
 
         // LABEL USUARIO
         JLabel nombreLBL = new JLabel("USUARIO");
+        nombreLBL.setForeground(new Color(89, 89, 89));
+        nombreLBL.setFont(new Font("Arial", Font.PLAIN, 12));
         nombreLBL.setHorizontalAlignment(SwingConstants.RIGHT);
         nombreLBL.setBounds(203, 249, 87, 32);
         add(nombreLBL);
@@ -83,6 +88,8 @@ public class PanelLogin extends JPanel {
 
         // LABEL CONTRASEÑA
         JLabel contraseñaLBL = new JLabel("CONTRASEÑA");
+        contraseñaLBL.setForeground(new Color(89, 89, 89));
+        contraseñaLBL.setFont(new Font("Arial", Font.PLAIN, 12));
         contraseñaLBL.setHorizontalAlignment(SwingConstants.RIGHT);
         contraseñaLBL.setBounds(203, 292, 87, 32);
         add(contraseñaLBL);
@@ -91,13 +98,43 @@ public class PanelLogin extends JPanel {
         passwordField = new JPasswordField();
         passwordField.setBounds(300, 292, 314, 32);
         add(passwordField);
+        
+        // TEXTFIELD MOSTRAR CONTRASEÑA
+        textFieldPasswordVisible = new JTextField();
+        textFieldPasswordVisible.setBounds(300, 292, 280, 32);
+        textFieldPasswordVisible.setVisible(false);
+        add(textFieldPasswordVisible);
+        
+     // CHECKBOX para mostrar/ocultar contraseña
+        mostrarContraseñaCheck = new JCheckBox("Mostrar contraseña");
+        mostrarContraseñaCheck.setForeground(new Color(89, 89, 89));
+        mostrarContraseñaCheck.setFont(new Font("Arial", Font.PLAIN, 12));
+        mostrarContraseñaCheck.setBounds(300, 325, 150, 25); // ajusta posición
+        mostrarContraseñaCheck.setOpaque(false); // opcional, transparente
+        add(mostrarContraseñaCheck);
+
+        // Acción del checkbox
+        mostrarContraseñaCheck.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (mostrarContraseñaCheck.isSelected()) {
+                    textFieldPasswordVisible.setText(new String(passwordField.getPassword()));
+                    textFieldPasswordVisible.setVisible(true);
+                    passwordField.setVisible(false);
+                } else {
+                    passwordField.setText(textFieldPasswordVisible.getText());
+                    passwordField.setVisible(true);
+                    textFieldPasswordVisible.setVisible(false);
+                }
+            }
+        });
 
         // BOTÓN ENVIAR
         botonEnviarLoggin = new JButton("ENVIAR");
-        botonEnviarLoggin.setBounds(400, 335, 99, 32);
+        botonEnviarLoggin.setBounds(400, 350, 99, 32);
         add(botonEnviarLoggin);
 
-        // Acción del botón
+        // BOTON ENVIAR DATOS
         botonEnviarLoggin.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 procesarLogin();
@@ -107,7 +144,13 @@ public class PanelLogin extends JPanel {
 
     private void procesarLogin() {
         String user = textField.getText().trim();
-        String pass = new String(passwordField.getPassword()).trim();
+        String pass;
+        if(mostrarContraseñaCheck.isSelected()) {
+        	pass = textFieldPasswordVisible.getText().trim();
+        }else {
+        	pass = new String(passwordField.getPassword()).trim();
+        }
+        
         User usuarioLogueado = null;
         boolean encontrado = false;
 

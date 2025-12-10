@@ -77,9 +77,6 @@ public class PanelNoticias extends JPanel {
 	private void inicializarComponentes() {
 		listaNoticias = carga.creaarListaDeNoticias(listaPaginas);
 		ArrayList<Noticia> noticiasSeleccionadas = new ArrayList<Noticia>();
-		for (Noticia n : listaNoticias) {
-			System.out.println(n.toString());
-		}
 
 		if (listaNoticias != null) {
 			if (!listaNoticias.isEmpty()) {
@@ -191,6 +188,15 @@ public class PanelNoticias extends JPanel {
 		JButton btnGuardar = new JButton("Guardar");
 		JButton btnEmail = new JButton("Enviar e-mail"); // este es el nuevo que quiero incorporar en el centro
 		
+		btnCerrarSesion.setPreferredSize(new Dimension(120, 30));
+		btnCerrarSesion.setMaximumSize(new Dimension(120, 30));
+		
+		// Si el usuario es el admi oculto el botón de guardar.
+		User usuarioLogueado = Sesion.getUsuario();
+		if (usuarioLogueado.getIdUser() == 1) {
+		    btnGuardar.setVisible(false);  // oculta botón Guardar
+		}
+		
 		// Con glue empujamos componentes hacia los extremos.
 		panelBotones.add(btnCerrarSesion);
 		panelBotones.add(Box.createHorizontalGlue());  // empuja a la izquierda
@@ -211,8 +217,13 @@ public class PanelNoticias extends JPanel {
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				User usuarioLogueado = Sesion.getUsuario();
-				escritor.guardarNoticias(todasLasNoticias, usuarioLogueado);
-				JOptionPane.showMessageDialog(null, "Noticias guardadas con exito.", "ENHORABUENA!", 3);
+				StringBuilder mensaje = crearMensaje(listaCategorias, noticiasSeleccionadas);
+				boolean guardadas = escritor.guardarNoticias(mensaje, usuarioLogueado);
+				if (guardadas) {
+					JOptionPane.showMessageDialog(null, "Noticias guardadas con exito.", "ENHORABUENA!", 3);
+				}else {
+					JOptionPane.showMessageDialog(null, "No se han podido guardar las noticias", "ERROR", 0);
+				}
 			}
 		});
 		// Boton de enviar noticias por email
@@ -222,7 +233,12 @@ public class PanelNoticias extends JPanel {
 						JOptionPane.QUESTION_MESSAGE);
 				StringBuilder mensaje = crearMensaje(listaCategorias, noticiasSeleccionadas);
 				Email email = new Email(correo, mensaje.toString());
-				email.enviarEmail();
+				boolean enviado = email.enviarEmail();
+				if (enviado) {
+					JOptionPane.showMessageDialog(null, "El mensaje fué enviado correctamente", "ENHORABUENA", 3);
+				}else {
+					JOptionPane.showMessageDialog(null, "No se pudo enviar el mensaje", "ERROR", 0);
+				}
 			}
 		});
 	}
