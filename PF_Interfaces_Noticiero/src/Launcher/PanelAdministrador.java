@@ -114,6 +114,7 @@ public class PanelAdministrador extends JPanel {
 		add(btnEliminarUsuario);
 
 		btnModoTest = new JButton("Test de noticias");
+		
 		btnModoTest.setForeground(new Color(89, 89, 89));
 		btnModoTest.setBounds(556, 310, 131, 23);
 		add(btnModoTest);
@@ -122,6 +123,8 @@ public class PanelAdministrador extends JPanel {
 		btnLogOut.setForeground(new Color(89, 89, 89));
 		btnLogOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Sesion.setUsuario(null);
+				ventana.mostrarLogin(listaUsuarios, listaPaginas);
 			}
 		});
 		btnLogOut.setBounds(26, 481, 97, 23);

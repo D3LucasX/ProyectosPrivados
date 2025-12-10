@@ -37,6 +37,7 @@ public class PanelNoticias extends JPanel {
 	private FileLoader carga;
 	private FileWritter escritor;
 	private StringBuilder noticiasTexto;
+	private Email email;
 
 	private Ventana ventana;
 
@@ -75,6 +76,7 @@ public class PanelNoticias extends JPanel {
 
 	private void inicializarComponentes() {
 		listaNoticias = carga.creaarListaDeNoticias(listaPaginas);
+		ArrayList<Noticia> noticiasSeleccionadas = new ArrayList<Noticia>();
 		for (Noticia n : listaNoticias) {
 			System.out.println(n.toString());
 		}
@@ -89,7 +91,6 @@ public class PanelNoticias extends JPanel {
 				}
 				
 				String[] listaSelecciones = selecciones.split("\\*");
-				ArrayList<Noticia> noticiasSeleccionadas = new ArrayList<Noticia>();
 				int i = 0;
 				while(i < listaSelecciones.length) {
 					for (Noticia noticia : listaNoticias) {
@@ -104,7 +105,7 @@ public class PanelNoticias extends JPanel {
 					System.out.println(cat);
 				}
 
-				mostrarNoticiasPorCategoria(listaCategorias, noticiasSeleccionadas);
+				mostrarNoticiasPorCategoria(listaCategorias, noticiasSeleccionadas, noticiasSeleccionadas);
 			}
 		} else {
 			System.err.println("No existe la lista de noticias");
@@ -138,7 +139,7 @@ public class PanelNoticias extends JPanel {
 
 	}
 
-	private void mostrarNoticiasPorCategoria(ArrayList<String> listaCategorias, ArrayList<Noticia> listaNoticias) {
+	private void mostrarNoticiasPorCategoria(ArrayList<String> listaCategorias, ArrayList<Noticia> listaNoticias,  ArrayList<Noticia> noticiasSeleccionadas) {
 		removeAll();
 		revalidate();
 		repaint();
@@ -146,6 +147,7 @@ public class PanelNoticias extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); // layout vertical
 		int anchoArea = 800; // ancho del JTextArea
 		int altoMax = 100; // altura visible máxima de JTextArea
+		StringBuilder todasLasNoticias = new StringBuilder();
 
 		for (String categoria : listaCategorias) {
 			// Panel para cada categoría
@@ -179,6 +181,7 @@ public class PanelNoticias extends JPanel {
 			
 			// Al final de mostrarNoticiasPorCategoria()
 			add(Box.createVerticalGlue()); // empuja todo el contenido arriba
+			todasLasNoticias.append(noticiasTexto);
 		
 		}
 		JPanel panelBotones = new JPanel();
@@ -208,16 +211,37 @@ public class PanelNoticias extends JPanel {
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				User usuarioLogueado = Sesion.getUsuario();
-				escritor.guardarNoticias(noticiasTexto, usuarioLogueado);
+				escritor.guardarNoticias(todasLasNoticias, usuarioLogueado);
 				JOptionPane.showMessageDialog(null, "Noticias guardadas con exito.", "ENHORABUENA!", 3);
 			}
 		});
 		// Boton de enviar noticias por email
-		btnGuardar.addActionListener(new ActionListener() {
+		btnEmail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				String correo = JOptionPane.showInputDialog(null, "Introduce el correo para enviar el mensaje:", "Envío de Email",
+						JOptionPane.QUESTION_MESSAGE);
+				StringBuilder mensaje = crearMensaje(listaCategorias, noticiasSeleccionadas);
+				Email email = new Email(correo, mensaje.toString());
+				email.enviarEmail();
 			}
 		});
+	}
+	
+	public StringBuilder crearMensaje(ArrayList<String> listaCategorias, ArrayList<Noticia> listaNoticias) {
+		noticiasTexto = new StringBuilder();
+		for (Noticia no : listaNoticias) {
+			System.out.println(no.toString());
+		}
+		for (String categoria : listaCategorias) {
+			noticiasTexto.append(categoria +"\n");
+			for (Noticia noticia : listaNoticias) {
+				if (noticia.getTitulo().equalsIgnoreCase(categoria)) {
+					String noticiaTexto = buscadorNoticia(noticia.getUrl(), noticia.getFiltro());
+					noticiasTexto.append("- ").append(noticiaTexto).append("\n");
+				}
+			}
+		}
+		return noticiasTexto;
 	}
 
 }

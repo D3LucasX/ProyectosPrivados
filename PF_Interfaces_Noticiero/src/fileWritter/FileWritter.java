@@ -63,11 +63,13 @@ public class FileWritter {
 	
 	public void guardarNoticias(StringBuilder noticiasAguardar, User usuarioLogueado) {
 		LocalDate date = LocalDate.now();
-		String fecha = "Fecha de registro: " + date + "\n";
-		String nombreArchivo = "Historial_Usuario_ID_" + usuarioLogueado.getIdUser();
+		String fecha = "Fecha de registro: " + date + " ";
+		int idUsuario = usuarioLogueado.getIdUser();
+		String nombreArchivo = "Historial";
 		try(BufferedWriter bw = new BufferedWriter(new FileWriter(nombreArchivo,true))){
 			// true es para que no sobreescriba y escriba a partir de la ultima linea
 			bw.write(fecha);
+			bw.write(idUsuario + "\n");
 			bw.write(noticiasAguardar.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
