@@ -2,4 +2,3 @@
 2;;Daniel Gonzalez;;SoyDaniel22;;0;;jose.delucas.dosa@gmail.com;;0
 3;;Mary;;SoyMary33;;1;;jose.delucas.dosa@gmail.com;;1*2*3*13*14*15
 4;;Roberto Angustiado;;SoyRoberto44;;0;;jose.delucas.dosa@gmail.com;;0 
-5;;Test;;12345;;0;;a@a.com;;0

@@ -62,7 +62,7 @@ public class PanelCarga extends JPanel {
         infoCarga.setFont(new Font("Arial", Font.PLAIN, 12));
         add(infoCarga);
 
-        Timer timer = new Timer(50, new ActionListener() {
+        Timer timer = new Timer(35, new ActionListener() {
             private int contador = 0;
 
             @Override

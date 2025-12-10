@@ -1,18 +1,18 @@
-1;;https://elpais.com/economia/;;h2.c_t a
-2;;https://www.eldiario.es/economia/;;h2 a 
-3;;https://www.eleconomista.es/;;h2 a
-4;;https://www.hobbyconsolas.com/;;h2 a
-5;;https://www.3djuegos.com/;;h2 a
-6;;https://www.3djuegospc.com/#utm_source=xataka&utm_medium=network&utm_campaign=favicons;;h2 a
-7;;https://www.elmundo.es/internacional.html;;h2
-8;;https://elpais.com/internacional/;;h2 a
-9;;https://www.bbc.com/mundo/topics/c2lej05epw5t;; h2 a
-10;;https://www.elmundo.es/espana.html;;h2
-11;;https://elpais.com/espana/;;h2.c_t a
-12;;https://www.elnacional.cat/es;;div.c-opening__main h2.c-news-block__title a
-13;;https://www.marca.com/;;div.ue-l-cover-grid h2.ue-c-cover-content__headline
-14;;https://as.com/;;h3
-15;;https://www.sport.es/es/;;h2 a
-16;;https://www.ocimagazine.es/categoria/moda/streetwear/;;h2 a
-17;;https://www.revistagq.com/tags/streetwear;;h3
-18;;https://www.vogue.es/;;h3
+1;;https://elpais.com/economia/;;h2.c_t a;;07:00
+2;;https://www.eldiario.es/economia/;;h2 a;;07:00 
+3;;https://www.eleconomista.es/;;h2 a;;07:00
+4;;https://www.hobbyconsolas.com/;;h2 a;;07:00
+5;;https://www.3djuegos.com/;;h2 a;;07:00
+6;;https://www.3djuegospc.com/#utm_source=xataka&utm_medium=network&utm_campaign=favicons;;h2 a;;07:00
+7;;https://www.elmundo.es/internacional.html;;h2;;07:00
+8;;https://elpais.com/internacional/;;h2 a;;07:00
+9;;https://www.bbc.com/mundo/topics/c2lej05epw5t;; h2 a;;07:00
+10;;https://www.elmundo.es/espana.html;;h2;;07:00
+11;;https://elpais.com/espana/;;h2.c_t a;;07:00
+12;;https://www.elnacional.cat/es;;div.c-opening__main h2.c-news-block__title a;;07:00
+13;;https://www.marca.com/;;div.ue-l-cover-grid h2.ue-c-cover-content__headline;;07:00
+14;;https://as.com/;;h3;;07:00
+15;;https://www.sport.es/es/;;h2 a;;07:00
+16;;https://www.ocimagazine.es/categoria/moda/streetwear/;;h2 a;;07:00
+17;;https://www.revistagq.com/tags/streetwear;;h3;;07:00
+18;;https://www.vogue.es/;;h3;;07:00

@@ -103,6 +103,10 @@ public class PanelAdministrador extends JPanel {
 		btnEliminarUsuario = new JButton("Eliminar Usuario");
 		btnEliminarUsuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ArrayList <User> actualizado = eliminarUsuario();
+				if (actualizado == null) {
+					JOptionPane.showMessageDialog(null, "Proceso de eliminación de usuario cancelado.", "ERROR", 0);
+				}
 			}
 		});
 		btnEliminarUsuario.setForeground(new Color(89, 89, 89));
@@ -146,14 +150,22 @@ public class PanelAdministrador extends JPanel {
 			        "Alta de usuario",
 			        JOptionPane.QUESTION_MESSAGE
 			);
+			if (pass == null) {
+				return null;
+			}
 			String passVerif = JOptionPane.showInputDialog(
 			        null,
 			        "Repita la contraseña:",
 			        "Alta de usuario",
 			        JOptionPane.QUESTION_MESSAGE
 			);
+			if(passVerif == null) {
+				return null;
+			}
 			if(pass.equals(passVerif)) {
 				coincide = true;
+			}else {
+				JOptionPane.showMessageDialog(null, "No han coicidido las contraseñas, inténtelo de nuevo.", "ERROR", 0);
 			}
 			
 		}while(!coincide);
@@ -163,10 +175,32 @@ public class PanelAdministrador extends JPanel {
 		        "Alta de usuario",
 		        JOptionPane.QUESTION_MESSAGE
 		);
+		if (email == null) {
+			return null;
+		}
 		
 		
 		User usuarioAlta = new User(idNuevo, nickName, pass, vecesLoaded, email,"0");
 		return usuarioAlta;
+	}
+	
+	public ArrayList<User> eliminarUsuario() {
+		listaUsuarios = carga.cargarUsuariosConConfiguracion();
+		String idS = JOptionPane.showInputDialog(null, "Introdue el ID del usuario que quieres buscar:", "Baja de usuario",
+				JOptionPane.QUESTION_MESSAGE);
+		if(idS == null) {
+			return null;
+		}
+		int id = Integer.parseInt(idS);
+		ArrayList<User> nuevaListaDeUsuarios = new ArrayList<User>();
+		for (User u : listaUsuarios) {
+			if (u.getIdUser() != id) {
+				nuevaListaDeUsuarios.add(u);
+			}
+		}
+		escritor.reescribirUsu(nuevaListaDeUsuarios);
+		listaUsuarios = nuevaListaDeUsuarios;
+		return listaUsuarios;
 	}
 
 }
