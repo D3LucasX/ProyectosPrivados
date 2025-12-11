@@ -25,6 +25,7 @@ import org.jsoup.nodes.Element;
 
 import FileLoader.FileLoader;
 import fileWritter.FileWritter;
+import model.Configuracion;
 import model.Noticia;
 import model.Paginas;
 import model.User;
@@ -229,9 +230,10 @@ public class PanelNoticias extends JPanel {
 		// Boton de enviar noticias por email
 		btnEmail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Configuracion confi = carga.cargarConfiguracion();
 				StringBuilder mensaje = crearMensaje(listaCategorias, noticiasSeleccionadas);
-				String correo = Sesion.getUsuario().getMail();
-				Email email = new Email(correo, mensaje.toString());
+				String correoDest = Sesion.getUsuario().getMail();
+				Email email = new Email(confi.getCorreoEnvio(), correoDest, mensaje.toString(), confi.getPassword(), confi.getHoraEnvio());
 				boolean enviado = email.enviarEmail();
 				if (enviado) {
 					JOptionPane.showMessageDialog(null, "El mensaje fué enviado correctamente", "ENHORABUENA", 3);

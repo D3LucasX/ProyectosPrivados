@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import Launcher.Sesion;
+import model.Configuracion;
 import model.Noticia;
 import model.Paginas;
 import model.User;
@@ -64,20 +65,41 @@ public class FileLoader {
 		String linea;
 		try (BufferedReader br = new BufferedReader(new FileReader("ConfiguracionDeNoticias.txt"))) {
 			while ((linea = br.readLine()) != null) {
-				String[] camposPag = linea.split(";;");
-				String idNoticia = camposPag[0];
-				String url = camposPag[1];
-				String filtro = camposPag[2];
-				Paginas pagina = new Paginas(idNoticia, url, filtro);
-				listaPaginas.add(pagina);
+				if (!linea.contains("#")){
+					String[] camposPag = linea.split(";;");
+					String idNoticia = camposPag[0];
+					String url = camposPag[1];
+					String filtro = camposPag[2];
+					Paginas pagina = new Paginas(idNoticia, url, filtro);
+					listaPaginas.add(pagina);
+				}
 			}
-
 		} catch (IOException e) {
 			System.err.println("No se ha podido cargar las paginas con los filtros.");
 			e.printStackTrace();
 			return null;
 		}
 		return listaPaginas;
+	}
+	
+	//Cargar configuracion de envio de emails.
+	public Configuracion cargarConfiguracion() {
+		Configuracion nueaconfig = null;
+		String linea;
+		try (BufferedReader br = new BufferedReader(new FileReader("ConfiguracionDeNoticias.txt"))) {
+			while ((linea = br.readLine()) != null) {
+				if (linea.contains("###")){
+					linea = linea.replaceAll("^#+|#+$", "");
+					String[] configuracion = linea.split("--");
+					nueaconfig = new Configuracion(configuracion[0],configuracion[1], configuracion[2]);
+				}
+			}
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+			return null;
+		}
+		return nueaconfig;
 	}
 	
 	

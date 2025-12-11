@@ -29,6 +29,16 @@ public class User {
 	}
 	
 	
+	
+	
+	public String getHora() {
+		return hora;
+	}
+
+	public void setHora(String hora) {
+		this.hora = hora;
+	}
+
 	public String getSelecciones() {
 		return selecciones;
 	}

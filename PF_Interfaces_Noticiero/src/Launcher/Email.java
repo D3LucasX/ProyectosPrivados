@@ -18,6 +18,7 @@ import org.jsoup.nodes.Element;
 
 import FileLoader.FileLoader;
 import fileWritter.FileWritter;
+import model.Configuracion;
 import model.Noticia;
 import model.Paginas;
 import model.User;
@@ -32,13 +33,29 @@ public class Email {
 	private Email email;
 	private String correoDestino;
 	private String mensaje;
+	private String password;
+	private String correoEnvio;
+	private String hora;
+	private Configuracion configuracion;
 
-	public Email(String correoDestino, String mensaje) {
+	public Email(String correoEnvio, String correoDestino, String mensaje, String password, String hora) {
+		this.correoEnvio = configuracion.getCorreoEnvio();
 		this.correoDestino = correoDestino;
 		this.mensaje = mensaje;
+		this.password = configuracion.getPassword();
+		this.hora = configuracion.getHoraEnvio();
+		this.listaPaginas = new ArrayList<Paginas>();
+		this.listaUsuarios = new ArrayList<User>();
+		this.carga = new FileLoader();
+		this.escritor = new FileWritter();
 	}
-
+	
 	public Email() {
+		this.correoEnvio = configuracion.getCorreoEnvio();
+		this.correoDestino = correoDestino;
+		this.mensaje = mensaje;
+		this.password = configuracion.getPassword();
+		this.hora = configuracion.getHoraEnvio();
 		this.listaPaginas = new ArrayList<Paginas>();
 		this.listaUsuarios = new ArrayList<User>();
 		this.carga = new FileLoader();
@@ -46,10 +63,7 @@ public class Email {
 	}
 
 	public boolean enviarEmail() {
-		final String fromEmail = "jose.delucas.dosa@gmail.com"; // EMAIL DE SALIDA
-		final String password = "emcw qyvk nprd yygr"; // CONTRASEÑA DEL EMAIL DE SALIDA (aplicaciones de 3ros)
-														// Contraseñas de aplicación -- Verificación en 2 pasos
-														// https://,yaccount.google.com/appaswords
+		
 		final String toEmail = correoDestino; // EMAIL DESTINATARIO
 		if (toEmail != null) {
 
@@ -61,7 +75,7 @@ public class Email {
 			props.put("mail.smtp.port", "465"); // SMTP Port
 			Authenticator auth = new Authenticator() {
 				protected PasswordAuthentication getPasswordAuthentication() {
-					return new PasswordAuthentication(fromEmail, password);
+					return new PasswordAuthentication(correoEnvio, password);
 				}
 			};
 			Session session = Session.getDefaultInstance(props, auth);// CREA UNA SESIÓN CON TODAS LAS PROPIEDADES Y EL
@@ -119,7 +133,7 @@ public class Email {
 					StringBuilder noticiasTexto = new StringBuilder();
 					StringBuilder mensaje = crearMensaje(listaCategorias, noticiasSeleccionadas, noticiasTexto);
 					String correo = Sesion.getUsuario().getMail();
-					Email email = new Email(correo, mensaje.toString());
+					Email email = new Email(correoEnvio, correo, mensaje.toString(), password, hora);
 					boolean enviado = email.enviarEmail();
 					if (enviado) {
 						JOptionPane.showMessageDialog(null, "El mensaje fué enviado correctamente", "ENHORABUENA", 3);

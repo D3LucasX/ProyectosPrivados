@@ -194,8 +194,8 @@ public class PanelAdministrador extends JPanel {
 		if(email != null && email.trim().isEmpty()) {
 			 return null;
 		 }
-		//String hora = Sesion.getUsuario().get // Hacer los geters y seters de la hora 
-		User usuarioAlta = new User(idNuevo, nickName, pass, vecesLoaded, email,"0", );
+		String hora = Sesion.getUsuario().getHora();
+		User usuarioAlta = new User(idNuevo, nickName, pass, vecesLoaded, email,"0", hora);
 		return usuarioAlta;
 	}
 	
