@@ -13,7 +13,7 @@ import model.User;
 public class FileWritter {
 	public void reescribirUsu(ArrayList<User> listaUsu) {
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter("ArchivoUsuario.txt"))) {
-
+		
 			for (User u : listaUsu) {
 				String linea = u.getIdUser() + ";;" + u.getNickName() + ";;" + u.getPass() + ";;" + u.getVecesLoaded()
 						+ ";;" + u.getMail() + ";;" + u.getSelecciones();

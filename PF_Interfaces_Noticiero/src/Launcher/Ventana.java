@@ -50,6 +50,11 @@ public class Ventana extends JFrame {
     	PanelAdministrador PAdmin = new PanelAdministrador(ventana, listaUsuarios, listaPaginas);
     	mostrarPanel(PAdmin, "PAdmin");
     }
+    
+    public void mostrarPBorrarUsu(Ventana ventana, ArrayList<User> listaUsuarios, ArrayList<Paginas> listaPaginas) {
+    	PanelEliminarUser pElimUser = new PanelEliminarUser(this, listaUsuarios, listaPaginas);
+    	mostrarPanel(pElimUser, "PeliminarUser");
+    }
 
     // Método para restaurar el marco de la ventana sin SwingWorker
     public void restaurarMarco() {

@@ -39,31 +39,38 @@ public class Email {
 	private Configuracion configuracion;
 
 	public Email(String correoEnvio, String correoDestino, String mensaje, String password, String hora) {
+		FileLoader loader = new FileLoader();
+		this.configuracion = loader.cargarConfiguracion();
+
 		this.correoEnvio = configuracion.getCorreoEnvio();
-		this.correoDestino = correoDestino;
-		this.mensaje = mensaje;
 		this.password = configuracion.getPassword();
 		this.hora = configuracion.getHoraEnvio();
-		this.listaPaginas = new ArrayList<Paginas>();
-		this.listaUsuarios = new ArrayList<User>();
+
+		this.correoDestino = correoDestino;
+		this.mensaje = mensaje;
+
+		this.listaPaginas = new ArrayList<>();
+		this.listaUsuarios = new ArrayList<>();
 		this.carga = new FileLoader();
 		this.escritor = new FileWritter();
 	}
-	
+
 	public Email() {
+		FileLoader loader = new FileLoader();
+		this.configuracion = loader.cargarConfiguracion();
+
 		this.correoEnvio = configuracion.getCorreoEnvio();
-		this.correoDestino = correoDestino;
-		this.mensaje = mensaje;
 		this.password = configuracion.getPassword();
 		this.hora = configuracion.getHoraEnvio();
-		this.listaPaginas = new ArrayList<Paginas>();
-		this.listaUsuarios = new ArrayList<User>();
+
+		this.listaPaginas = new ArrayList<>();
+		this.listaUsuarios = new ArrayList<>();
 		this.carga = new FileLoader();
 		this.escritor = new FileWritter();
 	}
 
 	public boolean enviarEmail() {
-		
+
 		final String toEmail = correoDestino; // EMAIL DESTINATARIO
 		if (toEmail != null) {
 
@@ -107,16 +114,12 @@ public class Email {
 
 	public void empezarEmail(ArrayList<Noticia> listaNoticias, ArrayList<User> listaUsers,
 			ArrayList<Paginas> listaPaginas, FileLoader carga, FileWritter escritor) {
-		boolean valido = false;
-		ArrayList<String> listaCategorias = new ArrayList<String>();
 		listaNoticias = carga.creaarListaDeNoticias(listaPaginas);
-		ArrayList<Noticia> noticiasSeleccionadas = new ArrayList<Noticia>();
-		if (listaNoticias != null) {
-			if (!listaNoticias.isEmpty()) {
-				User usuarioLogueado = Sesion.getUsuario();
-				String selecciones = usuarioLogueado.getSelecciones();
-				if (selecciones != null || !selecciones.equals("0") || !selecciones.isEmpty()) {
-
+		for (User u : listaUsers) {
+			if (listaNoticias != null || !listaNoticias.isEmpty()) {
+				String selecciones = u.getSelecciones();
+				if (selecciones != null && !selecciones.equals("0") && !selecciones.isEmpty()) {
+					ArrayList<Noticia> noticiasSeleccionadas = new ArrayList<Noticia>();
 					String[] listaSelecciones = selecciones.split("\\*");
 					int i = 0;
 					while (i < listaSelecciones.length) {
@@ -127,12 +130,12 @@ public class Email {
 						}
 						i++;
 					}
-					listaCategorias = crearListaCategorias(noticiasSeleccionadas);
+					ArrayList<String> listaCategorias = crearListaCategorias(noticiasSeleccionadas);
 
 					// Recoger noticias de la categoría
 					StringBuilder noticiasTexto = new StringBuilder();
 					StringBuilder mensaje = crearMensaje(listaCategorias, noticiasSeleccionadas, noticiasTexto);
-					String correo = Sesion.getUsuario().getMail();
+					String correo = u.getMail();
 					Email email = new Email(correoEnvio, correo, mensaje.toString(), password, hora);
 					boolean enviado = email.enviarEmail();
 					if (enviado) {
@@ -141,7 +144,9 @@ public class Email {
 						JOptionPane.showMessageDialog(null, "No se pudo enviar el mensaje", "ERROR", 0);
 					}
 				} else {
-					JOptionPane.showMessageDialog(null, "El usuario " + Sesion.getUsuario().getNickName() + " no tiene configuradas las noticias.", "Info", 1);
+					JOptionPane.showMessageDialog(null,
+							"El usuario " + u.getNickName() + " no tiene configuradas las noticias.",
+							"Info", 1);
 				}
 			}
 		}

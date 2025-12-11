@@ -8,7 +8,6 @@ public class User {
 	private int vecesLoaded;
 	private String mail;
 	private String selecciones;
-	private String hora;
 	
 	public User(int idUser, String nickName, String pass, int vecesLoaded, String mail) {
 		this.idUser = idUser;
@@ -18,25 +17,13 @@ public class User {
 		this.mail = mail;
 	}
 	
-	public User(int idUser, String nickName, String pass, int vecesLoaded, String mail, String selecciones, String hora) {
+	public User(int idUser, String nickName, String pass, int vecesLoaded, String mail, String selecciones) {
 		this.idUser = idUser;
 		this.nickName = nickName;
 		this.pass = pass;
 		this.vecesLoaded = vecesLoaded;
 		this.mail = mail;
 		this.selecciones = selecciones;
-		this.hora = hora;
-	}
-	
-	
-	
-	
-	public String getHora() {
-		return hora;
-	}
-
-	public void setHora(String hora) {
-		this.hora = hora;
 	}
 
 	public String getSelecciones() {

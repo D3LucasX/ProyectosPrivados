@@ -52,27 +52,24 @@ public class PanelNoticias extends JPanel {
 
 		inicializarComponentes();
 	}
-	
+
 	@Override
 	protected void paintComponent(Graphics g) {
-	    super.paintComponent(g);
+		super.paintComponent(g);
 
-	    Graphics2D g2d = (Graphics2D) g;
-	    int width = getWidth();
-	    int height = getHeight();
+		Graphics2D g2d = (Graphics2D) g;
+		int width = getWidth();
+		int height = getHeight();
 
-	    // Colores del degradado
-	    Color rosa = new Color(255, 102, 178);     // rosa
-	    Color amarillo = new Color(255, 255, 102); // amarillo
+		// Colores del degradado
+		Color rosa = new Color(255, 102, 178); // rosa
+		Color amarillo = new Color(255, 255, 102); // amarillo
 
-	    // Degradado vertical
-	    GradientPaint gp = new GradientPaint(
-	        0, 0, rosa,
-	        0, height, amarillo
-	    );
+		// Degradado vertical
+		GradientPaint gp = new GradientPaint(0, 0, rosa, 0, height, amarillo);
 
-	    g2d.setPaint(gp);
-	    g2d.fillRect(0, 0, width, height);
+		g2d.setPaint(gp);
+		g2d.fillRect(0, 0, width, height);
 	}
 
 	private void inicializarComponentes() {
@@ -87,10 +84,10 @@ public class PanelNoticias extends JPanel {
 					System.out.println("Este usuario no tiene selecciones");
 					return;
 				}
-				
+
 				String[] listaSelecciones = selecciones.split("\\*");
 				int i = 0;
-				while(i < listaSelecciones.length) {
+				while (i < listaSelecciones.length) {
 					for (Noticia noticia : listaNoticias) {
 						if (noticia.getIdNoticia().equals(listaSelecciones[i])) {
 							noticiasSeleccionadas.add(noticia);
@@ -137,7 +134,8 @@ public class PanelNoticias extends JPanel {
 
 	}
 
-	private void mostrarNoticiasPorCategoria(ArrayList<String> listaCategorias, ArrayList<Noticia> listaNoticias,  ArrayList<Noticia> noticiasSeleccionadas) {
+	private void mostrarNoticiasPorCategoria(ArrayList<String> listaCategorias, ArrayList<Noticia> listaNoticias,
+			ArrayList<Noticia> noticiasSeleccionadas) {
 		removeAll();
 		revalidate();
 		repaint();
@@ -176,36 +174,57 @@ public class PanelNoticias extends JPanel {
 			// Añadir panel de categoría al panel principal
 			add(panelCategoria);
 			add(Box.createVerticalStrut(10)); // espacio entre categorías
-			
+
 			// Al final de mostrarNoticiasPorCategoria()
 			add(Box.createVerticalGlue()); // empuja todo el contenido arriba
 			todasLasNoticias.append(noticiasTexto);
-		
+
 		}
 		JPanel panelBotones = new JPanel();
 		panelBotones.setLayout(new BoxLayout(panelBotones, BoxLayout.X_AXIS));
 
 		JButton btnCerrarSesion = new JButton("Cerrar sesión");
 		JButton btnGuardar = new JButton("Guardar");
-		JButton btnEmail = new JButton("Enviar e-mail"); // este es el nuevo que quiero incorporar en el centro
-		
+		JButton btnEmail = new JButton("Enviar e-mail"); 
+		JButton btnAtras = new JButton("Atras");
+
+		btnAtras.setPreferredSize(new Dimension(120, 30));
+		btnAtras.setMaximumSize(new Dimension(120, 30));
 		btnCerrarSesion.setPreferredSize(new Dimension(120, 30));
 		btnCerrarSesion.setMaximumSize(new Dimension(120, 30));
-		
-		// Si el usuario es el admi oculto el botón de guardar.
+		btnGuardar.setPreferredSize(new Dimension(120, 30));
+		btnGuardar.setMaximumSize(new Dimension(120, 30));
+
 		User usuarioLogueado = Sesion.getUsuario();
-		if (usuarioLogueado.getIdUser() == 1) {
-		    btnGuardar.setVisible(false);  // oculta botón Guardar
+
+		if (usuarioLogueado.getIdUser() == 1) { 
+			btnCerrarSesion.setVisible(false);
+			btnGuardar.setVisible(false);
+			btnAtras.setVisible(true);
+		} else { 
+			btnCerrarSesion.setVisible(true);
+			btnGuardar.setVisible(true);
+			btnAtras.setVisible(false);
 		}
-		
-		// Con glue empujamos componentes hacia los extremos.
+
+		// Añafo los botones al panel
+		panelBotones.add(btnAtras);
 		panelBotones.add(btnCerrarSesion);
-		panelBotones.add(Box.createHorizontalGlue());  // empuja a la izquierda
+		panelBotones.add(Box.createHorizontalGlue());
 		panelBotones.add(btnEmail);
-		panelBotones.add(Box.createHorizontalGlue());  // empuja a la derecha
+		panelBotones.add(Box.createHorizontalGlue());
 		panelBotones.add(btnGuardar);
 
 		add(panelBotones);
+		panelBotones.revalidate();
+		panelBotones.repaint();
+
+		// Boton atras
+		btnAtras.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ventana.mostrarPAdmin(ventana, listaUsu, listaPaginas);
+			}
+		});
 		// Boton cerrar sesión
 		btnCerrarSesion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -222,7 +241,7 @@ public class PanelNoticias extends JPanel {
 				boolean guardadas = escritor.guardarNoticias(mensaje, usuarioLogueado);
 				if (guardadas) {
 					JOptionPane.showMessageDialog(null, "Noticias guardadas con exito.", "ENHORABUENA!", 3);
-				}else {
+				} else {
 					JOptionPane.showMessageDialog(null, "No se han podido guardar las noticias", "ERROR", 0);
 				}
 			}
@@ -233,24 +252,25 @@ public class PanelNoticias extends JPanel {
 				Configuracion confi = carga.cargarConfiguracion();
 				StringBuilder mensaje = crearMensaje(listaCategorias, noticiasSeleccionadas);
 				String correoDest = Sesion.getUsuario().getMail();
-				Email email = new Email(confi.getCorreoEnvio(), correoDest, mensaje.toString(), confi.getPassword(), confi.getHoraEnvio());
+				Email email = new Email(confi.getCorreoEnvio(), correoDest, mensaje.toString(), confi.getPassword(),
+						confi.getHoraEnvio());
 				boolean enviado = email.enviarEmail();
 				if (enviado) {
 					JOptionPane.showMessageDialog(null, "El mensaje fué enviado correctamente", "ENHORABUENA", 3);
-				}else {
+				} else {
 					JOptionPane.showMessageDialog(null, "No se pudo enviar el mensaje", "ERROR", 0);
 				}
 			}
 		});
 	}
-	
+
 	public StringBuilder crearMensaje(ArrayList<String> listaCategorias, ArrayList<Noticia> listaNoticias) {
 		noticiasTexto = new StringBuilder();
 		for (Noticia no : listaNoticias) {
 			System.out.println(no.toString());
 		}
 		for (String categoria : listaCategorias) {
-			noticiasTexto.append(categoria +"\n");
+			noticiasTexto.append(categoria + "\n");
 			for (Noticia noticia : listaNoticias) {
 				if (noticia.getTitulo().equalsIgnoreCase(categoria)) {
 					String noticiaTexto = buscadorNoticia(noticia.getUrl(), noticia.getFiltro());
