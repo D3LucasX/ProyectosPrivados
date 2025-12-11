@@ -44,7 +44,7 @@ public class HiloEnviarEmail implements Runnable {
 
 		while (continuar) {
 			// Hora actual
-			LocalTime ahora = LocalTime.now();
+			LocalTime ahora = LocalTime.now().withSecond(0).withNano(0);
 			// Hora configurada parseada para poder comparar
 			LocalTime horaConfigurada = LocalTime.parse(configuracion.getHoraEnvio());
 
