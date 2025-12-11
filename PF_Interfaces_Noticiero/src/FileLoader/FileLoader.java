@@ -46,7 +46,7 @@ public class FileLoader {
 				int idUser = Integer.parseInt(camposUsu[0]);
 				
 				int vecesLoaded = Integer.parseInt(camposUsu[3]);
-				User user = new User(idUser, camposUsu[1], camposUsu[2], vecesLoaded, camposUsu[4], camposUsu[5]);
+				User user = new User(idUser, camposUsu[1], camposUsu[2], vecesLoaded, camposUsu[4], camposUsu[5], camposUsu[6]);
 				listaUsuarios.add(user);
 			}
 

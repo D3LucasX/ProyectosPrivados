@@ -229,9 +229,8 @@ public class PanelNoticias extends JPanel {
 		// Boton de enviar noticias por email
 		btnEmail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String correo = JOptionPane.showInputDialog(null, "Introduce el correo para enviar el mensaje:", "Envío de Email",
-						JOptionPane.QUESTION_MESSAGE);
 				StringBuilder mensaje = crearMensaje(listaCategorias, noticiasSeleccionadas);
+				String correo = Sesion.getUsuario().getMail();
 				Email email = new Email(correo, mensaje.toString());
 				boolean enviado = email.enviarEmail();
 				if (enviado) {

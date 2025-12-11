@@ -13,6 +13,7 @@ import model.User;
 public class Ventana extends JFrame {
 
     public Ventana() {
+    	//Thread hiloEnvioEmail
         // FRAME inicial sin decoraciones
         setBounds(100, 100, 900, 600);
         setLocationRelativeTo(null);

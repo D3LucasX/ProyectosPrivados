@@ -136,7 +136,7 @@ public class PanelAdministrador extends JPanel {
 		add(separator);
 	}
 	
-	public User crearUser() {
+	private User crearUser() {
 		// Actualizamos lista de usuarios por si acaso
 		listaUsuarios = carga.cargarUsuariosConConfiguracion();
 		boolean coincide = false;
@@ -194,31 +194,36 @@ public class PanelAdministrador extends JPanel {
 		if(email != null && email.trim().isEmpty()) {
 			 return null;
 		 }
-		
-		User usuarioAlta = new User(idNuevo, nickName, pass, vecesLoaded, email,"0");
+		//String hora = Sesion.getUsuario().get // Hacer los geters y seters de la hora 
+		User usuarioAlta = new User(idNuevo, nickName, pass, vecesLoaded, email,"0", );
 		return usuarioAlta;
 	}
 	
-	public ArrayList<User> eliminarUsuario() {
+	private ArrayList<User> eliminarUsuario() {
 		listaUsuarios = carga.cargarUsuariosConConfiguracion();
 		String idS = JOptionPane.showInputDialog(null, "Introdue el ID del usuario que quieres buscar:", "Baja de usuario",
 				JOptionPane.QUESTION_MESSAGE);
-		if(idS == null) {
-			return null;
-		}
-		if(idS != null && idS.trim().isEmpty()) {
-			 return null;
-		 }
-		int id = Integer.parseInt(idS);
-		ArrayList<User> nuevaListaDeUsuarios = new ArrayList<User>();
-		for (User u : listaUsuarios) {
-			if (u.getIdUser() != id) {
-				nuevaListaDeUsuarios.add(u);
+		if (listaUsuarios.size() > 4) {
+			if(idS == null) {
+				return null;
 			}
+			if(idS != null && idS.trim().isEmpty()) {
+				 return null;
+			 }
+			int id = Integer.parseInt(idS);
+			ArrayList<User> nuevaListaDeUsuarios = new ArrayList<User>();
+			for (User u : listaUsuarios) {
+				if (u.getIdUser() != id) {
+					nuevaListaDeUsuarios.add(u);
+				}
+			}
+			escritor.reescribirUsu(nuevaListaDeUsuarios);
+			listaUsuarios = nuevaListaDeUsuarios;
+			return listaUsuarios;
+		}else {
+			JOptionPane.showMessageDialog(null, "No puede haber menos de 4 usuarios contando con el administrador", "ERROR", 0);
 		}
-		escritor.reescribirUsu(nuevaListaDeUsuarios);
-		listaUsuarios = nuevaListaDeUsuarios;
-		return listaUsuarios;
+		return null;
 	}
 
 }
