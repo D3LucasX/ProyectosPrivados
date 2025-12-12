@@ -160,7 +160,6 @@ public class PanelLogin extends JPanel {
                 //Seteo el usuario logueado en la clase sesion para usar ese usuario en otras clases
                 Sesion.setUsuario(usuarioLogueado);
                 encontrado = true;
-                break;
             }
         }
 

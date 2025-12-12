@@ -5,10 +5,13 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import model.Paginas;
 import model.User;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Ventana extends JFrame {
 
@@ -18,10 +21,20 @@ public class Ventana extends JFrame {
         // FRAME inicial sin decoraciones
         setBounds(100, 100, 900, 600);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setUndecorated(true); //sin marco
         setResizable(false);
         getContentPane().setLayout(new CardLayout());
+        
+        addWindowListener(new WindowAdapter() {
+    		@Override
+    		public void windowClosing(WindowEvent e) {
+    			int cerrar = JOptionPane.showConfirmDialog(Ventana.this, "¿Seguro que quieres cerrar la aplicación?", "Cerar Aplicación", JOptionPane.YES_NO_OPTION, 1);
+    			if (cerrar == JOptionPane.YES_OPTION) {
+    				System.exit(1);
+    			}
+    		}
+    	});
     }
     
     public void mostrarPanel(JPanel panel, String nombre) {

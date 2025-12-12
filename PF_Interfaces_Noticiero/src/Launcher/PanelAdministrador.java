@@ -179,18 +179,27 @@ public class PanelAdministrador extends JPanel {
 			}
 			
 		}while(!coincide);
-		String email = JOptionPane.showInputDialog(
-		        null,
-		        "Introduce el email:",
-		        "Alta de usuario",
-		        JOptionPane.QUESTION_MESSAGE
-		);
-		if (email == null) {
-			return null;
-		}
-		if(email != null && email.trim().isEmpty()) {
-			 return null;
-		 }
+		boolean valido = false;
+		String email = "";
+		do {
+			email = JOptionPane.showInputDialog(
+			        null,
+			        "Introduce el email:",
+			        "Alta de usuario",
+			        JOptionPane.QUESTION_MESSAGE
+			);
+			if (email == null) {
+				return null;
+			}
+			if(email != null && email.trim().isEmpty()) {
+				 return null;
+			 }
+			if (email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.(com|es)$")) {
+				valido = true;
+			}else {
+		        JOptionPane.showMessageDialog(null, "Email inválido. Debe ser nombre@nombre.com o nombre@nombre.es");
+		    }
+		}while(!valido);
 		User usuarioAlta = new User(idNuevo, nickName, pass, vecesLoaded, email,"0");
 		return usuarioAlta;
 	}
