@@ -1,4 +1,4 @@
-package Launcher;
+package launcher;
 
 import javax.swing.JPanel;
 import java.awt.Color;
@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
-import FileLoader.FileLoader;
+import fileLoader.FileLoader;
 import fileWritter.FileWritter;
 import model.Paginas;
 import model.User;
@@ -85,9 +85,15 @@ public class PanelAdministrador extends JPanel {
 				//Creamos el usuario
 				User userNuevo = crearUser();
 				if(userNuevo != null) {
-					listaUsuarios.add(userNuevo);
-					escritor.reescribirUsu(listaUsuarios);
-					listaUsuarios = carga.cargarUsuarios();
+					int totalUsu = listaUsuarios.size();
+					if(totalUsu < 11) {
+						listaUsuarios.add(userNuevo);
+						escritor.reescribirUsu(listaUsuarios);
+						listaUsuarios = carga.cargarUsuariosConConfiguracion();
+						JOptionPane.showMessageDialog(null, "Usuario creado correctamenmte", "Enhorabuena", 3);
+					}else {
+						JOptionPane.showMessageDialog(null, "La aplicación no acepta mas usuarios, se cancelo la inscripcion del usuario", "ERROR", 0);
+					}
 				}else {
 					JOptionPane.showMessageDialog(null, "Se cancelo la inscripcion del usuario", "ERROR", 0);
 				}
@@ -137,16 +143,27 @@ public class PanelAdministrador extends JPanel {
 		// Actualizamos lista de usuarios por si acaso
 		listaUsuarios = carga.cargarUsuariosConConfiguracion();
 		boolean coincide = false;
+		boolean valido = false;
+		String nickName = "";
 		String pass = "";
 		int idNuevo = listaUsuarios.size() + 1, vecesLoaded = 0;
-		String nickName = JOptionPane.showInputDialog(null, "Introduce el nickname:", "Alta de usuario",
-				JOptionPane.QUESTION_MESSAGE);
-		 if (nickName == null) {
-		        return null;
-		    }
-		 if(nickName != null && nickName.trim().isEmpty()) {
-			 return null;
-		 }
+		do {
+			nickName = JOptionPane.showInputDialog(null, "Introduce el nickname:", "Alta de usuario",
+					JOptionPane.QUESTION_MESSAGE);
+			 if (nickName == null) {
+			        return null;
+			    }
+			 if(nickName != null && nickName.trim().isEmpty()) {
+				 return null;
+			 }
+			 
+			 if (nickName.matches("^(?!.*;)[A-Za-z0-9._\\- ]{3,20}$")) {
+				 valido = true;
+			 }else {
+				 JOptionPane.showMessageDialog(null, "Se introdujeron caracteres especiales inválidos, inténtelo de nuevo");
+			 }
+		}while(!valido);
+		valido = false;
 		do {
 			pass = JOptionPane.showInputDialog(
 			        null,
@@ -160,6 +177,7 @@ public class PanelAdministrador extends JPanel {
 			 if(pass != null && pass.trim().isEmpty()) {
 				 return null;
 			 }
+			 
 			String passVerif = JOptionPane.showInputDialog(
 			        null,
 			        "Repita la contraseña:",
@@ -172,14 +190,19 @@ public class PanelAdministrador extends JPanel {
 			if(passVerif != null && passVerif.trim().isEmpty()) {
 				 return null;
 			 }
+			if (pass.matches("^[^\\s;]+$")) {
+				 valido = true;
+			 }else {
+				 JOptionPane.showMessageDialog(null, "Se introdujeron caracteres especiales inválidos, inténtelo de nuevo:");
+			 }
 			if(pass.equals(passVerif)) {
 				coincide = true;
 			}else {
 				JOptionPane.showMessageDialog(null, "No han coicidido las contraseñas, inténtelo de nuevo.", "ERROR", 0);
 			}
 			
-		}while(!coincide);
-		boolean valido = false;
+		}while(!coincide || !valido);
+		valido = false;
 		String email = "";
 		do {
 			email = JOptionPane.showInputDialog(
@@ -194,10 +217,10 @@ public class PanelAdministrador extends JPanel {
 			if(email != null && email.trim().isEmpty()) {
 				 return null;
 			 }
-			if (email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.(com|es)$")) {
+			if (email.matches("^(?!.*;)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.(com|es)$")) {
 				valido = true;
 			}else {
-		        JOptionPane.showMessageDialog(null, "Email inválido. Debe ser nombre@nombre.com o nombre@nombre.es");
+		        JOptionPane.showMessageDialog(null, "Email inválido. Debe ser nombre@nombre.com o nombre@nombre.es y no contener ';' en ninguna parte.");
 		    }
 		}while(!valido);
 		User usuarioAlta = new User(idNuevo, nickName, pass, vecesLoaded, email,"0");

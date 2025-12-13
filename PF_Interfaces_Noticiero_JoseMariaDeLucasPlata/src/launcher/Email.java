@@ -1,6 +1,8 @@
-package Launcher;
+package launcher;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -16,12 +18,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import FileLoader.FileLoader;
+import fileLoader.FileLoader;
 import fileWritter.FileWritter;
 import model.Configuracion;
 import model.Noticia;
 import model.Paginas;
 import model.User;
+import utils.TestConexion;
 
 import javax.mail.PasswordAuthentication;
 
@@ -87,8 +90,6 @@ public class Email {
 			};
 			Session session = Session.getDefaultInstance(props, auth);// CREA UNA SESIÓN CON TODAS LAS PROPIEDADES Y EL
 																		// "LOGIN"
-			System.out.println("Sesión Creada");
-
 			try {
 				MimeMessage msg = new MimeMessage(session);
 				// Configurar Cabeceras
@@ -110,43 +111,46 @@ public class Email {
 			JOptionPane.showMessageDialog(null, "Envio Cancelado.", "ERROR", 0);
 			return false;
 		}
+
 	}
 
 	public void empezarEmail(ArrayList<Noticia> listaNoticias, ArrayList<User> listaUsers,
 			ArrayList<Paginas> listaPaginas, FileLoader carga, FileWritter escritor) {
-		listaNoticias = carga.creaarListaDeNoticias(listaPaginas);
-		for (User u : listaUsers) {
-			if (listaNoticias != null || !listaNoticias.isEmpty()) {
-				String selecciones = u.getSelecciones();
-				if (selecciones != null && !selecciones.equals("0") && !selecciones.isEmpty()) {
-					ArrayList<Noticia> noticiasSeleccionadas = new ArrayList<Noticia>();
-					String[] listaSelecciones = selecciones.split("\\*");
-					int i = 0;
-					while (i < listaSelecciones.length) {
-						for (Noticia noticia : listaNoticias) {
-							if (noticia.getIdNoticia().equals(listaSelecciones[i])) {
-								noticiasSeleccionadas.add(noticia);
+		if (TestConexion.isConectado()) {
+			listaNoticias = carga.creaarListaDeNoticias(listaPaginas);
+			for (User u : listaUsers) {
+				if (listaNoticias != null || !listaNoticias.isEmpty()) {
+					String selecciones = u.getSelecciones();
+					if (selecciones != null && !selecciones.equals("0") && !selecciones.isEmpty()) {
+						ArrayList<Noticia> noticiasSeleccionadas = new ArrayList<Noticia>();
+						String[] listaSelecciones = selecciones.split("\\*");
+						int i = 0;
+						while (i < listaSelecciones.length) {
+							for (Noticia noticia : listaNoticias) {
+								if (noticia.getIdNoticia().equals(listaSelecciones[i])) {
+									noticiasSeleccionadas.add(noticia);
+								}
 							}
+							i++;
 						}
-						i++;
-					}
-					ArrayList<String> listaCategorias = crearListaCategorias(noticiasSeleccionadas);
+						ArrayList<String> listaCategorias = crearListaCategorias(noticiasSeleccionadas);
 
-					// Recoger noticias de la categoría
-					StringBuilder noticiasTexto = new StringBuilder();
-					StringBuilder mensaje = crearMensaje(listaCategorias, noticiasSeleccionadas, noticiasTexto);
-					String correo = u.getMail();
-					Email email = new Email(correoEnvio, correo, mensaje.toString(), password, hora);
-					boolean enviado = email.enviarEmail();
-					if (enviado) {
-						JOptionPane.showMessageDialog(null, "El mensaje fué enviado correctamente", "ENHORABUENA", 3);
+						// Recoger noticias de la categoría
+						StringBuilder noticiasTexto = new StringBuilder();
+						StringBuilder mensaje = crearMensaje(listaCategorias, noticiasSeleccionadas, noticiasTexto);
+						String correo = u.getMail();
+						Email email = new Email(correoEnvio, correo, mensaje.toString(), password, hora);
+						boolean enviado = email.enviarEmail();
+						/*
+						 * if (enviado) { JOptionPane.showMessageDialog(null,
+						 * "El mensaje fué enviado correctamente", "ENHORABUENA", 3); } else {
+						 * JOptionPane.showMessageDialog(null, "No se pudo enviar el mensaje", "ERROR",
+						 * 0); }
+						 */
 					} else {
-						JOptionPane.showMessageDialog(null, "No se pudo enviar el mensaje", "ERROR", 0);
+						JOptionPane.showMessageDialog(null,
+								"El usuario " + u.getNickName() + " no tiene configuradas las noticias.", "Info", 1);
 					}
-				} else {
-					JOptionPane.showMessageDialog(null,
-							"El usuario " + u.getNickName() + " no tiene configuradas las noticias.",
-							"Info", 1);
 				}
 			}
 		}
@@ -182,11 +186,11 @@ public class Email {
 	public StringBuilder crearMensaje(ArrayList<String> listaCategorias, ArrayList<Noticia> listaNoticias,
 			StringBuilder noticiasTexto) {
 		noticiasTexto = new StringBuilder();
-		for (Noticia no : listaNoticias) {
-			System.out.println(no.toString());
-		}
+		LocalTime hora = LocalTime.now().withSecond(0).withNano(0);
+		LocalDate fecha = LocalDate.now();
+		noticiasTexto.append("\n" + fecha + " - " + hora + "\n");
 		for (String categoria : listaCategorias) {
-			noticiasTexto.append(categoria + "\n");
+			noticiasTexto.append("\n" + categoria + "\n");
 			for (Noticia noticia : listaNoticias) {
 				if (noticia.getTitulo().equalsIgnoreCase(categoria)) {
 					String noticiaTexto = buscadorNoticia(noticia.getUrl(), noticia.getFiltro());

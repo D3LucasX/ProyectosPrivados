@@ -1,6 +1,9 @@
-package Launcher;
+package launcher;
 
 import javax.swing.*;
+
+import fileLoader.FileLoader;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -8,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import FileLoader.FileLoader;
 import model.User;
 import model.Paginas;
 import javax.imageio.ImageIO;
@@ -36,20 +38,39 @@ public class PanelCarga extends JPanel {
         cargarImagenFondo();
         inicializarComponentes();
     }
-
+    // Si no encuentra la imágen en el proyecto, devuelvo null, para evitar la traza de error
     private void cargarImagenFondo() {
-        try {
-            fondo = ImageIO.read(new File("imagenFondo.jpg"));
-        } catch (IOException e) {
-            e.printStackTrace();
+        File archivo = new File("imagenFondo.jpg");
+        if (archivo.exists() && archivo.isFile()) {
+            try {
+                fondo = ImageIO.read(archivo);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            fondo = null; // Para que paintComponent use el fondo alternativo
         }
     }
-
+    // Si se encuentra la imágen en el proyecto, la mostrara, si no, mostrara un fondo alternativo
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (fondo != null) {
             g.drawImage(fondo, 0, 0, getWidth(), getHeight(), null);
+        }else {
+        	Graphics2D g2d = (Graphics2D) g;
+    		int width = getWidth();
+    		int height = getHeight();
+
+    		// Colores del degradado
+    		Color rosa = new Color(255, 102, 178); // rosa
+    		Color amarillo = new Color(255, 255, 102); // amarillo
+
+    		// Degradado vertical
+    		GradientPaint gp = new GradientPaint(0, 0, rosa, 0, height, amarillo);
+
+    		g2d.setPaint(gp);
+    		g2d.fillRect(0, 0, width, height);
         }
     }
 
@@ -72,16 +93,43 @@ public class PanelCarga extends JPanel {
                 progressBar.setValue(contador);
 
                 // Mensajes según progreso
-                if (contador <= 35) {
+                if (contador < 35) {
                     infoCarga.setText("Cargando usuarios...");
-                    
-                    if (contador == 5) {
-                        listaUsu = carga.cargarUsuariosConConfiguracion();
-                    }
-                    
-                } else if (contador <= 70) {
-                    infoCarga.setText("Cargando configuración...");
+                }else if(contador == 35){
+                	infoCarga.setText("Cargando configuración...");
+                } else if (contador == 70) {
+                    boolean listaValida = false;
                     listaPaginas = carga.cargarConfigPagina();
+                    if (listaPaginas == null) {
+                    	System.exit(0);
+                    }else {
+	                    int numPaginas = listaPaginas.size();
+	                    if (numPaginas >= 18) {
+	                    	listaValida = true;
+	                    }else {
+	                    	JOptionPane.showMessageDialog(null, "No hay el minimo de fuentes de noticias necesarias para ejecutar la aplicación", "ERROR", 0);
+	                    	System.exit(0);
+	                    }
+                    }
+                    listaUsu = carga.cargarUsuariosConConfiguracion();
+                    if (listaUsu == null || !listaValida) {
+                    	System.exit(0);
+                    }else {
+	                    int numUsu = listaUsu.size();
+	                    listaValida = false;
+	                    boolean usuarioClave = false;
+	                    for(User u : listaUsu) {
+	                    	if (u.getIdUser() == 1) {
+	                    		usuarioClave = true;
+	                    	}
+	                    }
+	                    if (numUsu >= 4 && usuarioClave) {
+	                    	listaValida = true;
+	                    }else {
+	                    	JOptionPane.showMessageDialog(null, "No hay el minimo de usuarios para ejecutar la aplicación", "ERROR", 0);
+	                    	System.exit(0);
+	                    }
+                    }
                     
                 } else if (contador == 80) {
                     if (listaUsu == null || listaUsu.isEmpty()) {
@@ -94,7 +142,7 @@ public class PanelCarga extends JPanel {
                         System.exit(0);
                     }
                     
-                } else if (contador <= 100) {
+                } else if (contador == 90) {
                     infoCarga.setText("Finalizando...");
                 }
 

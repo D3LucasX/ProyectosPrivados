@@ -1,4 +1,4 @@
-package Launcher;
+package launcher;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -8,6 +8,8 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import javax.swing.Box;
@@ -16,19 +18,19 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import FileLoader.FileLoader;
+import fileLoader.FileLoader;
 import fileWritter.FileWritter;
 import model.Configuracion;
 import model.Noticia;
 import model.Paginas;
 import model.User;
+import utils.TestConexion;
 
 public class PanelNoticias extends JPanel {
 
@@ -73,37 +75,85 @@ public class PanelNoticias extends JPanel {
 	}
 
 	private void inicializarComponentes() {
-		listaNoticias = carga.creaarListaDeNoticias(listaPaginas);
-		ArrayList<Noticia> noticiasSeleccionadas = new ArrayList<Noticia>();
+		User usuarioLogueado = Sesion.getUsuario();
+		boolean conectado = TestConexion.isConectado();
 
-		if (listaNoticias != null) {
-			if (!listaNoticias.isEmpty()) {
-				User usuarioLogueado = Sesion.getUsuario();
+		if (!conectado) { // Si no hay conexión
+		    JOptionPane.showMessageDialog(null, "Sin conexión a internet", "Alerta", 2);
+
+		    removeAll();
+		    revalidate();
+		    repaint();
+		    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		    setOpaque(false); // necesario para ver el fondo del panel padre, si no, se ve en blanco
+
+		    // empuja el boton y el layout hacia abajo
+		    add(Box.createVerticalGlue());
+
+		    JPanel panelCentro = new JPanel();
+		    panelCentro.setOpaque(false);
+		    panelCentro.setLayout(new BoxLayout(panelCentro, BoxLayout.Y_AXIS));
+
+		    JLabel lblCategoria = new JLabel("SIN CONEXIÓN A INTERNET");
+		    lblCategoria.setAlignmentX(CENTER_ALIGNMENT);
+		    panelCentro.add(lblCategoria);
+		    panelCentro.add(Box.createVerticalStrut(20)); // espacio entre label y botón
+
+		    if (usuarioLogueado != null && usuarioLogueado.getIdUser() == 1) { // Admin
+		        JButton btnAtras = new JButton("Atras");
+		        btnAtras.setAlignmentX(CENTER_ALIGNMENT);
+		        panelCentro.add(btnAtras);
+
+		        btnAtras.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						ventana.mostrarPAdmin(ventana, listaUsu, listaPaginas);
+					}
+				});
+
+		    } else { // Usuario normal
+		        JButton btnCerrarSesion = new JButton("Cerrar sesión");
+		        btnCerrarSesion.setAlignmentX(CENTER_ALIGNMENT);
+		        panelCentro.add(btnCerrarSesion);
+
+		     // Boton cerrar sesión
+				btnCerrarSesion.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Sesion.setUsuario(null);
+						ventana.mostrarLogin(listaUsu, listaPaginas);
+						JOptionPane.showMessageDialog(null, "Sesión Cerrada con exito.", "INFO", 3);
+					}
+				});
+		    }
+
+		    add(panelCentro);
+
+		    // empuja el boton y el layout hacia arriba
+		    add(Box.createVerticalGlue());
+		} else { // Si hay conexión
+			listaNoticias = carga.creaarListaDeNoticias(listaPaginas);
+
+			if (listaNoticias != null && !listaNoticias.isEmpty()) {
 				String selecciones = usuarioLogueado.getSelecciones();
-				if (selecciones == null || selecciones.equals("0") || selecciones.isEmpty()) {
-					System.out.println("Este usuario no tiene selecciones");
-					return;
-				}
-
-				String[] listaSelecciones = selecciones.split("\\*");
-				int i = 0;
-				while (i < listaSelecciones.length) {
-					for (Noticia noticia : listaNoticias) {
-						if (noticia.getIdNoticia().equals(listaSelecciones[i])) {
-							noticiasSeleccionadas.add(noticia);
+				if (selecciones != null && !selecciones.equals("0") && !selecciones.isEmpty()) {
+					// Lógica de mostrar noticias
+					String[] listaSelecciones = selecciones.split("\\*");
+					ArrayList<Noticia> noticiasSeleccionadas = new ArrayList<>();
+					for (String seleccion : listaSelecciones) {
+						for (Noticia noticia : listaNoticias) {
+							if (noticia.getIdNoticia().equals(seleccion)) {
+								noticiasSeleccionadas.add(noticia);
+							}
 						}
 					}
-					i++;
-				}
-				ArrayList<String> listaCategorias = crearListaCategorias(noticiasSeleccionadas);
-				for (String cat : listaCategorias) {
-					System.out.println(cat);
-				}
 
-				mostrarNoticiasPorCategoria(listaCategorias, noticiasSeleccionadas, noticiasSeleccionadas);
+					ArrayList<String> listaCategorias = crearListaCategorias(noticiasSeleccionadas);
+					mostrarNoticiasPorCategoria(listaCategorias, noticiasSeleccionadas, noticiasSeleccionadas);
+				} else {
+					JOptionPane.showMessageDialog(null, "Este usuario no tiene selecciones", "ERROR", 0);
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "No hay noticias disponibles", "ERROR", 0);
 			}
-		} else {
-			System.err.println("No existe la lista de noticias");
 		}
 	}
 
@@ -161,6 +211,7 @@ public class PanelNoticias extends JPanel {
 				if (noticia.getTitulo().equalsIgnoreCase(categoria)) {
 					String noticiaTexto = buscadorNoticia(noticia.getUrl(), noticia.getFiltro());
 					noticiasTexto.append("- ").append(noticiaTexto).append("\n");
+
 				}
 			}
 
@@ -185,7 +236,7 @@ public class PanelNoticias extends JPanel {
 
 		JButton btnCerrarSesion = new JButton("Cerrar sesión");
 		JButton btnGuardar = new JButton("Guardar");
-		JButton btnEmail = new JButton("Enviar e-mail"); 
+		JButton btnEmail = new JButton("Enviar e-mail");
 		JButton btnAtras = new JButton("Atras");
 
 		btnAtras.setPreferredSize(new Dimension(120, 30));
@@ -197,14 +248,20 @@ public class PanelNoticias extends JPanel {
 
 		User usuarioLogueado = Sesion.getUsuario();
 
-		if (usuarioLogueado.getIdUser() == 1) { 
+		if (usuarioLogueado.getIdUser() == 1) {
 			btnCerrarSesion.setVisible(false);
 			btnGuardar.setVisible(false);
 			btnAtras.setVisible(true);
-		} else { 
+		} else {
 			btnCerrarSesion.setVisible(true);
 			btnGuardar.setVisible(true);
 			btnAtras.setVisible(false);
+		}
+
+		if (usuarioLogueado.getIdUser() != 1) {
+			btnEmail.setVisible(false);
+		} else {
+			btnEmail.setVisible(true);
 		}
 
 		// Añafo los botones al panel
@@ -255,20 +312,12 @@ public class PanelNoticias extends JPanel {
 				Email email = new Email(confi.getCorreoEnvio(), correoDest, mensaje.toString(), confi.getPassword(),
 						confi.getHoraEnvio());
 				boolean enviado = email.enviarEmail();
-				if (enviado) {
-					JOptionPane.showMessageDialog(null, "El mensaje fué enviado correctamente", "ENHORABUENA", 3);
-				} else {
-					JOptionPane.showMessageDialog(null, "No se pudo enviar el mensaje", "ERROR", 0);
-				}
 			}
 		});
 	}
 
 	public StringBuilder crearMensaje(ArrayList<String> listaCategorias, ArrayList<Noticia> listaNoticias) {
 		noticiasTexto = new StringBuilder();
-		for (Noticia no : listaNoticias) {
-			System.out.println(no.toString());
-		}
 		for (String categoria : listaCategorias) {
 			noticiasTexto.append(categoria + "\n");
 			for (Noticia noticia : listaNoticias) {

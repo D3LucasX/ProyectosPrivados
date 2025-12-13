@@ -1,4 +1,4 @@
-package Launcher;
+package launcher;
 
 import java.awt.GridBagLayout;
 import java.awt.Color;
@@ -15,10 +15,12 @@ import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import fileLoader.FileLoader;
+
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 
-import FileLoader.FileLoader;
 import fileWritter.FileWritter;
 import model.Paginas;
 import model.User;
@@ -226,9 +228,6 @@ public class PanelConfiguracion extends JPanel {
 							}
 						}
 						if (actualizado) {
-							for (User u : listaUsu) {
-								System.out.println(u.toStringSelecciones());
-							}
 							escritor.setConfiguracion(usuarioLogueado, listaUsu, seleccionados);
 							listaUsu = carga.cargarUsuariosConConfiguracion();
 						}

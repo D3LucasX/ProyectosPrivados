@@ -1,8 +1,8 @@
-package Launcher;
+package launcher;
 
 import javax.swing.*;
 
-import FileLoader.FileLoader;
+import fileLoader.FileLoader;
 
 import java.awt.*;
 import java.awt.event.*;
