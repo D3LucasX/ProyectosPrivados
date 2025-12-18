@@ -139,7 +139,7 @@ public class PanelEliminarUser extends JPanel {
 	}
 
 	private void eliminarUsuario(String idAborrar) {
-		if (idAborrar.matches("^[0-9]+$")) {
+		if (idAborrar.matches("^[0-9]{1,9}$")) {
 			int id;
 			try {
 				id = Integer.parseInt(idAborrar);

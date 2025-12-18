@@ -72,9 +72,6 @@ public class HiloEnviarEmail implements Runnable {
 				LocalTime horaConfigurada = null;
 				horaConfigurada = LocalTime.parse(configuracion.getHoraEnvio());
 
-				// Comprobacion de horas
-				System.out.println("Hora actual: " + ahora + " | Hora de envío: " + horaConfigurada);
-
 				// Si coincide la hora se envia
 				if (ahora.equals(horaConfigurada)) {
 

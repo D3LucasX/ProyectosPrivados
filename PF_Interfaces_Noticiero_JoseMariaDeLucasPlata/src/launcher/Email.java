@@ -147,9 +147,6 @@ public class Email {
 						 * JOptionPane.showMessageDialog(null, "No se pudo enviar el mensaje", "ERROR",
 						 * 0); }
 						 */
-					} else {
-						JOptionPane.showMessageDialog(null,
-								"El usuario " + u.getNickName() + " no tiene configuradas las noticias.", "Info", 1);
 					}
 				}
 			}
