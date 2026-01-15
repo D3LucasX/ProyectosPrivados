@@ -141,6 +141,11 @@ public class PanelCarga extends JPanel {
                         JOptionPane.showMessageDialog(null, "Error al cargar la configuración de las páginas, se cerrará el programa...", "Error", JOptionPane.ERROR_MESSAGE);
                         System.exit(0);
                     }
+                    File historial = new File ("Historial");
+                    if (!historial.exists()) {
+                    	JOptionPane.showMessageDialog(null, "No existe el archivo de historial.", "Error", JOptionPane.ERROR_MESSAGE);
+                        System.exit(0);
+                    }
                     
                 } else if (contador == 90) {
                     infoCarga.setText("Finalizando...");

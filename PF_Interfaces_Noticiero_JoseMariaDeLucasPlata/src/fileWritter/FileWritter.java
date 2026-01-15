@@ -1,6 +1,7 @@
 package fileWritter;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -66,6 +67,11 @@ public class FileWritter {
 		String fecha = "Fecha de registro: " + date + " ";
 		int idUsuario = usuarioLogueado.getIdUser();
 		String nombreArchivo = "Historial";
+		File archivo = new File(nombreArchivo);
+		
+		if (!archivo.exists()) {
+			return false;
+		}
 		try(BufferedWriter bw = new BufferedWriter(new FileWriter(nombreArchivo,true))){
 			// true es para que no sobreescriba y escriba a partir de la ultima linea
 			bw.write(fecha);

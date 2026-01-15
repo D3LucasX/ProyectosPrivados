@@ -146,7 +146,9 @@ public class PanelAdministrador extends JPanel {
 		boolean valido = false;
 		String nickName = "";
 		String pass = "";
-		int idNuevo = listaUsuarios.size() + 1, vecesLoaded = 0;
+		int ultimoUser = listaUsuarios.size();
+		int idUltimoUser = listaUsuarios.get(ultimoUser-1).getIdUser();
+		int idNuevo = idUltimoUser + 1, vecesLoaded = 0;
 		do {
 			nickName = JOptionPane.showInputDialog(null, "Introduce el nickname:", "Alta de usuario",
 					JOptionPane.QUESTION_MESSAGE);

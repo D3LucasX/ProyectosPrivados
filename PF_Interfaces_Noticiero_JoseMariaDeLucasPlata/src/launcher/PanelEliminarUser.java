@@ -165,10 +165,10 @@ public class PanelEliminarUser extends JPanel {
 					JOptionPane.showMessageDialog(null, "No se encontró ningún usuario con ese ID", "INFO", 1);
 				}
 			}else {
-				JOptionPane.showMessageDialog(null, "Usuario seleccionado inválido", "INFO", 1);
+				JOptionPane.showMessageDialog(null, "Entrada inválida", "INFO", 1);
 			}
 		}else {
-			JOptionPane.showMessageDialog(null, "No se admite nada mas que números", "INFO", 1);
+			JOptionPane.showMessageDialog(null, "Entrada inválida", "INFO", 1);
 		}
 		
 	}

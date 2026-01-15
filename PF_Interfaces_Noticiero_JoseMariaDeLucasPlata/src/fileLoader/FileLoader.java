@@ -58,7 +58,7 @@ public class FileLoader {
 				while ((linea = br.readLine()) != null) {
 					if (!linea.startsWith("#")) {
 						String[] camposPag = linea.split(";;");
-						if(camposPag.length == 3) {
+						if (camposPag.length == 3) {
 							String idNoticia = camposPag[0];
 							String url = camposPag[1];
 							String filtro = camposPag[2];

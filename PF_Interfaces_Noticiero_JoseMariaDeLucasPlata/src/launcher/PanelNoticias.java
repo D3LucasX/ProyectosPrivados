@@ -115,7 +115,7 @@ public class PanelNoticias extends JPanel {
 		        btnCerrarSesion.setAlignmentX(CENTER_ALIGNMENT);
 		        panelCentro.add(btnCerrarSesion);
 
-		     // Boton cerrar sesión
+		     // Botón cerrar sesión
 				btnCerrarSesion.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Sesion.setUsuario(null);
